@@ -517,9 +517,9 @@ Collect the following components:
 
 Perform the following measurements:
 
-1. Measure the resistance of each resistor using the Keysight multimeter on your bench. See: [How to Measure Resistance with Keysight EDU34450A Multimeter](https://drive.google.com/file/d/1j6iN7GsJH1oI6mBRQmlJVnS2WCd6dato/view?usp=sharing)
+1. Measure the resistance of each resistor using the Keysight multimeter on your bench. See: [How to Measure Resistance with Keysight EDU34450A Multimeter](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/ResistanceMeasurements.html)
 
-2. Measure the capacitance of the capacitor using the Keysight multimeter on your bench. See: [How to Measure Capacitance with Keysight EDU34450A Multimeter](https://drive.google.com/file/d/1bbq8x2qO2SVNvI8vk4P20AJ2q68jkg8e/view?usp=sharing)
+2. Measure the capacitance of the capacitor using the Keysight multimeter on your bench. See: [How to Measure Capacitance with Keysight EDU34450A Multimeter](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/CapacitanceMeasurement.html)
 
 3. Record all measured values for future reference.
 
