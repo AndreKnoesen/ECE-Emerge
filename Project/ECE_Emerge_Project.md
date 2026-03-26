@@ -27,7 +27,7 @@ Design and build a digital scale that:
 
 The scale consists of five subsystems. The team is responsible for the design and integration of all five.
 
-<img src="media/LoadCellSystemDiagram.png" alt="Block diagram showing a signal processing chain from sensor to user interface, arranged left to right. The first block is Wheatstone Bridge Loadcell. The second and third blocks are grouped inside a dashed rounded rectangle labeled Signal Conditioning: Instrumentation Amplifier followed by Level Shifter and Amplifier. The fourth block is ADC. The fifth block is Computer Interface. The sixth block is GUI. Arrows connect each block to the next in sequence, showing the flow of the sensor signal through conditioning, digitization, and display." style="width: 60%; display: block; margin: 0 auto;" />
+<img src="media/LoadCellSystemDiagram.png" alt="Block diagram showing a signal processing chain from sensor to user interface, arranged left to right. The first block is Wheatstone Bridge Loadcell. The second and third blocks are grouped inside a dashed rounded rectangle labeled Signal Conditioning: Instrumentation Amplifier followed by Level Shifter and Amplifier. The fourth block is ADC. The fifth block is Computer Interface. The sixth block is GUI. Arrows connect each block to the next in sequence, showing the flow of the sensor signal through conditioning, digitization, and display." style="width: 90%; display: block; margin: 0 auto;" />
 
 *Figure 1: System overview: five subsystems from sensor to user interface.*
 
@@ -41,7 +41,7 @@ The scale consists of five subsystems. The team is responsible for the design an
 
 5. **Graphical User Interface.** A MATLAB App Designer GUI provides calibration, taring, and weight display.
 
-<img src="media/LoadCellTI2.png" alt="Photograph of a load cell measurement platform mounted inside a clear acrylic enclosure with a Texas Instruments logo. A small rectangular aluminum beam load cell is mounted horizontally at the top of the enclosure, with a white connector and multicolor ribbon cable connecting it to a green PCB signal conditioning board below. The PCB connects to a larger green development board at the bottom with edge connectors and component rows visible." style="width: 60%; display: block; margin: 0 auto;" />
+<img src="media/LoadCellTI2.png" alt="Photograph of a load cell measurement platform mounted inside a clear acrylic enclosure with a Texas Instruments logo. A small rectangular aluminum beam load cell is mounted horizontally at the top of the enclosure, with a white connector and multicolor ribbon cable connecting it to a green PCB signal conditioning board below. The PCB connects to a larger green development board at the bottom with edge connectors and component rows visible." style="width: 50%; display: block; margin: 0 auto;" />
 
 *Figure 2: The load cell platform used in this project.*
 
