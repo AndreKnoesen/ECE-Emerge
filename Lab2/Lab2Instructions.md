@@ -356,12 +356,14 @@ While you already made such measurements in the previous lab, re-measure the res
 
 In this section, you will work with a simple resistor network consisting of two resistors connected in series. You will use the M2K to make single-ended and differential voltage measurements and then apply Ohm's Law and Kirchhoff's Laws to analyze the circuit.
 
+In addition to using the M2K, also use the Keysight EDU34450A DMM to measure the same voltages and confirm that both instruments give consistent results. See: [How to Measure DC Voltage with Keysight EDU34450A Multimeter](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/DCVoltageMeasurement.html)
+
 #### Build the Circuit
 
 Construct the following circuit on your breadboard:
 
 <!-- CIRCUITIKZ FIGURE: Render from LaTeX source as media/fig_voltage_divider.png -->
-<img src="media/Lab3Fig1211-1.png" alt="Resistive voltage divider circuit with two 5 V sources. A 5 V source connects from ground up to node Va at the top. From Va, current flows down through R2, an 820 ohm resistor, to node Vb, then continues down through R1, a 1.2 kilohm resistor, to node Vc at the bottom. A second 5 V source connects from Vc up to ground, making Vc a negative supply rail. The circuit forms a series resistive divider between a positive and negative 5 V supply, with Vb as the intermediate voltage node." style="width: 50%; display: block; margin: 0 auto;" />
+<img src="media/Lab3Fig1211-1.png" alt="Resistive voltage divider circuit with two 5 V sources. A 5 V source connects from ground up to node Va at the top. From Va, current flows down through R2, an 820 ohm resistor, to node Vb, then continues down through R1, a 1.2 kilohm resistor, to node Vc at the bottom. A second 5 V source connects from Vc up to ground, making Vc a negative supply rail. The circuit forms a series resistive divider between a positive and negative 5 V supply, with Vb as the intermediate voltage node." style="width: 40%; display: block; margin: 0 auto;" />
 
 *Figure 5: Resistive network #1.*
 
@@ -413,7 +415,7 @@ In this section, you will add a third resistor ($R_3$) in parallel with $R_2$ in
 Add resistor $R_3 = 1.0\,\text{k}\Omega$ in parallel with $R_2 = 820\,\Omega$ in the existing circuit.
 
 <!-- CIRCUITIKZ FIGURE: Render from LaTeX source as media/fig_resistive_net2.png -->
-<img src="media/resistivenet2-1.png" alt="Resistive circuit with a 10 V source driving total current I3 which splits at the top into two parallel branches. The left branch carries current I3a downward through R2, an 820 ohm resistor. The right branch passes through node Va then carries current I3b downward through R3, a 1 kilohm resistor. Both branches recombine at node Vb. From Vb, current I3c flows downward through R1, a 1.2 kilohm resistor, to node Vc at the bottom. Ground connections are not explicitly shown in this circuit and must be determined by the student." style="width: 50%; display: block; margin: 0 auto;" />
+<img src="media/resistivenet2-1.png" alt="Resistive circuit with a 10 V source driving total current I3 which splits at the top into two parallel branches. The left branch carries current I3a downward through R2, an 820 ohm resistor. The right branch passes through node Va then carries current I3b downward through R3, a 1 kilohm resistor. Both branches recombine at node Vb. From Vb, current I3c flows downward through R1, a 1.2 kilohm resistor, to node Vc at the bottom. Ground connections are not explicitly shown in this circuit and must be determined by the student." style="width: 40%; display: block; margin: 0 auto;" />
 
 *Figure 6: Resistive network #2. Note that grounds are not explicitly shown in this circuit. You need to decide where to place them. Hint: See Figure 5.*
 
