@@ -100,6 +100,9 @@ Lab manuals are served via GitHub Pages:
 | Lab 7 Instructions | [Lab7Instructions.html](https://andreknoesen.github.io/ECE-Emerge/Lab7/htmlconversion/Lab7Instructions.html) |
 | Lab 8 Instructions | [Lab8Instructions.html](https://andreknoesen.github.io/ECE-Emerge/Lab8/htmlconversion/Lab8Instructions.html) |
 | ECE Emerge Project | [ECE_Emerge_Project.html](https://andreknoesen.github.io/ECE-Emerge/Project/htmlconversion/ECE_Emerge_Project.html) |
+| Equipment: Resistance Measurement | [ResistanceMeasurements.html](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/ResistanceMeasurements.html) |
+| Equipment: DC Voltage Measurement | [DCVoltageMeasurement.html](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/DCVoltageMeasurement.html) |
+| Equipment: Capacitance Measurement | [CapacitanceMeasurement.html](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/CapacitanceMeasurement.html) |
 
 ---
 
