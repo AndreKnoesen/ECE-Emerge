@@ -359,9 +359,9 @@ Adjust the negative supply voltage to reflect your birth date in the format of d
 >
 > Enable the output voltages and capture a screenshot of the power supply displaying the programmed and measured voltages. Add your name to the screenshot before saving. Upload the image via the course submission app.
 
-<img src="media/VoltmeterDisplayMK2.png" alt="Screenshot of the Scopy software Voltmeter interface showing two channels. Channel 1 displays a reading of 3.007 VDC with a minimum of 3.007 V and maximum of 3.007 V, indicating a stable positive DC voltage. Channel 2 displays a reading of negative 1.069 VDC with a minimum of negative 1.069 V and maximum of negative 1.052 V. Both channels are set to DC Direct Coupling mode. The left panel shows the Scopy instrument menu with Voltmeter selected. Each channel has a vertical bar graph showing signal level against a horizontal axis scaled from negative 5 to positive 5 volts." style="width: 60%; display: block; margin: 0 auto;" />
+<img src="media/PowerSupplyDisplayM2K.png" alt="Screenshot of the Scopy software Power Supply interface showing two channels. Channel 1 generates an output of 3.000 VDC. Channel 2 generates an output of -1.000 VDC" style="width: 60%; display: block; margin: 0 auto;" />
 
-*Figure 12: The Scopy Voltmeter instrument displaying two simultaneous DC voltage measurements: Channel 1 reading approximately 3.007 V and Channel 2 reading approximately −1.069 V, consistent with the M2K positive and negative supply outputs.*
+*Figure 12: The Scopy Power Supply interface configured to generate 3 V and -1 V: The positive power supply (V+) is generating approximately 2.996 V and the negative power supply (V-) is generating approximately -0.988 V.*
 
 ---
 
@@ -409,7 +409,7 @@ Turn on both channels of the voltmeter, and record the voltages produced by the 
 
 <img src="media/VoltmeterDisplayMK2.png" alt="Screenshot of the Scopy software Voltmeter application showing DC voltage measurements on two channels." style="width: 60%; display: block; margin: 0 auto;" />
 
-*Figure 14: M2K voltmeter example display.*
+*Figure 14: The Scopy Voltmeter instrument displaying two simultaneous DC voltage measurements: Channel 1 reading approximately 3.007 V and Channel 2 reading approximately negative 1.069 V, consistent with the M2K positive and negative supply outputs.*
 
 #### Differential Voltage Measurement
 
@@ -651,7 +651,7 @@ Figure A3 shows how the adaptor board will interface with the M2K.
    - 1 edge connector mounted from the bottom of the PCB
    - 2 1×15 female headers from the top of the PCB
 
-2. Important: Mount the 1×15 headers in the holes closest to where the solderless breadboard will be positioned (refer to Figure A1).
+2. Important: Mount the 1×15 headers in the holes labeled **J2 Female** and **J5 Female** (refer to Figure A7).
 
 3. Have your lab partner verify the correct positioning before proceeding.
 
