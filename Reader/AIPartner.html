@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Mind Worth Questioning: Working with AI in This Course</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 70%;
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$',  right: '$',  display: false}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>A Mind Worth Questioning: Working with AI in This Course</h1>
+<p>Every generation of engineers has had to learn how to use the most powerful thinking<br/>
+tools available to them. Slide rules gave way to calculators, which gave way to<br/>
+simulation software, which gave way to the internet. Each transition required<br/>
+engineers to develop a new skill: not merely operating the tool, but understanding<br/>
+what the tool was actually doing, where it could be trusted, and where it could not.</p>
+<p>You are entering engineering at a moment when the newest such tool is the large<br/>
+language model (LLM), the technology behind AI assistants such as ChatGPT, Claude,<br/>
+and Gemini. This course treats proficiency with these tools as a genuine learning<br/>
+objective, not an afterthought. By the time you complete ECE Emerge, you will not<br/>
+only understand foundational electronics; you will also understand how to use AI<br/>
+as a productive thinking partner rather than a shortcut that quietly undermines<br/>
+your own development.</p>
+<p>This chapter tells you exactly how to do that.</p>
+<h2>What an LLM Actually Is</h2>
+<p>Before you can use a tool wisely, you need a working mental model of what it does.<br/>
+An LLM is not a search engine that retrieves facts, and it is not a calculator that<br/>
+computes correct answers. It is a system trained to predict the most plausible<br/>
+continuation of any text it is given. That training was performed on an enormous<br/>
+corpus of human writing, which means the model has absorbed a remarkable breadth<br/>
+of knowledge about how concepts are explained, how arguments are structured, and<br/>
+how problems are solved across virtually every technical field.</p>
+<p>This gives LLMs a genuinely useful property: they are extraordinarily good at<br/>
+explanation. If you want a concept explained six different ways until one of them<br/>
+clicks, an LLM will do that patiently and without judgment. If you want to work<br/>
+through a problem step by step and have someone check your reasoning at each<br/>
+stage, an LLM can do that too.</p>
+<p>It also gives them a dangerous property: they are confident even when wrong.<br/>
+An LLM produces fluent, authoritative-sounding text regardless of whether the<br/>
+underlying content is correct. It can give you the wrong formula for a filter<br/>
+cutoff frequency in the same measured, helpful tone it uses to give you the right<br/>
+one. It cannot feel uncertainty the way a knowledgeable person does, and it will<br/>
+not always flag its own errors.</p>
+<p>The practical implication is this: an LLM is a powerful aid to understanding,<br/>
+and a poor substitute for it. Use it to help you think; do not use it to<br/>
+think for you.</p>
+<h2>The Fundamental Distinction</h2>
+<p>Every time you open an AI assistant in this course, you face a choice, usually<br/>
+without realizing it. You can use the tool to build your understanding, or you<br/>
+can use it to bypass the effort that builds understanding. These two paths are<br/>
+not equally useful. They are not even in the same category. A practical test<br/>
+for which path you took is described in the section on verification below.</p>
+<p>This matters in ways that will become visible sooner than you might expect.<br/>
+The prelab for Lab 4 depends on understanding the time constant from Chapter 7.<br/>
+The analysis in Lab 5 depends on the voltage divider from Chapter 3. The capstone<br/>
+project requires you to reason through every stage of a signal chain under<br/>
+real-world constraints. Each of these moments will reveal exactly what you<br/>
+actually understand, independent of what any AI told you to write.</p>
+<p>The goal is not to avoid AI. The goal is to use it in ways that leave you<br/>
+more capable, not less.</p>
+<h2>The Right Sequence</h2>
+<p>The most important practice in this course is also the simplest to state<br/>
+and the most tempting to skip: attempt the problem before you ask the AI.</p>
+<p>This is not a rule designed to make things harder. It is how learning works.<br/>
+The struggle of working on a problem, even partially and incorrectly, prepares<br/>
+your mind to receive an explanation in a way that going straight to the<br/>
+explanation does not. A concept explained before you have wrestled with the<br/>
+problem slides off. The same concept explained after you have identified exactly<br/>
+where your reasoning broke down tends to stick permanently.</p>
+<p>The sequence should always be:</p>
+<ol>
+<li>Read the relevant section of the textbook.</li>
+<li>Attempt the problem or work through the concept on your own.</li>
+<li>Identify specifically where you are stuck or uncertain.</li>
+<li>Bring that specific question to the AI.</li>
+</ol>
+<p>Step three is the most important and the most frequently skipped.<br/>
+"I do not understand Chapter 9" is not a question an AI can help with<br/>
+productively. "I understand that impedance combines resistance and reactance,<br/>
+but I do not see why the reactance of a capacitor decreases at high frequency<br/>
+when the formula $X_C = 1/\omega C$ makes it look like frequency is in the<br/>
+denominator" is a question the AI can engage with precisely. The specificity<br/>
+of your question reflects the quality of your prior engagement with the material.</p>
+<h2>How to Ask Well</h2>
+<p>The quality of an AI conversation depends almost entirely on how you frame<br/>
+your questions. The following practices will make your conversations substantially<br/>
+more useful.</p>
+<h3>Ask for explanation, not answers</h3>
+<p>The least useful thing you can do is ask the AI to solve a problem you have not<br/>
+yet attempted. The most useful thing is to describe your own reasoning and ask<br/>
+whether it is correct.</p>
+<p><em>Less useful:</em> "What is the output voltage of this voltage divider?"</p>
+<p><em>More useful:</em> "I calculated 2.2 V for this voltage divider using<br/>
+$V_{out} = V_s \cdot R_2 / (R_1 + R_2)$. My reasoning was that the bottom resistor<br/>
+sees the full supply voltage across the series combination. Is that reasoning correct,<br/>
+and if not, where does it go wrong?"</p>
+<h3>Ask for the "why," not just the "what"</h3>
+<p>An AI will give you a definition of impedance if you ask for one. That definition<br/>
+is also in the textbook. What the textbook cannot do interactively is respond to<br/>
+your specific confusion about why the definition takes the form it does. Ask for<br/>
+that instead.</p>
+<p><em>Less useful:</em> "What is impedance?"</p>
+<p><em>More useful:</em> "I understand that impedance generalizes resistance<br/>
+to AC circuits. What I do not understand is why we can use all the same series and<br/>
+parallel combination rules with impedances that we used with resistances in<br/>
+Chapter 3. What makes that valid?"</p>
+<h3>Ask it to use the course's framework</h3>
+<p>This textbook builds understanding through specific analogies and specific<br/>
+conceptual sequences. The gravity and hill analogy for electric potential.<br/>
+The voltage divider as the foundation for filters. The Golden Rules as<br/>
+consequences of feedback, not memorized facts. You can instruct the AI to<br/>
+stay within these frameworks rather than introducing new ones that may<br/>
+be correct in general but confusing in context.</p>
+<p>For example: "Can you explain why a capacitor blocks DC and passes AC, using<br/>
+the idea that impedance is frequency-dependent and using the same voltage divider<br/>
+reasoning from Chapter 3?" This grounds the explanation in what you already<br/>
+know rather than importing a new framework from outside the course.</p>
+<h3>Ask it to quiz you</h3>
+<p>After studying a topic, ask the AI to question you on it rather than summarize it<br/>
+for you. This is called retrieval practice, and it is among the most well-supported<br/>
+techniques in learning science. Tell the AI what you have just studied, ask it to<br/>
+pose a conceptual question, answer in your own words, and ask it to identify what<br/>
+is missing or incorrect. This converts the AI from a source of information into a<br/>
+training partner. The pre-lab self-test each week formalizes this practice.</p>
+<h3>Ask it to steelman your confusion</h3>
+<p>If something in the course seems wrong to you, or if a result surprises you,<br/>
+describe your confusion precisely and ask the AI to explain why your intuition<br/>
+led you astray. "I expected the output of the voltage follower to be different<br/>
+from the input because the op-amp has such high gain. It seems like something<br/>
+should be happening to the signal. What is wrong with my reasoning?"<br/>
+This kind of question teaches you more than asking for the correct explanation<br/>
+from scratch.</p>
+<h2>How to Verify</h2>
+<p>Verification is not optional. It is part of every AI interaction.</p>
+<p>An LLM can give you a formula, a component value, a circuit configuration, or<br/>
+a step-by-step derivation that is subtly or completely wrong. It will not<br/>
+preface that information with a warning. It will present it with the same<br/>
+helpful tone as everything else it says. In an engineering context, an<br/>
+unverified result that happens to be wrong is worse than no result at all,<br/>
+because it gives you false confidence at exactly the moment you need to<br/>
+be most careful.</p>
+<p>After any AI conversation that produced a technical claim, verify it against<br/>
+at least one of the following:</p>
+<ul>
+<li>The textbook (the authoritative source for this course)</li>
+<li>Your own independent calculation</li>
+<li>A lab measurement</li>
+<li>A course instructor or teaching assistant</li>
+</ul>
+<p>A practical technique: after an AI explains something to you, close the<br/>
+conversation, write down what you understood in your own words, and check that<br/>
+summary against the relevant section of this textbook. The gaps between what<br/>
+you wrote and what the textbook says identify exactly what you still need to<br/>
+work on.</p>
+<p>When an AI gives you a numerical answer to a circuit problem, work through the<br/>
+problem independently and compare. If the answers agree and you understand both,<br/>
+proceed. If they disagree, do not simply assume the AI is correct. Find the<br/>
+discrepancy before you move on.</p>
+<h2>What the AI Cannot Do for You</h2>
+<p>Several things matter in this course that no AI conversation can provide.</p>
+<p><strong>Physical intuition comes from measurement.</strong> When you watch the output<br/>
+of a low-pass filter roll off on the oscilloscope as you sweep the frequency<br/>
+upward, something is built in your mind that reading about cutoff frequencies<br/>
+cannot build. When your measured time constant matches your calculated one to<br/>
+within five percent, and then does not when you have a component in backwards,<br/>
+you are developing the calibrated judgment that distinguishes a practicing<br/>
+engineer from someone who has read about engineering. No amount of AI<br/>
+conversation substitutes for this.</p>
+<p><strong>The prelab is not a deliverable to be completed; it is preparation for the lab.</strong><br/>
+The purpose of the prelab is to send you into the lab with predictions in hand.<br/>
+If you arrive at the lab without having genuinely worked through the prelab<br/>
+yourself, you will not know what to look for, you will not notice when something<br/>
+unexpected happens, and you will not be able to explain discrepancies when they<br/>
+arise. Using an AI to complete prelab calculations means you have satisfied the<br/>
+submission requirement while defeating the purpose entirely.</p>
+<p><strong>The AI has never seen your breadboard.</strong> When your measured output<br/>
+does not match your theoretical prediction, the AI can help you think<br/>
+through the space of possible causes systematically. It cannot tell you<br/>
+that your capacitor leads are reversed, that you have a loose wire at<br/>
+a node, or that your resistor color-code reading was off by a factor of ten.<br/>
+Physical debugging requires physical inspection.</p>
+<p><strong>The AI does not know this course.</strong> It was not trained on this<br/>
+textbook. It may explain a concept using terminology this course specifically<br/>
+avoids, or it may introduce ideas from a framework the course has not yet<br/>
+built toward. When an AI explanation conflicts with something in this<br/>
+textbook, resolve the conflict by examining both carefully and consulting<br/>
+the textbook as the authoritative source.</p>
+<h2>Documentation: What Is Required</h2>
+<p>This course requires you to document and attribute AI contributions in<br/>
+your submitted work. This is not bureaucratic overhead. It is a professional<br/>
+norm that is becoming standard across engineering practice, and forming<br/>
+the habit now matters.</p>
+<p>The standard is that a reader of your report should be able to tell exactly<br/>
+what you did and what the AI did. In practice, this means the following.</p>
+<p>If an AI conversation helped you understand a concept that you then applied<br/>
+in your own work, note it briefly: "I used [AI tool] to clarify my understanding<br/>
+of the time constant derivation before completing this calculation."</p>
+<p>If you asked an AI to review your reasoning and it identified an error that<br/>
+you then corrected, note that: "I used [AI tool] to review my phasor calculation.<br/>
+It identified an error in my sign convention for the phase angle, which I<br/>
+corrected by re-reading the sections on Signals in the Time Domain and on Phasors."</p>
+<p>If any text, code, numerical result, or figure generated by an AI appears<br/>
+directly in your submitted work, cite it explicitly, just as you would cite<br/>
+any other source.</p>
+<p>The practical test is this: if you cannot write clearly about what the AI<br/>
+contributed and what you contributed, the boundary became unclear during<br/>
+the work itself. That is the moment to pause and re-engage with the material<br/>
+on your own terms before continuing.</p>
+<h2>The Larger Picture</h2>
+<p>Every interaction you have with an AI in this course is practice. An<br/>
+interaction in which you handed off your thinking to the machine is practice<br/>
+at becoming less capable. An interaction in which you brought your own<br/>
+reasoning to the table, challenged it, refined it, and left understanding<br/>
+something you did not before; that is practice at something that compounds.</p>
+<p>The material in this course is genuinely interesting. Circuits are a language<br/>
+for describing how energy and information move through the physical world.<br/>
+Signals carry meaning. Amplifiers and filters shape that meaning. The<br/>
+instrumentation amplifier at the heart of your capstone project is a<br/>
+precision instrument for extracting a faint physical signal from a noisy<br/>
+background — which is, in a certain sense, what good thinking is as well.</p>
+<p>The AI is a capable conversation partner for exploring all of this. Bring<br/>
+your questions to it. Challenge it. Verify what it tells you. The course<br/>
+will be richer for it, and so will you.</p>
+<h2>Putting It Into Practice: The Pre-Lab Reflective AI Exercise</h2>
+<p>Each lab in this course includes a structured Reflective AI Exercise as part of the<br/>
+pre-lab assignment. The format is identical each lab and has three parts.</p>
+<ul>
+<li>
+<p><strong>Part 1: Exploration.</strong> Use an AI assistant to explore two designated<br/>
+  focus areas for the current lab. The goal is not to collect a summary you<br/>
+  can paste into your report. The goal is to arrive at the lab with a mental<br/>
+  model that lets you make and check predictions.</p>
+</li>
+<li>
+<p><strong>Part 2: The Self-Test.</strong> Write and refine your own quiz prompt targeting<br/>
+  the specific concepts for that lab, then run the quiz. The details of how<br/>
+  to do this well are covered in the following section on prompt quality.</p>
+</li>
+<li>
+<p><strong>Part 3: The Formal Reflection.</strong> Submit a 150–250 word written synthesis<br/>
+  addressing three required points specific to each lab. This is submitted to<br/>
+  Gradescope as part of the pre-lab assignment, due Tuesday at noon.</p>
+</li>
+</ul>
+<h3>Prompt Quality: A Skill You Will Practice Every Week</h3>
+<p>The quality of what you get from an AI depends almost entirely on the quality<br/>
+of what you ask. This is not a minor detail. It is the skill. A vague prompt<br/>
+produces a generic response that teaches you nothing. A well-constructed prompt<br/>
+produces a focused, concept-specific conversation that actually builds your<br/>
+understanding.</p>
+<h4>Step 1: Asking for Information (Part 1 Exploration)</h4>
+<p>The first use of a prompt in each lab is to explore the designated focus areas.<br/>
+The same contrast between weak and strong applies here as anywhere else.</p>
+<p><em>Weak:</em> "Tell me about RC circuits."</p>
+<p>This produces a textbook summary. It teaches you what you could have read. It does<br/>
+not engage your existing understanding or identify where it breaks down.</p>
+<p><em>Strong:</em></p>
+<blockquote>
+<p><em>"I am a first-year electrical engineering student preparing for a<br/>
+lab on RC circuits. I understand that a capacitor stores charge, but I do<br/>
+not yet understand why the voltage across it cannot change instantly when a<br/>
+switch closes. Can you explain the physical reason for that constraint,<br/>
+without using differential equations? Focus on what the capacitor is<br/>
+actually doing with energy at the moment the switch closes."</em></p>
+</blockquote>
+<p>This prompt works because it establishes who you are and what you are preparing<br/>
+for, it names what you already understand, it identifies specifically where your<br/>
+understanding stops, and it constrains the form of the answer so the explanation<br/>
+stays at the right level. The AI now has a precise target. The resulting<br/>
+explanation will fill a real gap rather than restate what you already know.</p>
+<h4>Step 2: Writing Your Own Quiz Prompt (Part 2 Self-Test)</h4>
+<p>After exploring the focus areas, you write your own quiz prompt to test what you<br/>
+have learned. This prompt must do four things:</p>
+<ol>
+<li>Establish who you are and what you are preparing for</li>
+<li>Constrain the question type to scenario-based prediction, not simple recall</li>
+<li>Name the specific concepts the questions must involve</li>
+<li>Control when answers are revealed</li>
+</ol>
+<p><em>Weak:</em> "Quiz me on circuits."</p>
+<p>This fails on every dimension: no role context, no constraint on question type,<br/>
+no scope, and no output control.</p>
+<p><em>Strong:</em></p>
+<blockquote>
+<p><em>"I am a first-year electrical engineering student preparing for a<br/>
+lab on RC circuits. Give me a three-question scenario-based quiz. Each<br/>
+question must describe a specific physical situation (a component value,<br/>
+a switching event, or a waveform observation) and ask me to predict what<br/>
+happens and explain why in physical terms. Do not ask me to recall<br/>
+definitions or reproduce formulas from memory. Do not reveal any answers<br/>
+until I have responded to all three questions."</em></p>
+</blockquote>
+<h4>Step 3: The Meta-Prompt (Improving Your Draft)</h4>
+<p>Once you have written your quiz prompt draft, submit it to the AI using the<br/>
+following meta-prompt before running the quiz. This is the same every week;<br/>
+copy it exactly and paste your draft where indicated:</p>
+<blockquote>
+<p><em>"Here is a prompt I wrote to generate a self-quiz to help me prepare<br/>
+for an engineering lab. Please evaluate it against these four criteria:<br/>
+(1) does it establish my role and context clearly,<br/>
+(2) does it constrain the question type to scenario-based rather than simple recall,<br/>
+(3) does it prevent the AI from revealing answers before I have responded,<br/>
+(4) does it scope the content precisely enough to be useful for a specific lab topic.<br/>
+Then rewrite it to address any weaknesses you identify."</em></p>
+<p><em>My draft prompt: [paste your draft here]</em></p>
+</blockquote>
+<p>Use the AI's critique and revised version to produce your final prompt, then run<br/>
+the quiz with that revised version.</p>
+<h4>What You Submit for Part 2</h4>
+<p>Your Gradescope submission for Part 2 must include all four of the following:</p>
+<ol>
+<li>Your original draft prompt</li>
+<li>The AI's critique (copy-paste in full)</li>
+<li>Your revised prompt after incorporating the feedback</li>
+<li>The quiz transcript: your revised prompt, the AI's questions, and your responses</li>
+</ol>
+<p>Items 1 through 3 are the prompt-craft artifact. Item 4 is the content record.</p>
+<h3>What a Strong Reflection Looks Like (Part 3)</h3>
+<p>The three required points in Part 3 are not three separate paragraphs. They are<br/>
+three jobs that a single coherent paragraph must do simultaneously. The annotated<br/>
+example below uses a made-up lab scenario to show which sentence is doing which job.</p>
+<p><em>Example reflection (annotated):</em></p>
+<blockquote>
+<p>The wiring path between a sensor and a measurement instrument acts as an antenna<br/>
+for environmental interference, so the choice of connection method determines<br/>
+how much of that noise reaches the instrument alongside the signal.<br/>
+<strong>[The Link: wiring choice is framed as signal protection, not just a connection option.]</strong><br/>
+Differential wiring suppresses this noise through common-mode rejection: because<br/>
+both wires travel the same physical path, any interference that appears equally<br/>
+on both conductors is subtracted out at the instrument, while the true<br/>
+differential signal (which appears on only one wire) is preserved.<br/>
+<strong>[The Technical "Why": the key term is used to explain a mechanism, not just named.]</strong><br/>
+My specific realization was that using a single-ended connection at a bench<br/>
+cluttered with switching power supplies would feed that switching noise directly<br/>
+into the measurement chain; I now know to look for a periodically spiking noise<br/>
+floor as the diagnostic symptom of that mistake, and to switch to differential<br/>
+wiring as the first corrective step.<br/>
+<strong>[The Lab Application: a concrete, physically plausible mistake is identified,<br/>
+a symptom is named, and a correction is stated.]</strong></p>
+</blockquote>
+<p>Notice that the reflection does not list the three criteria and fill them in one<br/>
+by one. It builds a single argument in which each sentence advances the next. The<br/>
+annotations above are shown here for instructional purposes only; your submitted<br/>
+reflection should read as continuous prose.</p>
+<h2>Summary</h2>
+<ul>
+<li>An LLM is trained to produce plausible, fluent text. It is exceptionally good at<br/>
+  explanation and exceptionally unreliable as an authority. It does not flag its own errors.</li>
+<li>The fundamental test of a productive AI conversation: could you explain the result<br/>
+  in your own words afterward? If not, the AI did your thinking, not you.</li>
+<li>Always attempt the problem before asking the AI. The struggle of working on a<br/>
+  problem prepares your mind to receive an explanation. Skipping the struggle<br/>
+  discards most of the learning value.</li>
+<li>Ask for explanation of your reasoning, not production of an answer. Ask for the<br/>
+  "why," not just the "what." Ask it to quiz you.</li>
+<li>Verify every technical claim against the textbook, an independent calculation,<br/>
+  or a measurement before acting on it.</li>
+<li>Physical intuition, prelab preparation, and circuit debugging require your direct<br/>
+  engagement. No AI conversation substitutes for them.</li>
+<li>Document AI contributions in your work as you would any other source. The<br/>
+  standard: a reader should be able to tell exactly what you did and what the AI did.</li>
+</ul>
+<p><strong>Table: AI Use — Quick Reference</strong></p>
+<div aria-label="Summary" class="table-wrapper" role="region" tabindex="0"><table><caption>Summary</caption>
+<thead>
+<tr>
+<th scope="col" style="text-align: left;">Situation</th>
+<th scope="col" style="text-align: left;">Recommended Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">You do not understand a concept</td>
+<td style="text-align: left;">Attempt to articulate specifically what you do not understand; bring that specific gap to the AI</td>
+</tr>
+<tr>
+<td style="text-align: left;">You want to check your work</td>
+<td style="text-align: left;">Show the AI your reasoning, not just your answer; ask it to identify where the reasoning breaks down</td>
+</tr>
+<tr>
+<td style="text-align: left;">You want to prepare for a lab</td>
+<td style="text-align: left;">Ask the AI to quiz you on the relevant concepts after you have studied them</td>
+</tr>
+<tr>
+<td style="text-align: left;">The AI gives you a numerical result</td>
+<td style="text-align: left;">Verify it against the textbook or your own independent calculation before using it</td>
+</tr>
+<tr>
+<td style="text-align: left;">The AI conflicts with the textbook</td>
+<td style="text-align: left;">Examine both; treat the textbook as the authoritative source for this course</td>
+</tr>
+<tr>
+<td style="text-align: left;">You are stuck on a physical circuit</td>
+<td style="text-align: left;">Use the AI to generate a list of possible causes to investigate; do the investigation yourself</td>
+</tr>
+<tr>
+<td style="text-align: left;">You are writing a report</td>
+<td style="text-align: left;">Document what the AI contributed and what you contributed; the boundary should be clear</td>
+</tr>
+<tr>
+<td style="text-align: left;">You are tempted to ask the AI for the answer</td>
+<td style="text-align: left;">Close the window; attempt the problem; identify specifically where you get stuck; then return</td>
+</tr>
+</tbody>
+</table></div>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="data:image/png;base64,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"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>
