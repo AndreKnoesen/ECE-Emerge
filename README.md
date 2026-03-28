@@ -20,6 +20,7 @@ This repository contains lab manuals for the ECE Emerge course, covering hands-o
 | `Lab8/` | Lab 8: Instrumentation amplifier (INA125), differential signal acquisition |
 | `Project/` | ECE Emerge Digital Scale Project brief and appendices |
 | `md2ada.py` | Markdown to ADA-compliant HTML converter (see below) |
+| `Learning objectives for labs/` | Essential learning objectives for Lectures 1–16 |
 
 Each lab directory contains:
 
@@ -29,6 +30,31 @@ LabN/
   media/                    ← images referenced by the lab manual
   htmlconversion/           ← generated ADA-compliant HTML (self-contained)
 ```
+
+---
+
+## Learning Objectives for Labs
+
+Essential skills and learning objectives aligned to each lecture, used to guide lab assessment.
+
+| File | Link |
+|---|---|
+| Lecture 1 Essentials | [Lecture1Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture1Essentials.md) |
+| Lecture 2 Essentials | [Lecture2Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture2Essentials.md) |
+| Lecture 3 Essentials | [Lecture3Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture3Essentials.md) |
+| Lecture 4 Essentials | [Lecture4Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture4Essentials.md) |
+| Lecture 5 Essentials | [Lecture5Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture5Essentials.md) |
+| Lecture 6 Essentials | [Lecture6Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture6Essentials.md) |
+| Lecture 7 Essentials | [Lecture7Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture7Essentials.md) |
+| Lecture 8 Essentials | [Lecture8Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture8Essentials.md) |
+| Lecture 9 Essentials | [Lecture9Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture9Essentials.md) |
+| Lecture 10 Essentials | [Lecture10Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture10Essentials.md) |
+| Lecture 11 Essentials | [Lecture11Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture11Essentials.md) |
+| Lecture 12 Essentials | [Lecture12Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture12Essentials.md) |
+| Lecture 13 Essentials | [Lecture13Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture13Essentials.md) |
+| Lecture 14 Essentials | [Lecture14Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture14Essentials.md) |
+| Lecture 15 Essentials | [Lecture15Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture15Essentials.md) |
+| Lecture 16 Essentials | [Lecture16Essentials.md](https://github.com/AndreKnoesen/ECE-Emerge/blob/main/Learning%20objectives%20for%20labs/Lecture16Essentials.md) |
 
 ---
 
