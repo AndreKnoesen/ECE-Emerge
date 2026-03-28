@@ -69,6 +69,7 @@ ADA-compliant HTML version of the course reader. Each chapter is a single self-c
 | Chapter 1 — The Flashlight | [TheFlashlight.html](https://andreknoesen.github.io/ECE-Emerge/Reader/TheFlashlight.html) |
 | Chapter 2 — Language of Circuits | [LanguageofCircuits.html](https://andreknoesen.github.io/ECE-Emerge/Reader/LanguageofCircuits.html) |
 | Chapter 3 — Secrets of DC Circuits | [SecretsofDCCircuits.html](https://andreknoesen.github.io/ECE-Emerge/Reader/SecretsofDCCircuits.html) |
+| Chapter 4 — The I-V Menagerie | [IVMenagerie.html](https://andreknoesen.github.io/ECE-Emerge/Reader/IVMenagerie.html) |
 
 Further chapters will be added as they are converted.
 
@@ -149,6 +150,7 @@ Lab manuals are served via GitHub Pages:
 | Reader: Ch. 1 — The Flashlight | [TheFlashlight.html](https://andreknoesen.github.io/ECE-Emerge/Reader/TheFlashlight.html) |
 | Reader: Ch. 2 — Language of Circuits | [LanguageofCircuits.html](https://andreknoesen.github.io/ECE-Emerge/Reader/LanguageofCircuits.html) |
 | Reader: Ch. 3 — Secrets of DC Circuits | [SecretsofDCCircuits.html](https://andreknoesen.github.io/ECE-Emerge/Reader/SecretsofDCCircuits.html) |
+| Reader: Ch. 4 — The I-V Menagerie | [IVMenagerie.html](https://andreknoesen.github.io/ECE-Emerge/Reader/IVMenagerie.html) |
 
 ---
 
