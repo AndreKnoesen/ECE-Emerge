@@ -61,17 +61,18 @@ Essential skills and learning objectives aligned to each lecture, used to guide 
 
 ## Course Reader — *ECE Confidential: Cracking the Code*
 
-ADA-compliant HTML version of the course reader. Available as a **complete single-file book** or as individual chapter pages.
+Available in two formats and as individual chapter pages.
 
 ### Complete Book
 
 | Format | Link |
 |---|---|
-| Full book (cover, TOC, all chapters) | [ECEConfidential.html](https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html) |
+| Web (HTML) — full book with sidebar TOC | [ECEConfidential.html](https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html) |
+| PDF | [ECEConfidential.pdf](https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.pdf) |
 
-The book file is self-contained (23 MB): cover page, title page, accessibility statement with individual chapter links, preamble, and all 11 chapters. Features a sticky sidebar table of contents, consistent typography, KaTeX math, and a built-in accessibility notice meeting WCAG 2.1 Level AA.
+The HTML book is self-contained (23 MB): cover page, title page, accessibility statement, preamble, and all 11 chapters. Features a sticky sidebar table of contents, consistent typography, KaTeX math rendering, and meets WCAG 2.1 Level AA.
 
-### Individual Chapters
+### Individual Chapters (HTML)
 
 Each chapter is also available as a smaller standalone page — recommended for screen readers and assistive technology.
 
@@ -163,7 +164,8 @@ Lab manuals are served via GitHub Pages:
 | Equipment: Resistance Measurement | [ResistanceMeasurements.html](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/ResistanceMeasurements.html) |
 | Equipment: DC Voltage Measurement | [DCVoltageMeasurement.html](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/DCVoltageMeasurement.html) |
 | Equipment: Capacitance Measurement | [CapacitanceMeasurement.html](https://andreknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/CapacitanceMeasurement.html) |
-| Reader: Complete Book | [ECEConfidential.html](https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html) |
+| Reader: Complete Book (HTML) | [ECEConfidential.html](https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html) |
+| Reader: Complete Book (PDF) | [ECEConfidential.pdf](https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.pdf) |
 | Reader: AI Partner | [AIPartner.html](https://andreknoesen.github.io/ECE-Emerge/Reader/AIPartner.html) |
 | Reader: Ch. 1 — The Flashlight | [TheFlashlight.html](https://andreknoesen.github.io/ECE-Emerge/Reader/TheFlashlight.html) |
 | Reader: Ch. 2 — Language of Circuits | [LanguageofCircuits.html](https://andreknoesen.github.io/ECE-Emerge/Reader/LanguageofCircuits.html) |
