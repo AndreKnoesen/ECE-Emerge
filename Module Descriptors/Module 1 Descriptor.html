@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 1: Foundations and Circuit Language</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Module 1: Foundations and Circuit Language</h1>
+<p>Module 1 is your entry point into electrical engineering. You will build a conceptual foundation for how charge, current, and voltage work, learn to read and draw circuit schematics, and get hands-on with the ADALM2000 (M2K) for the first time.</p>
+<p><strong>This module covers:</strong><br/>
+* Electric force, field, and potential using a gravity-based analogy<br/>
+* Conventional current and the difference between DC and AC<br/>
+* Circuit schematics: nodes, branches, loops, and ground conventions<br/>
+* Responsible AI use as a learning tool in engineering</p>
+<h3>Before the Lecture</h3>
+<p><strong>Pre-Lecture Reading:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html" rel="noopener noreferrer" target="_blank"><strong>ECE Confidential: Cracking The Code</strong></a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/AIPartner.html" rel="noopener noreferrer" target="_blank">AI Partner</a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/TheFlashlight.html" rel="noopener noreferrer" target="_blank">Chapter 1 — The Flashlight</a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/LanguageofCircuits.html" rel="noopener noreferrer" target="_blank">Chapter 2 — Language of Circuits</a></p>
+<hr/>
+<h3>Pre-Lecture Assessments</h3>
+<p>After completing the reading for each chapter — and <strong>before attending lecture</strong> — you will take a short online quiz. Questions are drawn at random from a bank, so every attempt is different.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> First, <strong>complete the assigned reading</strong>. Then use an AI tool (such as ChatGPT or Claude) to work through the checklist below. Ask the tool to explain each item, provide an example, and then quiz you on the concept. When you can answer the questions confidently without referring to notes, you are ready. You will have <strong>35 minutes</strong> to complete the assessment.</p>
+<p>The goal is to ensure that you <strong>understand the material</strong>, not simply to pass the assessment.</p>
+</blockquote>
+<h4>Preamble: Responsible AI Use — 3 questions</h4>
+<ul>
+<li>Identify tasks where an LLM is and is not a reliable source of technical information</li>
+<li>Distinguish between using AI as a thinking partner versus using it to complete graded work</li>
+</ul>
+<h4>Chapter 1: Electrical Foundations — 10 questions</h4>
+<ul>
+<li>Explain how electric force between two charges depends on their sign and separation</li>
+<li>State the direction of conventional current and explain why it is defined opposite to electron flow</li>
+<li>Distinguish between direct current and alternating current in terms of charge flow direction</li>
+<li>Identify the four functional parts of a simple circuit and state the role of each</li>
+</ul>
+<h4>Chapter 2: Circuit Language — 10 questions</h4>
+<ul>
+<li>Explain what a schematic represents and what it intentionally omits</li>
+<li>Identify standard schematic symbols for resistor, voltage source, switch, wire, and ground</li>
+<li>Define node, branch, and loop and identify each in a given schematic</li>
+<li>Distinguish between a connected junction and two crossing wires that are not connected</li>
+</ul>
+<hr/>
+<h3>The Physics Behind the Circuit</h3>
+<p>We begin with the "why" before the "what." Using a gravity and hill analogy, you will learn to distinguish three foundational concepts: electric force, electric field, and electric potential. These invisible quantities are the reason a circuit does anything at all. Understanding the difference between them is the first step toward reading and building real circuits.</p>
+<h3>Speaking the Language of Circuits</h3>
+<p>Engineers communicate circuit ideas through schematics, not physical pictures of wires and components. You will learn to read and draw schematics using standard symbols and master the vocabulary of nodes, branches, and loops. You will also learn the conventions for current direction, voltage polarity, and ground references that apply throughout the rest of the course.</p>
+<h3>Responsible AI Use</h3>
+<p>This course treats AI as a thinking partner, not an answer dispenser. In Module 1, you will be introduced to how AI tools should and should not be used in your engineering education. Critical evaluation, proper attribution, and verification against the textbook are professional habits you will practice from the start.</p>
+<hr/>
+<h2>Hands-On: Lab 1</h2>
+<h3>Before the Lab</h3>
+<p><strong>Lab Assignment:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Lab1/htmlconversion/Lab1Instructions.html" rel="noopener noreferrer" target="_blank">Lab 1 Instructions</a></p>
+<p><strong>ECE Instructional Lab Safety Requirements:</strong> <a href="https://andreknoesen.github.io/eec1-widgets/ECE_Lab_Safety_Requirements.html" rel="noopener noreferrer" target="_blank">ECE Instructional Lab Safety Requirements</a></p>
+<p><strong>Soldering Training:</strong> <a href="https://andreknoesen.github.io/eec1-widgets/SolderTraining.html" rel="noopener noreferrer" target="_blank">Soldering Training</a></p>
+<p>Read the Lab assignment, complete the ECE Instructional Lab Safety Requirements and Soldering Training modules, and complete their associated assessments before attending the lab.  In Lab 1, you will get your first hands-on experience with the ADALM2000 (M2K), the portable instrument you will use throughout the course as your oscilloscope, signal generator, power supply, and voltmeter.</p>
+<ul>
+<li><strong>Soldering:</strong> Build your UC Davis M2K Adaptor Board, developing a foundational engineering skill you will use for the rest of the term.</li>
+<li><strong>Instrument Familiarization:</strong> Connect the M2K, launch Scopy, and complete your first DC measurements.</li>
+<li><strong>Component Collection:</strong> Gather the components you will use in the labs ahead.</li>
+</ul>
+<hr/>
+<h3>Post-Lecture Assessments</h3>
+<p>After completing the lecture and lab, you will take a post-lecture assessment for each chapter. These questions go beyond recall .  You will need to apply concepts, predict outcomes, and explain reasoning. Questions are drawn at random from a bank; each quiz is <strong>6 questions · 15 minutes</strong>.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> For each topic below, ask your AI tool for a worked example or scenario, then solve it yourself. If you can explain your reasoning out loud, you are ready.</p>
+</blockquote>
+<h4>Chapter 1: Electrical Foundations</h4>
+<ul>
+<li><strong>Electric charge and force</strong> — how charges attract and repel; how distance and magnitude affect the force</li>
+<li><strong>Electric field and potential</strong> — what a field represents; what potential difference means physically; the gravity/hill analogy</li>
+<li><strong>The force–field–potential hierarchy</strong> — how force, field, and potential relate to each other and to their gravitational counterparts</li>
+<li><strong>Current</strong> — the direction convention for conventional current; why it is opposite to electron flow; DC vs AC</li>
+<li><strong>A complete circuit</strong> — the four functional parts; how energy is converted from source to load</li>
+</ul>
+<h4>Chapter 2: Circuit Language</h4>
+<ul>
+<li><strong>Schematics</strong> — what a schematic captures and what it deliberately omits</li>
+<li><strong>Standard symbols</strong> — resistor, voltage source, switch, wire, ground</li>
+<li><strong>Circuit topology</strong> — nodes, branches, and loops; identifying each in a schematic</li>
+<li><strong>Connection conventions</strong> — connected junction vs crossing wires; why all points on an ideal wire share the same potential</li>
+<li><strong>Open and short circuits</strong> — the effect of each on current flow in the surrounding circuit</li>
+<li><strong>Voltage and current conventions</strong> — applying correct polarity signs; marking conventional current direction given a source</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>

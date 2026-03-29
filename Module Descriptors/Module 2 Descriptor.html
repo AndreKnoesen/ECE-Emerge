@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 2: DC Circuits and Component Behavior</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Module 2: DC Circuits and Component Behavior</h1>
+<p>Module 2 introduces the analytical tools you will use throughout your engineering career. You will move from understanding individual components to analyzing how they behave in connected networks, and you will verify those laws in the lab.</p>
+<p><strong>This module covers:</strong><br/>
+* Kirchhoff's Current Law (KCL) and Kirchhoff's Voltage Law (KVL)<br/>
+* Series and parallel resistance combinations<br/>
+* The voltage divider and how it changes under load<br/>
+* I-V curves and the difference between linear and nonlinear components</p>
+<h3>Before the Lecture</h3>
+<p><strong>Pre-Lecture Reading:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html" rel="noopener noreferrer" target="_blank"><strong>ECE Confidential: Cracking The Code</strong></a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/SecretsofDCCircuits.html" rel="noopener noreferrer" target="_blank">Chapter 3 — Secrets of DC Circuits</a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/IVMenagerie.html" rel="noopener noreferrer" target="_blank">Chapter 4 — The I-V Menagerie</a></p>
+<hr/>
+<h3>Pre-Lecture Assessments</h3>
+<p>After completing the reading for each chapter, and <strong>before attending lecture</strong>, you will take a short online quiz. Questions are drawn at random from a bank, so every attempt is different.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> Use an AI tool to work through the checklist below. Ask it to explain each item, give you an example, then quiz you on it. When you can answer without looking, you are ready.  You will have <strong>30 minutes</strong> to complete the assessment.</p>
+</blockquote>
+<h4>Chapter 3: DC Circuits — 10 questions</h4>
+<ul>
+<li>Identify all nodes in a given circuit schematic</li>
+<li>Identify a valid closed loop in a circuit and state the KVL equation for it</li>
+<li>State the condition under which a voltmeter measurement is accurate to within 1%</li>
+</ul>
+<h4>Chapter 4: I-V Curves — 10 questions</h4>
+<ul>
+<li>Explain what an I-V curve represents and why it completely characterizes a component</li>
+<li>Identify the I-V curve of an ideal resistor and explain what linearity means in this context</li>
+<li>Distinguish between the I-V curve of a resistor and a diode and describe the key difference</li>
+<li>Describe the I-V curve of an ideal voltage source and explain what it implies about current</li>
+<li>Explain how the M2K can be used to measure the I-V curve of a component</li>
+<li>Describe one observable difference between an LED and a standard resistor when current flows through each</li>
+</ul>
+<hr/>
+<h3>Conservation Laws in Action</h3>
+<p>KCL and KVL are not just textbook rules. They are statements of conservation of charge and energy. Every method of circuit analysis you will encounter in this course derives from these two laws. You will apply them to resistor networks and verify that they hold in the real world on your breadboard.</p>
+<h3>The Voltage Divider</h3>
+<p>If there is one circuit to master in Module 2, it is the voltage divider. This two-resistor configuration appears in almost every engineering application. You will learn how it works in theory and how its output voltage changes when a load is connected, an effect called loading. This loading concept will resurface when you study op-amps in Module 6.</p>
+<h3>The I-V Menagerie</h3>
+<p>Every component can be characterized by its I-V curve, a graph that shows how current through it relates to voltage across it. Resistors produce a straight line; diodes do not. You will be introduced to this range of component behaviors as a preview of the device characterization you will carry further in Module 3.</p>
+<hr/>
+<h2>Hands-On: Lab 2</h2>
+<h3>Before the Lab</h3>
+<p><strong>Lab Assignment:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Lab2/htmlconversion/Lab2Instructions.html" rel="noopener noreferrer" target="_blank">Lab 2 Instructions</a></p>
+<p>Read the Lab assignment and complete the prelab before attending the lab. In Lab 2, you will use the ADALM2000 (M2K) and the Keysight Bench Multimeter to verify DC circuit laws and capture your first periodic signals.</p>
+<ul>
+<li><strong>Verify the Laws:</strong> Build resistor networks and confirm that KCL and KVL hold on your breadboard.</li>
+<li><strong>Oscilloscope and Signal Generator:</strong> Use the M2K to capture and export periodic signals for the first time.</li>
+<li><strong>MATLAB Analysis:</strong> Calculate mean and standard deviation on class resistor data to see how real components vary from their nominal values.</li>
+</ul>
+<hr/>
+<h3>Post-Lecture Assessment</h3>
+<p>After completing the lecture and lab, you will take a post-lecture assessment. These questions require you to apply KCL, KVL, and the voltage divider — not just recall them. Questions are drawn at random from a bank; the quiz is <strong>6 questions · 15 minutes</strong>.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> For each topic below, ask your AI tool for a worked example, then solve it yourself. If you can explain your reasoning out loud, you are ready.</p>
+</blockquote>
+<h4>Chapter 3: DC Circuits</h4>
+<ul>
+<li><strong>Kirchhoff's Current Law (KCL)</strong> — why it follows from conservation of charge; applying it at a node; writing KCL for multiple nodes</li>
+<li><strong>Kirchhoff's Voltage Law (KVL)</strong> — why it follows from conservation of energy; applying the correct sign convention around a loop; finding an unknown voltage</li>
+<li><strong>Series and parallel resistance</strong> — calculating equivalent resistance for series and parallel combinations</li>
+<li><strong>Voltage dividers</strong> — applying the divider formula; predicting the effect of a connected load</li>
+<li>
+<p><strong>Circuit measurement</strong> — why a voltmeter loads the circuit it measures; the condition for less than 1% error</p>
+</li>
+<li>
+<p>There is no post lecture assessment for Chapter 4 (I-V Curves)</p>
+</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>

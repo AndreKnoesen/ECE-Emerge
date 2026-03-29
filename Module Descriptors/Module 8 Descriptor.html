@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 8: Instrumentation and Signal Chains</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Module 8: Instrumentation and Signal Chains</h1>
+<p>Module 8 is the pivot point of the course. You will learn how to measure tiny signals in the presence of large background voltages, and you will design a complete signal conditioning chain that prepares a sensor output for digitization. This module is also the launch of the capstone scale project.</p>
+<p><strong>This module covers:</strong><br/>
+* The Wheatstone bridge and how it converts mechanical force into a differential voltage<br/>
+* The instrumentation amplifier (INA125): high input impedance, common-mode rejection, and single-resistor gain<br/>
+* Signal chain design: connecting sensor, instrumentation amplifier, level shifter, and ADC<br/>
+* Capstone bring-up: verifying each stage of the scale signal chain on the breadboard</p>
+<h3>Before the Lecture</h3>
+<p><strong>Pre-Lecture Reading:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html" rel="noopener noreferrer" target="_blank"><strong>ECE Confidential: Cracking The Code</strong></a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/InstrumentationAmplifiers.html" rel="noopener noreferrer" target="_blank">Chapter 11 — The Signal in the Difference</a></p>
+<hr/>
+<h3>Measuring Small Signals in a Noisy World</h3>
+<p>Real sensor signals are often tiny and ride on a large common-mode voltage that appears equally on both signal leads. A simple difference amplifier can cancel this background in principle, but its finite input impedance distorts the sensor signal. The three-op-amp instrumentation amplifier solves this by presenting nearly infinite input impedance while still rejecting common-mode interference with high precision.</p>
+<h3>The INA125 Instrumentation Amplifier</h3>
+<p>The INA125 is a complete instrumentation amplifier in a single package, with gain set by one external resistor. For the scale project, the Wheatstone bridge load cell produces only about 10 mV at full load, riding on a 2.5 V common-mode voltage. The INA125 amplifies the differential signal by approximately 400 times while rejecting the common-mode background, leaving a clean signal ready for the level-shifting stage you built in Module 7.</p>
+<h3>Signal Chain Design</h3>
+<p>Every design decision in the signal chain exists to maximize the fraction of the ADC input range occupied by the signal of interest. You will connect the stages you have built across Modules 6, 7, and 8 into a single working system: bridge sensor to instrumentation amplifier to summing amplifier to ADC. Verifying each stage in isolation before connecting them is the disciplined bring-up approach used in professional hardware development.</p>
+<hr/>
+<h2>Hands-On: Lab 8</h2>
+<p><strong>Project Description:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/ECE_Emerge_Project/htmlconversion/ECE_Emerge_Project.html" rel="noopener noreferrer" target="_blank">ECE Emerge Project</a></p>
+<p><strong>Lab Assignment:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Lab8/htmlconversion/Lab8Instructions.html" rel="noopener noreferrer" target="_blank">Lab 8 Instructions</a></p>
+<p>In Lab 8, you will execute your team's bring-up plan to verify the integrated scale signal chain on the breadboard.</p>
+<ul>
+<li><strong>INA125 Verification:</strong> Confirm the instrumentation amplifier power connections, set the gain resistor, and verify the output with a known input.</li>
+<li><strong>Full Chain Integration:</strong> Connect the load cell, INA125, and summing amplifier, and confirm that a known weight produces the expected ADC output.</li>
+<li><strong>Capstone Launch:</strong> This lab has no step-by-step procedure. Your team follows the Design Document prepared in the pre-lab and documents every measurement and discrepancy found during bring-up.</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>

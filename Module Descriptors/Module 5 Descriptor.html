@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 5: Phasors, Impedance, and Filters</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Module 5: Phasors, Impedance, and Filters</h1>
+<p>Module 5 is the conceptual bridge of the course. You will combine what you know about DC circuits, signals, and energy storage to analyze circuits driven by AC signals, and you will see how a simple arrangement of resistors and capacitors can selectively pass or block specific frequencies.</p>
+<p><strong>This module covers:</strong><br/>
+* Phasors: representing sinusoidal signals as complex numbers to make AC analysis algebraic<br/>
+* Impedance: the frequency-dependent generalization of resistance<br/>
+* Low-pass, high-pass, and other filter types built from resistors and capacitors<br/>
+* The cutoff frequency and the decibel scale</p>
+<h3>Before the Lecture</h3>
+<p><strong>Pre-Lecture Reading:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html" rel="noopener noreferrer" target="_blank"><strong>ECE Confidential: Cracking The Code</strong></a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ComplexNumbers.html" rel="noopener noreferrer" target="_blank">Chapter 8 — The Imaginary Made Useful</a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ACAnalysis.html" rel="noopener noreferrer" target="_blank">Chapter 9 — The Impedance Code</a></p>
+<hr/>
+<h3>Pre-Lecture Assessments</h3>
+<p>After completing the reading for each chapter — and <strong>before attending lecture</strong> — you will take a short online quiz. Questions are drawn at random from a bank, so every attempt is different.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> Use an AI tool to work through the checklist below. Ask it to explain each item, give you an example, then quiz you on it. When you can answer without looking, you are ready.  ou will have <strong>30 minutes</strong> to complete the assessment.</p>
+</blockquote>
+<h4>Chapter 8: The Imaginary Made Useful — 10 questions</h4>
+<ul>
+<li>Identify the real and imaginary parts of a complex number written in rectangular form and plot it on the complex plane</li>
+<li>Explain what multiplying a complex number by j does geometrically and state the resulting angle change</li>
+<li>Define a phasor and explain what information it encodes about a sinusoidal signal</li>
+</ul>
+<h4>Chapter 9: Impedance and Filters — 10 questions</h4>
+<ul>
+<li>Define impedance and explain how it generalizes resistance to AC circuits</li>
+<li>Explain what the −3 dB point means physically and state what ratio of V_out/V_in it corresponds to</li>
+</ul>
+<hr/>
+<h3>Phasors: Making AC Analysis Algebraic</h3>
+<p>Analyzing circuits with time-varying signals normally requires solving differential equations. Phasors let you sidestep the calculus. A phasor encodes a signal's amplitude and phase as a single complex number. The key geometric insight is that multiplying by the imaginary unit j rotates a phasor by 90 degrees, which is exactly how a capacitor shifts the phase of a signal passing through it.</p>
+<h3>Impedance: Ohm's Law for AC</h3>
+<p>Impedance generalizes resistance to AC circuits. Like resistance, impedances combine in series and parallel by the same rules you learned in Module 2. Unlike resistance, impedance depends on frequency. A capacitor's impedance falls as frequency rises. An inductor's impedance rises with frequency. This frequency dependence is what makes filtering possible.</p>
+<blockquote>
+<p>The voltage divider from Module 2 becomes a filter the moment you replace one resistor with a capacitor. The circuit structure is identical; only the frequency dependence of the impedance is new.</p>
+</blockquote>
+<h3>Filters</h3>
+<p>By combining a resistor and a capacitor as an impedance voltage divider, you create a circuit whose gain changes with frequency. A low-pass filter passes low frequencies and attenuates high ones. A high-pass filter does the opposite. The cutoff frequency marks the boundary between the passband and the stopband, defined as the point where output power is reduced by half.</p>
+<hr/>
+<h3>Hands-On: Lab 5</h3>
+<h3>Before the Lab</h3>
+<p><strong>Lab Assignment:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Lab5/htmlconversion/Lab5Instructions.html" rel="noopener noreferrer" target="_blank">Lab 5 Instructions</a></p>
+<p>In Lab 5, you will characterize RC filters using two complementary methods and compare the results.</p>
+<ul>
+<li><strong>Time-Domain Measurement:</strong> Use the oscilloscope to measure amplitude and phase shift at specific frequencies.</li>
+<li><strong>Network Analyzer:</strong> Use the M2K Network Analyzer to automatically sweep frequencies and generate Bode plots of magnitude and phase.</li>
+<li><strong>MATLAB Analysis:</strong> Overlay manual measurements, automated data, and theoretical predictions in a single composite graph to analyze real-world discrepancies.</li>
+</ul>
+<hr/>
+<h3>Post-Lecture Assessments</h3>
+<p>After completing the lecture and lab, you will take a post-lecture assessment for each chapter. These questions require you to work with phasors and impedances, calculate filter responses, and reason about frequency-dependent behavior. Questions are drawn at random from a bank; each quiz is <strong>6 questions · 15 minutes</strong>.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> For each topic below, ask your AI tool for a worked example, then solve it yourself. If you can explain your reasoning out loud, you are ready.</p>
+</blockquote>
+<h4>Chapter 8: The Imaginary Made Useful</h4>
+<ul>
+<li><strong>Complex numbers</strong> — rectangular and polar forms; converting between them; what magnitude and angle represent; plotting on the complex plane</li>
+<li><strong>The j operator</strong> — what multiplying by j does geometrically (90° rotation); Euler's formula and how it connects polar form to sinusoids</li>
+<li><strong>Phasors</strong> — definition and what amplitude and phase a phasor encodes; converting between time-domain expressions and phasors; adding phasors; determining leading vs lagging; why differentiation becomes multiplication by jω</li>
+</ul>
+<h4>Chapter 9: Impedance and Filters</h4>
+<ul>
+<li><strong>Impedance</strong> — how it generalizes resistance; the impedance of a capacitor (Z = 1/jωC) at DC and high frequency; the impedance of an inductor (Z = jωL) at DC and high frequency</li>
+<li><strong>Impedance voltage divider</strong> — applying the voltage divider formula with complex impedances to find output voltage as a function of frequency</li>
+<li><strong>Decibels</strong> — calculating transfer function magnitude in dB; the −3 dB point and what it means; the corresponding V_out/V_in ratio</li>
+<li><strong>RC filters</strong> — identifying low-pass and high-pass topologies; predicting output at DC and high frequency; calculating cutoff frequency f_c = 1/(2πRC); the phase shift at the cutoff frequency</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>

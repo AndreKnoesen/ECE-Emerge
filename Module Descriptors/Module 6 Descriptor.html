@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 6: Operational Amplifiers</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Module 6: Operational Amplifiers</h1>
+<p>Module 6 introduces the operational amplifier, one of the most widely used components in analog electronics. You will learn how to tame a device with enormous open-loop gain using negative feedback, and how to build precision amplifiers whose gain is set entirely by external resistors.</p>
+<p><strong>This module covers:</strong><br/>
+* The ideal op-amp assumptions and the concept of negative feedback<br/>
+* The Golden Rules: virtual short and virtual open<br/>
+* Voltage follower, inverting amplifier, and non-inverting amplifier circuits<br/>
+* Real-world limits: slew rate and output saturation</p>
+<h3>Before the Lecture</h3>
+<p><strong>Pre-Lecture Reading:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html" rel="noopener noreferrer" target="_blank"><strong>ECE Confidential: Cracking The Code</strong></a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/OperationalAmplifiers.html" rel="noopener noreferrer" target="_blank">Chapter 10 — How Op-Amps Hide Complexity</a> (Section 1: Device, Feedback, and Golden Rules)</p>
+<hr/>
+<h3>Pre-Lecture Assessments</h3>
+<p>After completing the reading — and <strong>before attending lecture</strong> — you will take a short online quiz for each part of Chapter 10. Questions are drawn at random from a bank, so every attempt is different.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> Use an AI tool to work through the checklist below. Ask it to explain each item, give you an example, then quiz you on it. When you can answer without looking, you are ready. ou will have <strong>15 minutes</strong> to complete the assessment.</p>
+</blockquote>
+<h4>Chapter 10.1: Device, Feedback, and Golden Rules</h4>
+<ul>
+<li>Identify the five terminals of an op-amp and state the function of each</li>
+<li>Explain why an op-amp is an active component and what that implies about power</li>
+<li>State what open-loop gain means and explain why an op-amp with only open-loop gain is impractical for most applications</li>
+<li>Explain what limits the maximum output voltage of an op-amp and define output saturation</li>
+<li>Explain why an ideal op-amp draws no current at its input terminals, and state the practical implication for circuits connected to it</li>
+<li>Explain why an ideal op-amp has zero output impedance, and state what this implies about loading effects</li>
+<li>Explain qualitatively what happens when positive feedback is applied to a high-gain amplifier</li>
+<li>State the virtual open rule and explain what it says about the currents into the op-amp input terminals</li>
+<li>State the condition that must be satisfied before applying the Golden Rules to an op-amp circuit</li>
+<li>Identify the feedback connection in a voltage follower schematic and explain which Golden Rule it activates</li>
+</ul>
+<hr/>
+<h3>The Power of Negative Feedback</h3>
+<p>An op-amp on its own has an open-loop gain so large that almost any input signal drives the output to its maximum or minimum. Negative feedback changes everything. By connecting the output back to the inverting input, the circuit forces the output to settle at a value where the two inputs are nearly equal. This self-correcting behavior makes the op-amp stable, linear, and predictable.</p>
+<h3>The Golden Rules</h3>
+<p>When negative feedback is present and the op-amp is behaving ideally, two rules let you analyze almost any circuit without knowing anything about the op-amp's internal design. The virtual short rule states that the op-amp drives its output to force the two input voltages to be equal. The virtual open rule states that no current flows into either input terminal. These rules are the distilled consequence of ideal negative feedback, not definitions to memorize but results to understand.</p>
+<h3>Amplifier Circuits</h3>
+<p>With the Golden Rules in hand, you can analyze a family of precision amplifiers. The voltage follower provides unity gain with high input impedance, solving the loading problem you encountered in Module 2. The non-inverting amplifier provides gain greater than one while preserving the signal's polarity. The inverting amplifier scales and inverts the signal, with gain set by the ratio of two external resistors.</p>
+<hr/>
+<h2>Hands-On: Lab 6</h2>
+<h3>Before the Lab</h3>
+<p>Lab Assignment:** <a href="https://andreknoesen.github.io/ECE-Emerge/Lab6/htmlconversion/Lab6Instructions.html" rel="noopener noreferrer" target="_blank">Lab 6 Instructions</a></p>
+<p>In Lab 6, you will build and characterize op-amp circuits on your breadboard, moving from ideal analysis to real-world observation.</p>
+<ul>
+<li><strong>Voltage Follower:</strong> Demonstrate how a buffer prevents loading and observe the gap between ideal theory and real hardware behavior.</li>
+<li><strong>Inverting and Non-Inverting Amplifiers:</strong> Build both topologies, verify gain using the Golden Rules, and observe output saturation when the signal exceeds the supply rails.</li>
+<li><strong>Slew Rate:</strong> Measure the maximum rate at which the op-amp output can change, revealing a physical speed limit that the ideal model does not capture.</li>
+</ul>
+<hr/>
+<h3>Post-Lecture Assessments</h3>
+<p>After completing the lecture and lab, you will take a post-lecture assessment for each part of Chapter 10. These questions require you to apply the Golden Rules, analyze amplifier circuits, and reason about real-device limits. Questions are drawn at random from a bank; each quiz is <strong>6 questions · 15 minutes</strong>.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> For each topic below, ask your AI tool for a worked example, then solve it yourself. If you can explain your reasoning out loud, you are ready.</p>
+</blockquote>
+<h4>Chapter 10.1: Device, Feedback, and Golden Rules</h4>
+<ul>
+<li><strong>The op-amp as a device</strong> — the five terminals; why it is an active component; open-loop gain and why it is impractical alone; differential input; supply rails and output saturation</li>
+<li><strong>Ideal op-amp model</strong> — infinite open-loop gain; infinite input impedance; zero output impedance; when these assumptions are valid</li>
+<li><strong>Negative feedback</strong> — the concept of feeding output back to the inverting input; how feedback stabilizes gain; what happens with positive feedback instead</li>
+<li><strong>The Golden Rules</strong> — virtual short (V+ = V− when negative feedback is present); virtual open (no current into input terminals); the condition that must hold before applying them</li>
+<li><strong>Voltage follower</strong> — the circuit topology; applying the Golden Rules to confirm unity gain; why input impedance is high and output impedance is low; the loading problem it solves</li>
+</ul>
+<h4>Chapter 10.2: Amplifier Configurations and Real-Device Limits</h4>
+<ul>
+<li><strong>Non-inverting amplifier</strong> — identifying the topology and feedback network; the gain formula G = 1 + R_f/R_1; high input resistance; the voltage follower as the special case R_f = 0, R_1 = ∞</li>
+<li><strong>Inverting amplifier</strong> — identifying the topology; the virtual ground at the inverting input; the gain G = −R_f/R_in; why the output is 180° out of phase; input resistance equals R_in</li>
+<li><strong>Summing amplifier</strong> — using superposition to derive the output formula; using it as a level shifter to add a DC offset to an AC signal</li>
+<li><strong>Output saturation</strong> — what causes it; the relationship between supply voltage and saturation voltage; how to choose gain and input amplitude to avoid it</li>
+<li><strong>Gain-bandwidth product (GBW)</strong> — the GBW relationship; calculating the −3 dB bandwidth at a chosen closed-loop gain; implications for filter design</li>
+<li><strong>Slew rate</strong> — what it is; how it differs from the GBW limit; which one governs for large-amplitude, high-frequency signals</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>

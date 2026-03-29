@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 4: Circuits That Remember</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Module 4: Circuits That Remember</h1>
+<p>Module 4 introduces the two energy-storage elements in electronics: capacitors and inductors. Unlike resistors, these components remember their prior state, giving circuits the ability to respond to changes over time.</p>
+<p><strong>This module covers:</strong><br/>
+* How capacitors store energy in electric fields and resist instantaneous voltage change<br/>
+* How inductors store energy in magnetic fields and resist instantaneous current change<br/>
+* The time constant and the exponential step response of RC and RL circuits<br/>
+* Engineering judgment about when a small physical detail matters</p>
+<h3>Before the Lecture</h3>
+<p><strong>Pre-Lecture Reading:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html" rel="noopener noreferrer" target="_blank"><strong>ECE Confidential: Cracking The Code</strong></a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/InductorsCapacitors.html" rel="noopener noreferrer" target="_blank">Chapter 7 — Circuits That Remember</a></p>
+<hr/>
+<h3>Pre-Lecture Assessment</h3>
+<p>After completing the reading — and <strong>before attending lecture</strong> — you will take a short online quiz. Questions are drawn at random from a bank, so every attempt is different.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> Use an AI tool to work through the checklist below. Ask it to explain each item, give you an example, then quiz you on it. When you can answer without looking, you are ready.  You will have <strong>15 minutes</strong> to complete the assessment.</p>
+</blockquote>
+<h4>Chapter 7: Circuits That Remember — 10 questions</h4>
+<ul>
+<li>Explain why a fully charged capacitor behaves like an open circuit in DC steady state</li>
+<li>Define the RC time constant and state its units</li>
+<li>Write the voltage equation for a charging capacitor and identify what each term represents</li>
+<li>State approximately how many time constants are required for a capacitor to reach 98% of its final value and explain why "fully charged" is a practical approximation</li>
+<li>Write the voltage equation for a discharging capacitor and describe the shape of the resulting waveform</li>
+<li>Explain why an ideal inductor behaves like a short circuit in DC steady state</li>
+<li>Write the expression for the RL time constant and explain why increasing resistance decreases the time constant</li>
+<li>Write the current equation for an RL circuit energizing from zero and identify what each term represents</li>
+<li>Explain why the current through an energizing inductor reaches 63.2% of its steady-state value after one time constant</li>
+</ul>
+<hr/>
+<h3>Energy Storage and Fundamental Constraints</h3>
+<p>Capacitors and inductors each store energy in a different form. A capacitor stores energy in an electric field between its plates; its defining constraint is that voltage cannot change instantaneously. An inductor stores energy in the magnetic field around its coil; its defining constraint is that current cannot change instantaneously. These constraints are what give circuits memory.</p>
+<h3>The Time Constant</h3>
+<p>When a switch changes state in an RC or RL circuit, the response does not jump to its new value instantly. Instead, it follows an exponential curve governed by the time constant. For an RC circuit, the time constant is the product of resistance and capacitance. For an RL circuit, it is the ratio of inductance to resistance. After one time constant, a charging capacitor has reached 63.2% of its final voltage.</p>
+<h3>Engineering Judgment</h3>
+<p>A practical theme of this module is learning when a small physical detail is significant. The M2K signal generator has an internal resistance of about 50 ohms. You will calculate and verify why this resistance is negligible in the RC circuit but significant in the RL circuit. Knowing what to include and what to safely ignore is a core engineering skill.</p>
+<hr/>
+<h2>Hands-On: Lab 4</h2>
+<h3>Before the Lab</h3>
+<p><strong>Lab Assignment:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Lab4/htmlconversion/Lab4Instructions.html" rel="noopener noreferrer" target="_blank">Lab 4 Instructions</a></p>
+<p>In Lab 4, you will observe transient response directly and apply quantitative methods to extract accurate measurements from real data.</p>
+<ul>
+<li><strong>Visual Measurement:</strong> Use the M2K oscilloscope to identify the 63.2% point and read the time constant directly from the screen.</li>
+<li><strong>MATLAB Fitting:</strong> Export RC data and use linearization to extract a precise time constant from noisy real-world signals.</li>
+<li><strong>Statistical Rigor:</strong> Apply 95% confidence intervals to your measurements, learning how averaging multiple charge and discharge cycles reduces random error.</li>
+</ul>
+<hr/>
+<h3>Post-Lecture Assessment</h3>
+<p>After completing the lecture and lab, you will take a post-lecture assessment. These questions require you to apply the step-response equations, interpret exponential curves, and compare RC and RL behavior. Questions are drawn at random from a bank; the quiz is <strong>6 questions · 15 minutes</strong>.</p>
+<blockquote>
+<p><strong>How to prepare:</strong> For each topic below, ask your AI tool for a worked example, then solve it yourself. If you can explain your reasoning out loud, you are ready.</p>
+</blockquote>
+<h4>Chapter 7: Circuits That Remember</h4>
+<ul>
+<li><strong>Capacitor fundamentals</strong> — how a capacitor stores energy; why voltage cannot change instantaneously; the V-I relationship; open-circuit behavior at DC steady state</li>
+<li><strong>RC step response</strong> — the charging and discharging equations; the time constant τ = RC; the 63.2% point; how many time constants reach practical steady state; response to a square wave</li>
+<li><strong>Inductor fundamentals</strong> — how an inductor stores energy; why current cannot change instantaneously; the V-I relationship; short-circuit behavior at DC steady state</li>
+<li><strong>RL step response</strong> — the current rise equation; the time constant τ = L/R; why increasing resistance decreases the time constant; the voltage across the inductor during energizing</li>
+<li><strong>RC vs RL comparison</strong> — the structural parallel between the two circuits; how source resistance affects the RL time constant</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>

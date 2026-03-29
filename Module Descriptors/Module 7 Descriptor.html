@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 7: Applied Op-Amp Circuits</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Module 7: Applied Op-Amp Circuits</h1>
+<p>Module 7 puts the Golden Rules to work. Building on the amplifier fundamentals from Module 6, you will extend the op-amp toolkit to include circuits that combine multiple signals and shift DC levels, skills that are essential for the capstone scale project.</p>
+<p><strong>This module covers:</strong><br/>
+* The summing amplifier: adding and scaling multiple input signals simultaneously<br/>
+* Virtual ground and how the inverting configuration enables the summing operation<br/>
+* DC level shifting: using a summing amplifier to move a signal into a desired voltage range<br/>
+* Real-world limits: output saturation and gain-bandwidth product</p>
+<h3>Before the Lecture</h3>
+<p><strong>Pre-Lecture Reading:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html" rel="noopener noreferrer" target="_blank"><strong>ECE Confidential: Cracking The Code</strong></a><br/>
+* <a href="https://andreknoesen.github.io/ECE-Emerge/Reader/OperationalAmplifiers.html" rel="noopener noreferrer" target="_blank">Chapter 10 — How Op-Amps Hide Complexity</a> (Section 2: Amplifier Configurations and Real-Device Limits)</p>
+<hr/>
+<blockquote>
+<p><strong>How to prepare:</strong> Use an AI tool to work through the checklist below. Ask it to explain each item, give you an example, then quiz you on it. When you can answer without looking, you are ready. ou will have <strong>15 minutes</strong> to complete the assessment.</p>
+</blockquote>
+<h4>Chapter 10.2: Amplifier Configurations and Real-Device Limits</h4>
+<ul>
+<li>Identify the non-inverting amplifier topology and state which elements form the feedback network</li>
+<li>Show that the voltage follower is a special case of the non-inverting amplifier with R_f = 0 and R_1 = ∞</li>
+<li>Identify the inverting amplifier topology and explain why the non-inverting input is grounded</li>
+<li>Explain physically why the inverting amplifier output is 180° out of phase with the input</li>
+<li>Write the output voltage formula for a two-input inverting summing amplifier with different input resistors</li>
+<li>Describe how the summing amplifier can be used as a level shifter: adding a DC offset to an AC signal</li>
+<li>Explain what causes an op-amp output to saturate and state the relationship between supply voltage and saturation voltage</li>
+<li>Explain what happens to the output waveform when the ideal output would exceed the saturation voltage</li>
+<li>State the gain-bandwidth product relationship and explain what it implies about the bandwidth available at a given closed-loop gain</li>
+</ul>
+<hr/>
+<h3>The Summing Amplifier</h3>
+<p>The inverting amplifier from Module 6 can be extended to accept multiple input signals at once. Each input contributes to the output independently, scaled by its own resistor ratio. The output is the weighted sum of all inputs, inverted in sign. The key to understanding this circuit is the virtual ground node at the inverting input, which ensures that each input signal is isolated from the others.</p>
+<h3>DC Level Shifting</h3>
+<p>A signal that swings between 0 V and 4 V cannot fill an ADC input range of -2.5 V to +2.5 V without adjustment. By treating a fixed reference voltage as one input to the summing amplifier, you can add a precise DC offset to any signal. This level-shifting technique maps a signal from one voltage window to another, and it is a central requirement of the capstone scale design.</p>
+<h3>Real-World Limits</h3>
+<p>Two physical limits become important as amplifier gain increases. Saturation occurs when the output tries to exceed the supply rails; the output "clips" and the circuit no longer behaves linearly. The gain-bandwidth product is a fixed property of the op-amp: as gain increases, the usable frequency range decreases. Both limits must be understood before committing to a design.</p>
+<hr/>
+<h2>Hands-On: Lab 7</h2>
+<h3>Before the Lab</h3>
+<p><strong>Lab Assignment:</strong> <a href="https://andreknoesen.github.io/ECE-Emerge/Lab7/htmlconversion/Lab7Instructions.html" rel="noopener noreferrer" target="_blank">Lab 7 Instructions</a></p>
+<p>In Lab 7, you will design and build a summing amplifier that adds a DC offset to shift a signal into a target voltage range.</p>
+<ul>
+<li><strong>Summing Amplifier:</strong> Build an inverting summing amplifier, verify that each input contributes independently to the output, and confirm the expected gain for each channel.</li>
+<li><strong>Level Shifting:</strong> Apply a DC reference to one input and verify that the circuit shifts the signal into the required output range.</li>
+<li><strong>Saturation and Gain-Bandwidth:</strong> Observe output clipping when the signal exceeds the supply rails and measure how the amplifier's frequency response changes with gain.</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>
