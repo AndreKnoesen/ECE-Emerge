@@ -320,7 +320,7 @@
 <p>Outline the step-by-step procedure to configure the M2K signal generator in Scopy to produce two sine waves with the following specifications:</p>
 <ul>
 <li>Frequency: 10 Hz</li>
-<li>Amplitude: 2 V peak</li>
+<li>Amplitude: 2 V peak-to-peak</li>
 <li>Phase: 0° on W1, 90° on W2</li>
 </ul>
 <p>List each setting you must change in the Scopy interface and the value you would enter. You will execute this procedure in the lab.</p>
@@ -384,7 +384,7 @@
 </blockquote>
 <h4>Part 2: AI-Assisted Data Analysis and Self-Test</h4>
 <p><strong>Data Analysis.</strong></p>
-<p>Download a dataset of measured resistors, specified to be 10% tolerance, of 820 Ω, 1 kΩ, and 1.2 kΩ resistors (same values that you will use in the lab): <a href="https://raw.githubusercontent.com/AndreKnoesen/eec1-widgets/main/Measure_Resistance_Values.csv" rel="noopener noreferrer" target="_blank">Measured_Resistances</a>.</p>
+<p>Download a dataset of measured resistors, specified to be 10% tolerance, of 820 Ω, 1 kΩ, and 1.2 kΩ resistors (same values that you will use in the lab): <a href="https://raw.githubusercontent.com/AndreKnoesen/eec1-widgets/main/Measure_Resistance_Values.csv">Measured_Resistances</a>.</p>
 <p>Open MATLAB and use the <strong>Import Data</strong> app (found under the Home tab) to load the CSV file into your workspace. The app will guide you through selecting columns and previewing the data before importing; no code is required for this step.</p>
 <p>Once the data is in your workspace, write a script yourself, or use MATLAB's built-in AI assistant to help you write a script that does the following for each of the three resistor values:</p>
 <ul>
@@ -462,7 +462,7 @@
 <hr/>
 <h3>Section 2: Resistor Networks, Part 1 (Two Resistors in Series)</h3>
 <p>In this section, you will work with a simple resistor network consisting of two resistors connected in series. You will use the M2K to make single-ended and differential voltage measurements and then apply Ohm's Law and Kirchhoff's Laws to analyze the circuit.</p>
-<p>In addition to using the M2K, also use the Keysight EDU34450A DMM to measure the same voltages and confirm that both instruments give consistent results. See: <a href="https://aknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/DCVoltageMeasurement.html" rel="noopener noreferrer" target="_blank">How to Measure DC Voltage with Keysight EDU34450A Multimeter</a></p>
+<p>In addition to using the M2K, also use the Keysight EDU34450A DMM to measure the same voltages and confirm that both instruments give consistent results. See: <a href="https://aknoesen.github.io/ECE-Emerge/EquipmentInstructions/htmlconversion/DCVoltageMeasurement.html">How to Measure DC Voltage with Keysight EDU34450A Multimeter</a></p>
 <h4>Build the Circuit</h4>
 <p>Construct the following circuit on your breadboard:</p>
 <!-- CIRCUITIKZ FIGURE: Render from LaTeX source as media/fig_voltage_divider.png -->
@@ -475,8 +475,8 @@
 <h4>Make Single-Ended Measurements</h4>
 <p>Use the M2K voltmeter to measure the following voltages:</p>
 <ul>
-<li>$V_{ac}$: Voltage between point $V_a$ and ground ($V_c$)</li>
-<li>$V_{bc}$: Voltage between point $V_b$ and ground ($V_c$)</li>
+<li>$V_{ac}$: Voltage between point $V_a$ and $V_c$</li>
+<li>$V_{bc}$: Voltage between point $V_b$ and $V_c$</li>
 </ul>
 <blockquote>
 <p><strong>Lab Deliverable #3</strong></p>
@@ -604,7 +604,7 @@
 <p><em>Figure 13: Enabling XY mode in Scopy. Click the X-Y button in the toolbar, then set X-Axis to CH1 and Y-Axis to CH2 in the settings panel.</em></p>
 <blockquote>
 <p><strong>Lab Deliverable #16</strong></p>
-<p>Take a screenshot of the XY oscilloscope display showing the Lissajous pattern and submit it via the course submission app.</p>
+<p>Take a screenshot of the XY oscilloscope display showing the Lissajous pattern and submit it via the course submission app. Your XY oscilloscope display should look similar to the Lissajous pattern in the YouTube video, not the curve in Figure 13.</p>
 <p><strong>Lab Deliverable #17</strong></p>
 <p>On your captured XY plot, annotate the following and submit the annotated image:</p>
 <ul>
@@ -848,7 +848,7 @@
 <p><strong>IMPORTANT</strong></p>
 <p>Submit your completed work via the course submission app. All plots, images, data tables, and calculations must be clearly labeled and referenced in your post-lab report.</p>
 </blockquote>
-<p>Version:  1.0</p>
+<p>Version:  2.0</p>
   </main>
 </body>
 </html>
