@@ -26,6 +26,9 @@ classdef SignalLab
     %   xf     = s.filterSignal(x, fLow, fHigh)
     %   xq     = s.quantizeSignal(x, range, bits)
     %
+    % SPECTRAL ANALYSIS
+    %   [fDom, spectrum, freqAxis] = s.computeSpectrum(x)
+    %
     % PLOTTING
     %   s.plotSignal(t, x)
     %   s.plotSpectrum(x)
@@ -672,6 +675,55 @@ classdef SignalLab
     end
 
     % =====================================================================
+    %  Spectral analysis
+    % =====================================================================
+    methods
+
+        function [fDom, spectrum, freqAxis] = computeSpectrum(obj, x)
+            % computeSpectrum  Single-sided magnitude spectrum and dominant frequency
+            %
+            %   [fDom, spectrum, freqAxis] = s.computeSpectrum(x)
+            %
+            %   x        - Signal vector (numeric, at least 4 samples)
+            %   fDom     - Dominant frequency (Hz): frequency of the largest
+            %              spectral peak, excluding DC
+            %   spectrum - Single-sided magnitude spectrum (V); DC is removed
+            %              before the FFT and amplitudes are scaled so peaks
+            %              equal true signal amplitudes (e.g. a 1 V sine gives
+            %              a peak of 1 V at f0)
+            %   freqAxis - Frequency axis (Hz), length floor(N/2)+1,
+            %              with bin spacing Fs/N
+            %
+            %   Example — extract the amplitude at the 3rd harmonic:
+            %     [~, spectrum, freqAxis] = s.computeSpectrum(x);
+            %     [~, idx] = min(abs(freqAxis - 3*s.frequency));
+            %     amp3 = spectrum(idx);
+
+            SignalLab.validateSignalInput(x, "computeSpectrum");
+            x = x(:) - mean(x);
+            N = length(x);
+
+            if N < 4
+                error("SignalLab:tooShort", ...
+                    "Signal must contain at least 4 samples for spectral analysis.");
+            end
+
+            Xmag = abs(fft(x) / N);
+
+            nUniq    = floor(N/2) + 1;
+            spectrum = Xmag(1:nUniq);
+            spectrum(2:end-1) = 2 * spectrum(2:end-1);
+
+            freqAxis = (0 : nUniq-1) * (obj.samplingRate / N);
+
+            % Dominant frequency: largest peak excluding DC (index 1)
+            [~, idx] = max(spectrum(2:end));
+            fDom = freqAxis(idx + 1);
+        end
+
+    end
+
+    % =====================================================================
     %  Private helpers
     % =====================================================================
     methods (Access = private)
@@ -728,33 +780,6 @@ classdef SignalLab
                     obj.waveType, obj.samplingRate, obj.frequency, ...
                     highestHarmonic, obj.samplingRate / 2);
             end
-        end
-
-        function [fDom, spectrum, freqAxis] = computeSpectrum(obj, x)
-            % Compute the single-sided magnitude spectrum and dominant frequency.
-            %
-            % DC offset is removed before the FFT. The single-sided spectrum
-            % is scaled so that peak values correspond to true signal amplitudes.
-
-            x = x(:) - mean(x);
-            N = length(x);
-
-            if N < 4
-                error("SignalLab:tooShort", ...
-                    "Signal must contain at least 4 samples for spectral analysis.");
-            end
-
-            Xmag = abs(fft(x) / N);
-
-            nUniq    = floor(N/2) + 1;
-            spectrum = Xmag(1:nUniq);
-            spectrum(2:end-1) = 2 * spectrum(2:end-1);
-
-            freqAxis = (0 : nUniq-1) * (obj.samplingRate / N);
-
-            % Dominant frequency: largest peak excluding DC (index 1)
-            [~, idx] = max(spectrum(2:end));
-            fDom = freqAxis(idx + 1);
         end
 
     end
