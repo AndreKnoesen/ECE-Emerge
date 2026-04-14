@@ -990,7 +990,7 @@
 <p>The four waveforms measured in Part 1 (sine, square, triangle, sawtooth) will each be compared to their theoretical counterpart. The goal is to examine where agreement between theory and measurement is strong, where it breaks down, and why.</p>
 <h4>Getting <code>SignalLab</code> Class</h4>
 <ol>
-<li>Download <strong>SignalLab.m</strong> (<a href="https://ucdavis.box.com/s/gk3w1nbyqafmo13irx35ia1ziil8lqga">https://ucdavis.box.com/s/gk3w1nbyqafmo13irx35ia1ziil8lqga</a>)</li>
+<li>Download <strong>SignalLab.m</strong> (<a href="https://aknoesen.github.io/ECE-Emerge/SignalLab.m">https://aknoesen.github.io/ECE-Emerge/SignalLab.m</a>)</li>
 <li>Place the file in your working MATLAB folder, <em>or</em> add its location permanently to the MATLAB path:</li>
 </ol>
 <pre><code class="language-matlab">addpath('C:/path/to/folder/containing/SignalLab')
@@ -1003,7 +1003,7 @@ savepath
 </code></pre>
 <p>MATLAB should respond with the full path to <code>SignalLab.m</code>. If it does not, check that the file is in the correct folder.</p>
 <ol>
-<li>A complete usage guide (<code>SignalLab_Guide</code>) is found here (<a href="https://ucdavis.box.com/s/3lgs68hcipowgcveyomcr5t7ogyxnkue">https://ucdavis.box.com/s/3lgs68hcipowgcveyomcr5t7ogyxnkue</a>)</li>
+<li>A complete usage guide (<code>SignalLab_Guide</code>) is found here (<a href="https://aknoesen.github.io/ECE-Emerge/SignalLab_Guide.html">https://aknoesen.github.io/ECE-Emerge/SignalLab_Guide.html</a>)</li>
 </ol>
 <h4>Starter Script</h4>
 <p>The following script sets up the signal parameters and loads your first measured CSV file. Use it as your starting point and extend it to complete Tasks 2a through 2e.</p>
@@ -1055,16 +1055,31 @@ grid on;
 s = s.setWave("square");      % 2. configure
 [t, x] = s.generate(dur);     % 3. generate
 </code></pre>
-<h4>Tasks  Note: These deliverables are not yet finalized and will be finalized by the end of Wednesday.</h4>
+<h4>Tasks</h4>
 <blockquote>
 <p><strong>Lab Deliverable #2a</strong></p>
 <p>Load the four time-domain CSV files collected in Part 1 into MATLAB. Plot the measured time-domain signal for each waveform. Each plot must include labeled axes (time in seconds, amplitude in volts) and a descriptive title. Arrange all four plots in a single figure using <code>subplot</code>. Upload the figure as an image via the course submission app. Your name must be visible in the image before uploading.</p>
-<p><strong>Lab Deliverable #2b</strong></p>
-<p>Use <code>SignalLab</code> to generate the theoretical version of each waveform at 1 kHz with 1 V amplitude. For each waveform, plot the measured and theoretical signals on the same axes. Use distinct colors or line styles and include a legend. For each waveform, write one to two sentences comparing the measured and theoretical time-domain signals. Upload the comparison figure as an image via the course submission app. Your name must be visible in the image before uploading.</p>
-<p><strong>Lab Deliverable #2c</strong></p>
-<p>Use <code>SignalLab</code> to compute the theoretical frequency spectrum for each waveform. Load the corresponding frequency-domain CSV files exported from the M2K Spectrum Analyzer during the lab session. For each of the four waveforms (sine, square, triangle, sawtooth), produce a plot showing the theoretical spectrum and the M2K-measured spectrum on the same axes over 0–10 kHz. Label all axes. Four plots are required, one per waveform. Upload all four plots as images via the course submission app. Your name must be visible in each image before uploading.</p>
-<p><strong>Lab Deliverable #2d</strong></p>
-<p>For the square wave, triangle wave, and sawtooth wave, tabulate the theoretical and measured amplitude of each harmonic from the 1st through the 9th. Use the amplitudes recorded in the in-lab harmonic tables for the measured values and <code>SignalLab</code> for the theoretical values. Three tables are required, one per waveform. In each table, identify any harmonic predicted to have zero amplitude and note whether a non-zero amplitude was observed in the measurement. Take a screenshot of each completed table and upload via the course submission app. Your name must be visible in each image before uploading.</p>
+<p><strong>Lab Deliverable #2b — Part 1 (MATLAB Grader)</strong></p>
+<p>In MATLAB Grader, write a function with the following signature:</p>
+<p><code>matlab
+function [t, x] = generateTheoretical(waveType, A, f0, Fs, duration)</code></p>
+<p>The function must use <code>SignalLab</code> to return the theoretical time vector <code>t</code> (in seconds) and signal <code>x</code> (in volts) for the waveform specified by <code>waveType</code> (<code>'sine'</code>, <code>'square'</code>, <code>'triangle'</code>, or <code>'sawtooth'</code>), with amplitude <code>A</code>, fundamental frequency <code>f0</code> (Hz), sampling rate <code>Fs</code> (Sa/s), and duration <code>duration</code> (s). The output vectors must each have length <code>round(Fs * duration)</code>. Follow the create → configure → generate order shown in the starter script. Submit via the MATLAB Grader link in Canvas.</p>
+<p><strong>Lab Deliverable #2b — Part 2 (course submission app)</strong></p>
+<p>Using your <code>generateTheoretical</code> function and your measured CSV files, overlay the theoretical and measured time-domain signals for each of the four waveforms on the same axes. Use distinct colors or line styles and include a legend. For each waveform, write one to two sentences comparing the two signals. Arrange all four comparison plots in a single figure using <code>subplot</code>. Upload the figure as an image via the course submission app. Your name must be visible in the image before uploading.</p>
+<p><strong>Lab Deliverable #2c — Part 1 (MATLAB Grader)</strong></p>
+<p>In MATLAB Grader, write a function with the following signature:</p>
+<p><code>matlab
+function amplitudes = theoreticalHarmonics(waveType, A, f0, numHarmonics)</code></p>
+<p>The function must use <code>SignalLab</code> to return a column vector <code>amplitudes</code> of length <code>numHarmonics</code> whose k-th entry is the theoretical amplitude (in volts) of the k-th harmonic at frequency <code>k * f0</code>. Set the harmonic amplitude to exactly zero for any harmonic that is theoretically absent (e.g., even harmonics of a square wave). Submit via the MATLAB Grader link in Canvas.</p>
+<p><strong>Lab Deliverable #2c — Part 2 (course submission app)</strong></p>
+<p>Using <code>theoreticalHarmonics</code> and the frequency-domain CSV files exported from the M2K Spectrum Analyzer during the lab session, produce one plot per waveform (four total) showing the theoretical and M2K-measured spectra on the same axes over 0–10 kHz. Label all axes and include a legend. Upload all four plots as images via the course submission app. Your name must be visible in each image before uploading.</p>
+<p><strong>Lab Deliverable #2d — Part 1 (MATLAB Grader)</strong></p>
+<p>In MATLAB Grader, write a function with the following signature:</p>
+<p><code>matlab
+function amplitudes = harmonicTable(waveType, A, f0)</code></p>
+<p>The function must return a 9×1 column vector of theoretical harmonic amplitudes (in volts) for harmonics 1 through 9, using <code>SignalLab</code>. <code>waveType</code> will be one of <code>'square'</code>, <code>'triangle'</code>, or <code>'sawtooth'</code>. Set any theoretically absent harmonic to exactly zero. The function <code>theoreticalHarmonics</code> is available as a support file in this problem — you may call it directly. Submit via the MATLAB Grader link in Canvas.</p>
+<p><strong>Lab Deliverable #2d — Part 2 (course submission app)</strong></p>
+<p>Using the output of <code>harmonicTable</code> and the amplitude values you recorded in the in-lab harmonic tables, complete three comparison tables — one each for the square, triangle, and sawtooth wave — with columns for harmonic number, theoretical amplitude, and measured amplitude. In each table, mark any harmonic predicted to be zero and note whether a non-zero amplitude was observed. Take a screenshot of each completed table and upload via the course submission app. Your name must be visible in each image before uploading.</p>
 <p><strong>Lab Deliverable #2e</strong></p>
 <p>For each of the three non-sinusoidal waveforms (square, triangle, sawtooth), write a short paragraph of 5–8 sentences: How well does the measured spectrum agree with the theoretical prediction? Where is the agreement closest, and where does it break down? Identify at least two physical or instrumental factors that could account for any observed discrepancies. Draw on Chapters 5 and 6 of the reader to support your explanation.</p>
 <p>You are encouraged to use an AI assistant to help structure your analysis or to clarify concepts such as Fourier analysis and frequency content. Ask it to explain, check your reasoning, or suggest a framework; then apply that framework to your own data. <strong>The analysis you submit must be your own work: use AI as a thinking partner, not as a substitute for your own conclusions.</strong></p>
@@ -1072,9 +1087,9 @@ s = s.setWave("square");      % 2. configure
 <h2>Submission Instructions</h2>
 <blockquote>
 <p><strong>IMPORTANT</strong></p>
-<p>Submit your completed work via the course submission app. All plots, images, data tables, and calculations must be clearly labeled and referenced in your post-lab report.</p>
+<p>Deliverables marked <strong>(MATLAB Grader)</strong> must be submitted through the MATLAB Grader link in Canvas. Deliverables marked <strong>(course submission app)</strong> must be submitted through the course submission app. All plots, images, data tables, and calculations must be clearly labeled.</p>
 </blockquote>
-<p>Version 3.1</p>
+<p>Version 3.2</p>
   </main>
 </body>
 </html>
