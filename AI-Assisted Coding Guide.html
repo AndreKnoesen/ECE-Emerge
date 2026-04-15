@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Assisted Coding Guide — ECE Emerge</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #f4f4f4;
+      border: 1px solid #cccccc;
+      border-left: 4px solid #005a9c;
+      border-radius: 4px;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      line-height: 1.45;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      font-size: 0.88em;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 70%;
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$',  right: '$',  display: false}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>AI-Assisted Coding Guide — ECE Emerge</h1>
+<p><strong>UC Davis — Spring 2026</strong></p>
+<p>This practical reference for data analysis labs applies to all labs requiring computational work.</p>
+<hr/>
+<h2>1. Which tool should I use?</h2>
+<p>You may use any programming language and any AI coding tool; the deliverable remains the same regardless. <strong>MATLAB</strong> is the safe default, as all UC Davis students have access via the campus license, which includes <strong>MATLAB Copilot</strong>.</p>
+<div aria-label="1. Which tool should I use?" class="table-wrapper" role="region" tabindex="0"><table><caption>1. Which tool should I use?</caption>
+<thead>
+<tr>
+<th scope="col" style="text-align: left;">Your situation</th>
+<th scope="col" style="text-align: left;">Recommended path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">New to programming or unsure</td>
+<td style="text-align: left;">MATLAB + MATLAB Copilot</td>
+</tr>
+<tr>
+<td style="text-align: left;">Comfortable with MATLAB</td>
+<td style="text-align: left;">MATLAB + any AI tool</td>
+</tr>
+<tr>
+<td style="text-align: left;">Comfortable with Python</td>
+<td style="text-align: left;">Python + any AI tool</td>
+</tr>
+<tr>
+<td style="text-align: left;">Want to try something new</td>
+<td style="text-align: left;">Pick either — both work</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Note:</strong> Suggestions in MATLAB Copilot appear directly in the editor, making it easier to follow the generated code.</p>
+</blockquote>
+<hr/>
+<h2>2. The non-negotiable rule</h2>
+<blockquote>
+<p><strong>You are responsible for every line of code you submit.</strong><br/>
+AI tools can produce incorrect results in subtle ways. In engineering, code you cannot explain is code you cannot trust.</p>
+</blockquote>
+<p>Every submission including AI-generated code must contain:<br/>
+1.  <strong>The code itself:</strong> Complete and runnable, with a comment at the top naming the tool used (e.g., <code>% Generated with MATLAB Copilot, adapted by [your name]</code>).<br/>
+2.  <strong>The output:</strong> The actual plot or table produced by running that code on <strong>your</strong> specific data.<br/>
+3.  <strong>A brief code review:</strong> 3–5 sentences written by <strong>you</strong> (not the AI) explaining:<br/>
+    * What the code does step-by-step.<br/>
+    * One thing you verified or would change.<br/>
+    * Whether the output matches physical expectations and why.</p>
+<hr/>
+<h2>3. How to write a prompt that works</h2>
+<p>Vague prompts are the primary cause of AI failure. A good prompt includes four parts:<br/>
+* <strong>What you have:</strong> Describe data names, units, size, and format.<br/>
+* <strong>What you want:</strong> Describe the output (plot, table, etc.).<br/>
+* <strong>Any constraints:</strong> Language or specific functions to use/avoid.<br/>
+* <strong>A verification request:</strong> Ask the AI to explain the code it just generated.</p>
+<h3>Example: Good Prompt</h3>
+<blockquote>
+<p>"I have two MATLAB vectors: t (time in seconds, length 500) and v (normalized voltage, values 0 to 1, from one RC discharge curve). Write MATLAB code that: (1) finds the index where v first drops below 0.368, (2) reads the corresponding time from t and stores it as tau, (3) plots v vs t with a horizontal dashed line at v = 0.368 and a vertical dashed line at t = tau, both labeled. After generating the code, explain what each block does in plain English."</p>
+</blockquote>
+<hr/>
+<h2>4. When the code does not work</h2>
+<ol>
+<li><strong>Paste the error back:</strong> Send the full error message and line number back to the AI in the same conversation.</li>
+<li><strong>Check data format:</strong> Verify CSV imports, vector shapes (row vs. column), and normalization.</li>
+<li><strong>Use Appendix A:</strong> If AI fails three times, adapt the working example code provided in Appendix A of the lab document.</li>
+</ol>
+<hr/>
+<h2>5. Verifying the output</h2>
+<ul>
+<li><strong>Physical Sense:</strong> For an RC circuit ($R = 2.2\text{ k}\Omega$, $C = 1\text{ }\mu\text{F}$), $\tau$ should be $\approx 2.2\text{ ms}$.</li>
+<li><strong>Visual Check:</strong> Normalized voltage should span 0 to 1; threshold lines should cross the curve correctly.</li>
+<li><strong>Consistency:</strong> Investigate if per-cycle $\tau$ values vary by more than 20%.</li>
+</ul>
+<hr/>
+<h3>6. What to Submit</h3>
+<p>For any deliverable that involves AI-assisted code, your Gradescope submission will most likely ask that you submit some of the following: </p>
+<div aria-label="6. What to Submit" class="table-wrapper" role="region" tabindex="0"><table><caption>6. What to Submit</caption>
+<thead>
+<tr>
+<th scope="col"><strong>Item</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code file or clearly formatted code paste</td>
+</tr>
+<tr>
+<td>Comment identifying AI tool used</td>
+</tr>
+<tr>
+<td>Plot or table produced by running that code on your data</td>
+</tr>
+<tr>
+<td>Code review paragraph (3--5 sentences, your own words)</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2>7. Academic integrity</h2>
+<p>Using AI is encouraged, but submitting output you do not understand is prohibited. <strong>AI as a thinking partner is the goal; AI as a shortcut that bypasses thinking is not.</strong></p>
+  </main>
+</body>
+</html>
