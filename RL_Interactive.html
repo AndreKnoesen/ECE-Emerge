@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RL Time Constant — Interactive Widget</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-muted: #9c9a92;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4ef;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.25);
+    --color-background-info: #e6f1fb;
+    --color-text-info: #185fa5;
+    --color-neutral-tint: #f5f4ef;
+    --color-accent: #0891B2;
+    /* ADA FIX: darker cyan for small text on light backgrounds.
+       #0e7490 gives ≥ 4.7:1 on white and ≥ 4.7:1 on #e6f1fb — passes WCAG AA.
+       (Standard accent #0891B2 is only 3.67:1 on white — fails for 12px text.) */
+    --color-accent-text: #0e7490;
+    --font-sans: system-ui, sans-serif;
+    --font-mono: ui-monospace, monospace;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e6dc;
+      --color-text-secondary: #9c9a92;
+      --color-text-muted: #6b6963;
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #2a2a28;
+      --color-border-tertiary: rgba(255,255,255,0.1);
+      --color-border-secondary: rgba(255,255,255,0.2);
+      --color-background-info: #0c3a5c;
+      --color-text-info: #85b7eb;
+      --color-neutral-tint: #2a2a28;
+      --color-accent: #22D3EE;
+      /* In dark mode #22D3EE has ≥ 9:1 on dark backgrounds — use directly */
+      --color-accent-text: #22D3EE;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--color-text-primary);
+    background: var(--color-background-primary);
+    padding: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .widget {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background: var(--color-background-primary);
+  }
+
+  .panel { padding: 20px 24px; }
+  .panel + .panel { border-top: 0.5px solid var(--color-border-tertiary); }
+
+  /* ADA FIX: was --color-text-muted (#9c9a92 on white = 2.82:1 — FAIL at 11px).
+     Now --color-text-secondary (#5f5e5a on white = 6.5:1 — PASS).
+     Also fixes dark mode: --color-text-secondary (#9c9a92 on #1e1e1c = 5.9:1 — PASS)
+     vs the old --color-text-muted (#6b6963 on #1e1e1c = 3.05:1 — FAIL). */
+  .panel-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 14px;
+  }
+
+  /* Panel 1 */
+  .inductor-svg-wrap { display: flex; justify-content: center; }
+
+  /* Panel 2 */
+  .vi-layout {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .vi-equation {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px 16px;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+    min-width: 140px;
+  }
+
+  /* ADA FIX: was --color-text-muted (2.82:1 on secondary bg) → --color-text-secondary (6.5:1) */
+  .vi-equation .label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; }
+  .vi-equation .eq { font-family: var(--font-mono); font-size: 22px; color: var(--color-text-primary); }
+
+  .vi-cards-wrap { flex: 1 1 220px; display: flex; flex-direction: column; gap: 8px; }
+
+  .vi-cards { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .vi-card {
+    flex: 1 1 140px;
+    padding: 12px 14px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .vi-card.ac { background: var(--color-background-info); }
+  .vi-card.dc { background: var(--color-neutral-tint); }
+
+  .vi-card .card-title { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 6px; }
+  .vi-card .card-arrow { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+
+  /* ADA FIX: was --color-accent (#0891B2 on #e6f1fb = 3.22:1 — FAIL for 12px text).
+     Now --color-accent-text (#0e7490 on #e6f1fb = 4.71:1 — PASS). */
+  .vi-card .card-result { font-size: 12px; font-weight: 600; color: var(--color-accent-text); font-family: var(--font-mono); }
+
+  /* ADA FIX: was --color-text-muted (2.82:1) → --color-text-secondary (6.5:1) */
+  .contrast-note { font-size: 11px; color: var(--color-text-secondary); font-style: italic; line-height: 1.4; }
+
+  /* Panel 3 */
+  .intuition-header { font-size: 13px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 12px; }
+
+  .tau-cols { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .tau-col {
+    flex: 1 1 160px;
+    padding: 12px 14px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .tau-col.fast { background: var(--color-background-info); }
+  .tau-col.slow { background: var(--color-neutral-tint); }
+
+  .tau-col-title { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 8px; }
+
+  .tau-col ul { list-style: none; padding: 0; margin-bottom: 10px; }
+
+  .tau-col ul li {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  /* ADA FIX: was --color-text-muted (2.82:1) → --color-text-secondary (6.5:1) */
+  .tau-col ul li::before { content: "→"; position: absolute; left: 0; color: var(--color-text-secondary); }
+
+  .mini-curve-wrap { display: flex; justify-content: center; }
+
+  /* Panel 4 */
+  .controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+  .control-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  /* ADA FIX: was <span> — now styled <label>; same visual appearance */
+  .control-label { font-family: var(--font-mono); font-size: 13px; color: var(--color-text-secondary); min-width: 32px; cursor: pointer; }
+
+  .control-row input[type="range"] {
+    flex: 1 1 160px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+    height: 4px;
+  }
+
+  /* ADA FIX: explicit focus ring — browsers strip defaults inconsistently */
+  .control-row input[type="range"]:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .control-value { font-family: var(--font-mono); font-size: 13px; color: var(--color-text-primary); min-width: 80px; text-align: right; }
+
+  .computed-display { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+
+  .computed-item {
+    flex: 1 1 160px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+  }
+
+  .computed-label { font-family: var(--font-mono); font-size: 13px; color: var(--color-text-secondary); white-space: nowrap; }
+  /* computed-value is 22px/600 — WCAG "large text" (≥18.67px bold), needs only 3:1.
+     #0891B2 on #f5f4ef = 3.37:1 → passes large-text threshold. */
+  .computed-value { font-family: var(--font-mono); font-size: 22px; font-weight: 600; color: var(--color-accent); }
+  .computed-unit  { font-family: var(--font-mono); font-size: 13px; color: var(--color-text-secondary); }
+
+  .chart-wrap { position: relative; width: 100%; height: 280px; }
+
+  .summary-sentence { margin-top: 14px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+  .summary-sentence strong { color: var(--color-text-primary); font-family: var(--font-mono); }
+
+  .chart-divider { border-top: 0.5px solid var(--color-border-tertiary); margin: 16px 0; }
+
+  /* ADA FIX: was --color-text-muted (2.82:1) → --color-text-secondary (6.5:1) */
+  .chart-subtitle {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .chart-wrap-sm { position: relative; width: 100%; height: 180px; }
+
+  @media (max-width: 420px) {
+    .panel { padding: 14px 14px; }
+    .vi-layout { flex-direction: column; }
+    .vi-equation { min-width: unset; width: 100%; }
+  }
+
+  /* ── Panel 5: De-energizing ── */
+  .spike-callout {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    border-radius: var(--border-radius-md);
+    border: 1.5px solid;
+    margin-bottom: 16px;
+  }
+  .spike-callout.safe   { border-color: rgba(22,163,74,0.6);  background: rgba(22,163,74,0.07); }
+  .spike-callout.warn   { border-color: rgba(217,119,6,0.6);  background: rgba(217,119,6,0.07); }
+  .spike-callout.danger { border-color: rgba(220,38,38,0.6);  background: rgba(220,38,38,0.07); }
+  .spike-top { display: flex; flex-direction: column; min-width: 130px; }
+  .spike-callout-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 2px; }
+  .spike-callout-value { font-family: var(--font-mono); font-size: 30px; font-weight: 700; line-height: 1; }
+  .spike-callout.safe   .spike-callout-value { color: #16a34a; }
+  .spike-callout.warn   .spike-callout-value { color: #d97706; }
+  .spike-callout.danger .spike-callout-value { color: #dc2626; }
+  .spike-callout-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .deenergize-compare { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+  .deenergize-compare-card {
+    flex: 1 1 160px;
+    padding: 12px 14px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid;
+  }
+  .deenergize-compare-card.unprotected { background: rgba(220,38,38,0.06); border-color: rgba(220,38,38,0.3); }
+  .deenergize-compare-card.protected   { background: rgba(22,163,74,0.06);  border-color: rgba(22,163,74,0.3); }
+  .compare-title  { font-size: 12px; font-weight: 600; margin-bottom: 5px; color: var(--color-text-primary); }
+  .compare-detail { font-size: 11px; color: var(--color-text-secondary); line-height: 1.4; margin-bottom: 6px; }
+  .compare-spike  { font-family: var(--font-mono); font-size: 13px; font-weight: 600; }
+  .deenergize-compare-card.unprotected .compare-spike { color: #dc2626; }
+  .deenergize-compare-card.protected   .compare-spike { color: #16a34a; }
+  .chart-wrap-dis   { position: relative; width: 100%; height: 180px; }
+  .chart-wrap-spike { position: relative; width: 100%; height: 220px; }
+</style>
+</head>
+<body>
+<div class="widget">
+
+  <!-- ── Panel 1: Physical picture ── -->
+  <div class="panel">
+    <!-- ADA FIX: div → h2 for semantic document structure (WCAG 1.3.1) -->
+    <h2 class="panel-title">RL circuit setup and inductor physics</h2>
+    <div class="inductor-svg-wrap">
+      <!--
+        ADA FIX: Added role="img" (aria-label was already present but role was missing).
+        Expanded aria-label to be more descriptive for screen reader users.
+      -->
+      <svg role="img" viewBox="0 0 720 268" width="100%" style="display:block;max-width:720px;margin:0 auto"
+           xmlns="http://www.w3.org/2000/svg"
+           aria-label="RL circuit schematic on the left showing a battery Vs, open switch S, resistor R, and inductor L in a loop with current IL labeled. On the right, a solenoid cross-section showing horizontal B-field lines passing through the coil interior and looping back around the outside, illustrating closed magnetic flux lines.">
+        <defs>
+          <marker id="rlP1Arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 Z" style="fill:var(--color-text-primary,#111827)"/>
+          </marker>
+        </defs>
+
+        <!-- ══════ LEFT: RL circuit schematic ══════ -->
+        <line x1="36"  y1="36"  x2="66"  y2="36"  style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <line x1="112" y1="36"  x2="148" y2="36"  style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <line x1="212" y1="36"  x2="284" y2="36"  style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <line x1="284" y1="36"  x2="284" y2="87"  style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <line x1="284" y1="167" x2="284" y2="208" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <line x1="284" y1="208" x2="36"  y2="208" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <line x1="36"  y1="36"  x2="36"  y2="100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <line x1="36"  y1="148" x2="36"  y2="208" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+
+        <!-- Switch S (open) -->
+        <circle cx="66"  cy="36" r="5" style="stroke:var(--color-text-primary,#111827);stroke-width:1.8;fill:var(--color-background-primary,#fff)"/>
+        <circle cx="112" cy="36" r="5" style="stroke:var(--color-text-primary,#111827);stroke-width:1.8;fill:var(--color-background-primary,#fff)"/>
+        <line x1="66" y1="36" x2="106" y2="19" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2"/>
+        <text x="80" y="12" style="font-family:serif;font-style:italic;font-size:16px;fill:var(--color-text-primary,#111827)">S</text>
+        <text x="88" y="55" style="font-family:sans-serif;font-size:11px;fill:var(--color-text-primary,#111827)" text-anchor="middle">OPEN</text>
+
+        <!-- Resistor R -->
+        <rect x="148" y="27" width="64" height="18" style="stroke:var(--color-text-primary,#111827);stroke-width:2;fill:var(--color-background-primary,#fff)"/>
+        <text x="180" y="17" style="font-family:serif;font-style:italic;font-size:16px;fill:var(--color-text-primary,#111827)" text-anchor="middle">R</text>
+
+        <!-- Battery Vs -->
+        <line x1="20" y1="107" x2="52" y2="107" style="stroke:var(--color-text-primary,#111827);stroke-width:3"/>
+        <line x1="26" y1="118" x2="46" y2="118" style="stroke:var(--color-text-primary,#111827);stroke-width:2"/>
+        <line x1="20" y1="129" x2="52" y2="129" style="stroke:var(--color-text-primary,#111827);stroke-width:3"/>
+        <line x1="26" y1="140" x2="46" y2="140" style="stroke:var(--color-text-primary,#111827);stroke-width:2"/>
+        <text x="6" y="127" style="font-family:serif;font-style:italic;font-size:16px;fill:var(--color-text-primary,#111827)">V<tspan dy="3" font-size="12" font-style="normal">s</tspan></text>
+
+        <!-- Inductor L -->
+        <path d="M 284 87 A 10 10 0 0 1 284 107
+                 A 10 10 0 0 1 284 127
+                 A 10 10 0 0 1 284 147
+                 A 10 10 0 0 1 284 167"
+              style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+
+        <!-- I_L current arrow -->
+        <line x1="276" y1="50" x2="276" y2="78"
+              style="stroke:var(--color-text-primary,#111827);stroke-width:1.8"
+              marker-end="url(#rlP1Arrow)"/>
+        <text x="256" y="68" style="font-family:serif;font-style:italic;font-size:14px;fill:var(--color-text-primary,#111827)" text-anchor="end">I<tspan dy="3" font-size="10">L</tspan></text>
+
+        <!-- L label -->
+        <text x="250" y="132" style="font-family:serif;font-style:italic;font-size:16px;fill:var(--color-text-primary,#111827)" text-anchor="end">L</text>
+
+        <!-- v_L polarity -->
+        <text x="308" y="93"  style="font-family:sans-serif;font-size:15px;fill:var(--color-text-primary,#111827)">+</text>
+        <text x="308" y="170" style="font-family:sans-serif;font-size:19px;fill:var(--color-text-primary,#111827)">−</text>
+        <text x="308" y="132" style="font-family:serif;font-style:italic;font-size:16px;fill:var(--color-text-primary,#111827)">v<tspan dy="3" font-size="11" font-style="normal">L</tspan></text>
+
+        <!-- Circuit caption -->
+        <text x="160" y="238" style="font-family:sans-serif;font-size:13px;fill:var(--color-text-primary,#111827)" text-anchor="middle">Switch open → <tspan font-style="italic">I</tspan><tspan dy="2" font-size="10">L</tspan><tspan dy="-2"> = </tspan><tspan font-style="italic">I</tspan><tspan dy="2" font-size="10">0</tspan></text>
+
+        <!-- ══════ DIVIDER ══════ -->
+        <line x1="344" y1="8" x2="344" y2="252" style="stroke:var(--color-border-tertiary,#D1D5DB);stroke-width:0.5"/>
+
+        <!-- ══════ RIGHT: Solenoid cross-section ══════ -->
+
+        <!-- Back arcs (dashed, upper half) -->
+        <path d="M 392 100 A 14 26 0 0 0 420 100" style="stroke:var(--color-text-primary,#111827);stroke-width:1;stroke-dasharray:3 2;fill:none"/>
+        <path d="M 419 100 A 14 26 0 0 0 447 100" style="stroke:var(--color-text-primary,#111827);stroke-width:1;stroke-dasharray:3 2;fill:none"/>
+        <path d="M 446 100 A 14 26 0 0 0 474 100" style="stroke:var(--color-text-primary,#111827);stroke-width:1;stroke-dasharray:3 2;fill:none"/>
+        <path d="M 473 100 A 14 26 0 0 0 501 100" style="stroke:var(--color-text-primary,#111827);stroke-width:1;stroke-dasharray:3 2;fill:none"/>
+        <path d="M 500 100 A 14 26 0 0 0 528 100" style="stroke:var(--color-text-primary,#111827);stroke-width:1;stroke-dasharray:3 2;fill:none"/>
+        <path d="M 527 100 A 14 26 0 0 0 555 100" style="stroke:var(--color-text-primary,#111827);stroke-width:1;stroke-dasharray:3 2;fill:none"/>
+        <path d="M 554 100 A 14 26 0 0 0 582 100" style="stroke:var(--color-text-primary,#111827);stroke-width:1;stroke-dasharray:3 2;fill:none"/>
+
+        <!-- B-field interior lines -->
+        <line x1="392" y1="84"  x2="582" y2="84"  style="stroke:var(--color-text-primary,#111827);stroke-width:1.5"/>
+        <line x1="392" y1="100" x2="580" y2="100" style="stroke:var(--color-text-primary,#111827);stroke-width:1.5" marker-end="url(#rlP1Arrow)"/>
+        <line x1="392" y1="116" x2="582" y2="116" style="stroke:var(--color-text-primary,#111827);stroke-width:1.5"/>
+
+        <!-- Front arcs (solid, lower half) -->
+        <path d="M 392 100 A 14 26 0 0 1 420 100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <path d="M 419 100 A 14 26 0 0 1 447 100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <path d="M 446 100 A 14 26 0 0 1 474 100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <path d="M 473 100 A 14 26 0 0 1 501 100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <path d="M 500 100 A 14 26 0 0 1 528 100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <path d="M 527 100 A 14 26 0 0 1 555 100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+        <path d="M 554 100 A 14 26 0 0 1 582 100" style="stroke:var(--color-text-primary,#111827);stroke-width:2.2;fill:none"/>
+
+        <!-- External B-field loops -->
+        <path d="M 582 84 Q 618 84 618 100"
+              style="stroke:var(--color-text-primary,#111827);stroke-width:1.5;fill:none"
+              marker-end="url(#rlP1Arrow)"/>
+        <path d="M 618 100 Q 618 116 582 116"
+              style="stroke:var(--color-text-primary,#111827);stroke-width:1.5;fill:none"/>
+        <path d="M 392 116 Q 356 116 356 100"
+              style="stroke:var(--color-text-primary,#111827);stroke-width:1.5;fill:none"
+              marker-end="url(#rlP1Arrow)"/>
+        <path d="M 356 100 Q 356 84 392 84"
+              style="stroke:var(--color-text-primary,#111827);stroke-width:1.5;fill:none"/>
+
+        <!-- B label + callout -->
+        <text x="628" y="99" style="font-family:serif;font-style:italic;font-size:18px;fill:var(--color-text-primary,#111827)">B</text>
+        <line x1="644" y1="95" x2="660" y2="95"
+              style="stroke:var(--color-text-primary,#111827);stroke-width:1.5"
+              marker-end="url(#rlP1Arrow)"/>
+        <text x="626" y="113" style="font-family:sans-serif;font-size:11px;fill:var(--color-text-primary,#111827)">magnetic</text>
+        <text x="626" y="125" style="font-family:sans-serif;font-size:11px;fill:var(--color-text-primary,#111827)">flux</text>
+
+        <!-- "initial current: I₀" label -->
+        <text x="396" y="103" style="font-family:sans-serif;font-size:12px;fill:var(--color-text-secondary,#5f5e5a)">initial</text>
+        <text x="396" y="117" style="font-family:sans-serif;font-size:12px;fill:var(--color-text-secondary,#5f5e5a)">current: <tspan font-style="italic">I</tspan><tspan dy="2" font-size="9">0</tspan></text>
+
+        <!-- Annotations -->
+        <text x="487" y="150" style="font-family:sans-serif;font-size:12px;fill:var(--color-text-primary,#111827)" text-anchor="middle"><tspan font-style="italic">I</tspan><tspan dy="2" font-size="9">L</tspan><tspan dy="-2"> through wire creates B field</tspan></text>
+        <text x="487" y="210" style="font-family:sans-serif;font-size:13px;fill:var(--color-text-primary,#111827)" text-anchor="middle"><tspan font-style="italic">I</tspan><tspan dy="2" font-size="10">L</tspan><tspan dy="-2"> builds as flux accumulates</tspan></text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── Panel 2: V-I relationship ── -->
+  <div class="panel">
+    <!-- ADA FIX: div → h2 -->
+    <h2 class="panel-title">V-I relationship</h2>
+    <div class="vi-layout">
+      <div class="vi-equation">
+        <div class="label">current–voltage law</div>
+        <div class="eq">v = L di/dt</div>
+      </div>
+      <div class="vi-cards-wrap">
+        <div class="vi-cards">
+          <div class="vi-card ac">
+            <div class="card-title">AC / changing I</div>
+            <div class="card-arrow">di/dt ≠ 0</div>
+            <div class="card-result">→ v ≠ 0 — voltage appears</div>
+          </div>
+          <div class="vi-card dc">
+            <div class="card-title">DC steady state</div>
+            <div class="card-arrow">di/dt = 0</div>
+            <div class="card-result">→ v = 0 — short circuit</div>
+          </div>
+        </div>
+        <div class="contrast-note">
+          Contrast with capacitor: inductor is a short at DC; capacitor is an open at DC.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Panel 3: τ = L/R intuition ── -->
+  <div class="panel">
+    <!-- ADA FIX: div → h2 -->
+    <h2 class="panel-title">Time constant intuition — τ = L/R</h2>
+    <!-- ADA FIX: div → h3 (sub-heading within this panel) -->
+    <h3 class="intuition-header">Why larger R → faster response</h3>
+    <div class="tau-cols">
+
+      <div class="tau-col fast">
+        <div class="tau-col-title">Larger R</div>
+        <ul>
+          <li>Smaller I<sub>final</sub> = V/R</li>
+          <li>τ = L/R decreases → settles faster</li>
+        </ul>
+        <div class="mini-curve-wrap">
+          <!--
+            ADA FIX: Added role="img" to both mini SVGs (aria-label was present, role was missing).
+            These are purely illustrative; the text bullets above carry the key information.
+          -->
+          <svg role="img" viewBox="0 0 110 72" width="110" height="72"
+               aria-label="Fast-rising current curve: reaches near-final value quickly within the time window">
+            <line x1="0" y1="14" x2="110" y2="14" stroke="#9CA3AF" stroke-width="0.6" stroke-dasharray="3 2"/>
+            <path d="M 0 66 C 16 66 24 15 110 14" fill="none" stroke="#0891B2" stroke-width="2"/>
+            <line x1="0" y1="68" x2="110" y2="68" stroke="#9CA3AF" stroke-width="0.6"/>
+            <line x1="0" y1="68" x2="0" y2="8"   stroke="#9CA3AF" stroke-width="0.6"/>
+            <text x="55" y="72" text-anchor="middle" font-family="monospace" font-size="9" fill="#9CA3AF">time</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="tau-col slow">
+        <div class="tau-col-title">Smaller R</div>
+        <ul>
+          <li>Larger I<sub>final</sub> = V/R</li>
+          <li>τ = L/R increases → settles slower</li>
+        </ul>
+        <div class="mini-curve-wrap">
+          <svg role="img" viewBox="0 0 110 72" width="110" height="72"
+               aria-label="Slow-rising current curve: only partway to final value within the same time window">
+            <line x1="0" y1="4" x2="110" y2="4" stroke="#9CA3AF" stroke-width="0.6" stroke-dasharray="3 2"/>
+            <path d="M 0 66 C 50 66 88 50 110 36" fill="none" stroke="#0891B2" stroke-width="2"/>
+            <line x1="0" y1="68" x2="110" y2="68" stroke="#9CA3AF" stroke-width="0.6"/>
+            <line x1="0" y1="68" x2="0" y2="1"   stroke="#9CA3AF" stroke-width="0.6"/>
+            <text x="55" y="72" text-anchor="middle" font-family="monospace" font-size="9" fill="#9CA3AF">time</text>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Panel 4: Interactive current rise curve ── -->
+  <div class="panel">
+    <!-- ADA FIX: div → h2 -->
+    <h2 class="panel-title">Current curve — I<sub>L</sub>(t) = I<sub>final</sub> + (I<sub>0</sub> − I<sub>final</sub>)e<sup>−Rt/L</sup></h2>
+
+    <div class="controls">
+      <!--
+        ADA FIX: <span class="control-label"> → <label class="control-label" for="...">
+        Each slider also gets aria-label (full descriptive name) and aria-valuetext
+        (human-readable value, updated by JS — avoids TTS mispronouncing Ω / mH symbols).
+      -->
+      <div class="control-row">
+        <label class="control-label" for="sliderR">R</label>
+        <input type="range" id="sliderR" min="0" max="100" value="50"
+               aria-label="Resistance R"
+               aria-valuetext="100 ohms">
+        <span class="control-value" id="valR">100 Ω</span>
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="sliderL">L</label>
+        <input type="range" id="sliderL" min="0" max="100" value="66.7"
+               aria-label="Inductance L"
+               aria-valuetext="100 millihenries">
+        <span class="control-value" id="valL">100 mH</span>
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="sliderV">V</label>
+        <input type="range" id="sliderV" min="1" max="12" step="0.5" value="5"
+               aria-label="Supply voltage V"
+               aria-valuetext="5.0 volts">
+        <span class="control-value" id="valV">5.0 V</span>
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="sliderI0">I<sub>0</sub></label>
+        <input type="range" id="sliderI0" min="0" max="1200" step="0.5" value="0"
+               aria-label="Initial inductor current I0"
+               aria-valuetext="0.0 milliamps">
+        <span class="control-value" id="valI0">0.0 mA</span>
+      </div>
+    </div>
+
+    <!--
+      ADA FIX: role="status" on each computed-item gives an implicit aria-live="polite" region.
+      Screen readers announce updated τ and I_final values after slider interactions settle.
+    -->
+    <div class="computed-display">
+      <div class="computed-item" role="status" aria-label="Time constant tau">
+        <span class="computed-label">τ = L/R =</span>
+        <span class="computed-value" id="tauValue">1.0</span>
+        <span class="computed-unit">ms</span>
+      </div>
+      <div class="computed-item" role="status" aria-label="Final current">
+        <span class="computed-label">I<sub>final</sub> = V/R =</span>
+        <span class="computed-value" id="ifinValue">50.0</span>
+        <span class="computed-unit">mA</span>
+      </div>
+    </div>
+
+    <!--
+      ADA FIX: role="img" + aria-label on both Chart.js canvases (WCAG 1.1.1 / 4.1.2).
+      aria-label is updated dynamically in JS to reflect current parameter values.
+    -->
+    <div class="chart-wrap">
+      <canvas id="rlChart"
+              role="img"
+              aria-label="RL inductor current curve. Loading…"></canvas>
+    </div>
+
+    <!--
+      ADA FIX: aria-live="polite" + aria-atomic="true" on both summary divs (WCAG 4.1.3).
+      Screen readers announce the updated sentence after each slider interaction.
+    -->
+    <div class="summary-sentence" id="summaryText"
+         aria-live="polite" aria-atomic="true"></div>
+
+    <div class="chart-divider"></div>
+    <!-- ADA FIX: div → h3 (sub-section heading within panel 4) -->
+    <h3 class="chart-subtitle">Inductor voltage v_L(t)</h3>
+    <div class="chart-wrap-sm">
+      <canvas id="rlVoltageChart"
+              role="img"
+              aria-label="Inductor voltage decay curve. Loading…"></canvas>
+    </div>
+    <div class="summary-sentence" id="voltageSummaryText"
+         aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <!-- ── Panel 5: De-energizing — the voltage spike ── -->
+  <div class="panel">
+    <h2 class="panel-title">De-energizing — the voltage spike</h2>
+
+    <div class="spike-callout warn" id="spikeCallout">
+      <div class="spike-top">
+        <div class="spike-callout-label">peak spike  |v_L(0⁺)| = I₀ × R_arc</div>
+        <div class="spike-callout-value" id="spikeValue">50 V</div>
+      </div>
+      <div class="spike-callout-desc" id="spikeDesc">I₀ × R_arc = 50.0 mA × 10 kΩ — can damage or destroy transistors and ICs</div>
+    </div>
+
+    <div class="controls">
+      <div class="control-row">
+        <span class="control-label">I₀</span>
+        <span style="flex:1;font-size:11px;font-style:italic;color:var(--color-text-secondary)">linked — V/R from Panel 4 steady state</span>
+        <span class="control-value" id="valIdis">50.0 mA</span>
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="sliderRarc">R_arc</label>
+        <input type="range" id="sliderRarc" min="0" max="100" value="75"
+               aria-label="Discharge path resistance R_arc"
+               aria-valuetext="10 kilohms">
+        <span class="control-value" id="valRarc">10 kΩ</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);font-style:italic;margin-top:-6px;padding:0 2px;">
+        <span>← 10 Ω (flyback diode)</span>
+        <span>(open switch) 100 kΩ →</span>
+      </div>
+      <div class="control-row">
+        <span class="control-label">L</span>
+        <span style="flex:1;font-size:11px;font-style:italic;color:var(--color-text-secondary)">linked — from Panel 4</span>
+        <span class="control-value" id="valLdis">100 mH</span>
+      </div>
+    </div>
+
+    <div class="computed-display">
+      <div class="computed-item" role="status" aria-label="Discharge time constant">
+        <span class="computed-label">τ_dis = L/R =</span>
+        <span class="computed-value" id="tauDisValue">0.100</span>
+        <span class="computed-unit" id="tauDisUnit">ms</span>
+      </div>
+    </div>
+
+    <h3 class="chart-subtitle">Current decay — I_L(t) = I₀ · e^(−t / τ)</h3>
+    <div class="chart-wrap-dis">
+      <canvas id="disCurrentChart" role="img"
+              aria-label="Inductor current decaying to zero after switch opens"></canvas>
+    </div>
+
+    <div class="chart-divider"></div>
+
+    <h3 class="chart-subtitle">Inductor voltage — polarity reverses (Lenz's law): v_L(t) = −I₀ R · e^(−t / τ)</h3>
+    <div class="chart-wrap-spike">
+      <canvas id="disSpikeChart" role="img"
+              aria-label="Inductor voltage spike with reversed polarity after switch opens"></canvas>
+    </div>
+
+    <div class="summary-sentence" id="disSummaryText"
+         aria-live="polite" aria-atomic="true"></div>
+
+    <div class="deenergize-compare">
+      <div class="deenergize-compare-card unprotected">
+        <div class="compare-title">No flyback diode (your R setting)</div>
+        <div class="compare-detail">Switch arc or open circuit — high R forces a large spike across the switch and any connected IC</div>
+        <div class="compare-spike" id="noFlybackSpike">—</div>
+      </div>
+      <div class="deenergize-compare-card protected">
+        <div class="compare-title">With flyback diode (R ≈ 1 Ω)</div>
+        <div class="compare-detail">Current recirculates through diode forward path — spike is clamped to a fraction of a volt</div>
+        <div class="compare-spike" id="flybackSpike">—</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // ── Log-scale slider mapping ──
+  function logVal(sliderVal, min, max) {
+    const logMin = Math.log10(min);
+    const logMax = Math.log10(max);
+    return Math.pow(10, logMin + (sliderVal / 100) * (logMax - logMin));
+  }
+
+  // ── Format helpers (display) ──
+  function trimZeros(s) {
+    // Only strip trailing zeros when there is a decimal point — prevents
+    // "100".replace(…) → "1" when toPrecision produces an integer string.
+    return s.includes('.') ? s.replace(/\.?0+$/, '') : s;
+  }
+
+  function fmtR(ohms) {
+    if (ohms >= 1000) return trimZeros((ohms / 1000).toPrecision(3)) + ' kΩ';
+    return Math.round(ohms) + ' Ω';
+  }
+
+  function fmtL(henries) {
+    if (henries < 1) return trimZeros((henries * 1000).toPrecision(3)) + ' mH';
+    return trimZeros(henries.toPrecision(3)) + ' H';
+  }
+
+  // ADA FIX: spoken format helpers for aria-valuetext (avoids TTS mispronouncing symbols)
+  function fmtR_spoken(ohms) {
+    if (ohms >= 1000) return (ohms / 1000).toPrecision(3).replace(/\.?0+$/, '') + ' kilohms';
+    return Math.round(ohms) + ' ohms';
+  }
+
+  function fmtL_spoken(henries) {
+    if (henries < 1) return (henries * 1000).toPrecision(3).replace(/\.?0+$/, '') + ' millihenries';
+    return henries.toPrecision(3).replace(/\.?0+$/, '') + ' henries';
+  }
+
+  // ── State ──
+  let R        = 100;   // Ω
+  let L        = 0.1;   // H  (100 mH)
+  let Vf       = 5;     // V
+  let I0       = 0;     // mA — initial inductor current
+  let R_arc    = 10000; // Ω  — Panel 5: discharge path resistance (default 10 kΩ)
+  let _disReady = false; // Panel 5 charts not yet created on first update() call
+
+  const DEFAULT_TAU = 0.1 / 100;
+  const X_WINDOW    = 5 * DEFAULT_TAU;
+
+  const LANDMARKS     = [1, 2, 3, 4];
+  const LANDMARK_PCT  = ['63.2%', '86.5%', '95.0%', '98.2%'];
+  const N_POINTS      = 400;
+
+  function isDark() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  function chartColors() {
+    return isDark()
+      ? { grid: '#2a2a28', tick: '#9c9a92', ifLine: '#6b6963', bg: '#1e1e1c' }
+      : { grid: '#E5E7EB', tick: '#6B7280', ifLine: '#9CA3AF', bg: '#FFFFFF' };
+  }
+
+  function buildDataset() {
+    const tau    = L / R;
+    const Ifinal = Vf / R * 1000;
+    const tDraw  = Math.max(5 * tau, X_WINDOW);
+    const data   = [];
+    for (let i = 0; i <= N_POINTS; i++) {
+      const t = (i / N_POINTS) * tDraw;
+      data.push({ x: t, y: Ifinal + (I0 - Ifinal) * Math.exp(-t / tau) });
+    }
+    return data;
+  }
+
+  function buildLandmarkDataset() {
+    const tau    = L / R;
+    const Ifinal = Vf / R * 1000;
+    return LANDMARKS.map(k => ({
+      x: k * tau,
+      y: Ifinal + (I0 - Ifinal) * Math.exp(-k)
+    }));
+  }
+
+  function buildVoltageDataset() {
+    const tau    = L / R;
+    const Ifinal = Vf / R * 1000;
+    const vPeak  = Math.abs(Ifinal - I0) * R / 1000;
+    const tDraw  = Math.max(5 * tau, X_WINDOW);
+    const data   = [];
+    for (let i = 0; i <= N_POINTS; i++) {
+      const t = (i / N_POINTS) * tDraw;
+      data.push({ x: t, y: vPeak * Math.exp(-t / tau) });
+    }
+    return data;
+  }
+
+  // ── Current chart ──
+  const ctx = document.getElementById('rlChart').getContext('2d');
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: 'I_L(t)',
+          data: buildDataset(),
+          borderColor: '#0891B2',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          tension: 0.4,
+          fill: false,
+          parsing: false,
+        },
+        {
+          label: 'Landmarks',
+          data: buildLandmarkDataset(),
+          type: 'scatter',
+          pointRadius: 6,
+          pointHoverRadius: 7,
+          pointBackgroundColor: '#0891B2',
+          pointBorderColor: '#FFFFFF',
+          pointBorderWidth: 1.5,
+          showLine: false,
+          parsing: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { top: 28, right: 20, bottom: 8, left: 8 } },
+      plugins: {
+        legend:  { display: false },
+        tooltip: { enabled: false },
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          min: 0,
+          max: X_WINDOW,
+          title: {
+            display: true,
+            text: 'time (ms)  —  dashed lines mark each τ multiple',
+            color: chartColors().tick,
+            font: { size: 10, family: 'monospace' }
+          },
+          ticks: {
+            color: chartColors().tick,
+            callback: val => (val * 1000).toFixed(1) + ' ms',
+            maxTicksLimit: 6,
+            font: { family: 'monospace', size: 11 },
+          },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        },
+        y: {
+          min: 0,
+          title: {
+            display: true,
+            text: 'I_L (mA)',
+            color: chartColors().tick,
+            font: { size: 11, family: 'monospace' }
+          },
+          ticks: {
+            color: chartColors().tick,
+            font: { family: 'monospace', size: 11 },
+            callback: v => v.toFixed(1) + ' mA',
+          },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        }
+      }
+    },
+    plugins: [{
+      id: 'rlAnnotations',
+      afterDraw(chart) {
+        const { ctx, scales: { x: xScale, y: yScale }, chartArea } = chart;
+        const tau    = L / R;
+        const Ifinal = Vf / R * 1000;
+        const colors = chartColors();
+        ctx.save();
+
+        const yIf = yScale.getPixelForValue(Ifinal);
+        ctx.beginPath();
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = colors.ifLine;
+        ctx.lineWidth = 1;
+        ctx.moveTo(chartArea.left, yIf);
+        ctx.lineTo(chartArea.right, yIf);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = colors.tick;
+        ctx.font = '11px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('I\u1D69 = ' + Ifinal.toFixed(1) + ' mA', chartArea.right - 4, yIf - 5);
+
+        if (I0 > 0.001) {
+          const yI0 = yScale.getPixelForValue(I0);
+          ctx.beginPath();
+          ctx.setLineDash([4, 4]);
+          ctx.strokeStyle = colors.ifLine;
+          ctx.lineWidth = 1;
+          ctx.moveTo(chartArea.left, yI0);
+          ctx.lineTo(chartArea.right, yI0);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = colors.tick;
+          ctx.font = '11px monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText('I\u2080 = ' + I0.toFixed(1) + ' mA', chartArea.right - 4, yI0 - 5);
+        }
+
+        const gapDefined = Math.abs(Ifinal - I0) > 0.001;
+        const yI0px = yScale.getPixelForValue(I0);
+        LANDMARKS.forEach((k, idx) => {
+          const t   = k * tau;
+          const iMa = Ifinal + (I0 - Ifinal) * Math.exp(-k);
+          const xPx = xScale.getPixelForValue(t);
+          const yPx = yScale.getPixelForValue(iMa);
+
+          if (xPx < chartArea.left || xPx > chartArea.right) return;
+
+          ctx.beginPath();
+          ctx.setLineDash([4, 3]);
+          ctx.strokeStyle = '#9CA3AF';
+          ctx.lineWidth = 1;
+          ctx.moveTo(xPx, yPx);
+          ctx.lineTo(xPx, yI0px);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          if (gapDefined) {
+            ctx.fillStyle = isDark() ? '#e8e6dc' : '#1a1a18';
+            ctx.font = '600 11px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(LANDMARK_PCT[idx], xPx, yPx - 10);
+          }
+
+          ctx.fillStyle = colors.tick;
+          ctx.font = '10px monospace';
+          ctx.fillText(k + 'τ', xPx, chartArea.bottom + 13);
+        });
+
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ── Voltage chart v_L(t) ──
+  const ctxVoltage = document.getElementById('rlVoltageChart').getContext('2d');
+
+  const chartVoltage = new Chart(ctxVoltage, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'v_L(t)',
+        data: buildVoltageDataset(),
+        borderColor: '#0891B2',
+        borderWidth: 1.5,
+        pointRadius: 0,
+        tension: 0.4,
+        fill: false,
+        parsing: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { top: 16, right: 20, bottom: 8, left: 8 } },
+      plugins: {
+        legend:  { display: false },
+        tooltip: { enabled: false },
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          min: 0,
+          max: X_WINDOW,
+          ticks: {
+            color: chartColors().tick,
+            callback: val => (val * 1000).toFixed(1) + ' ms',
+            maxTicksLimit: 6,
+            font: { family: 'monospace', size: 11 },
+          },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        },
+        y: {
+          min: 0,
+          title: {
+            display: true,
+            text: 'v_L (V)',
+            color: chartColors().tick,
+            font: { size: 11, family: 'monospace' }
+          },
+          ticks: {
+            color: chartColors().tick,
+            font: { family: 'monospace', size: 11 },
+            callback: v => v.toFixed(2) + ' V',
+          },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        }
+      }
+    },
+    plugins: [{
+      id: 'voltageAnnotations',
+      afterDraw(chart) {
+        const { ctx, scales: { y: yScale }, chartArea } = chart;
+        const colors = chartColors();
+        ctx.save();
+        const yZero = yScale.getPixelForValue(0);
+        ctx.beginPath();
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = colors.ifLine;
+        ctx.lineWidth = 1;
+        ctx.moveTo(chartArea.left, yZero);
+        ctx.lineTo(chartArea.right, yZero);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = colors.tick;
+        ctx.font = '11px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('0 V (steady state)', chartArea.right - 4, yZero - 5);
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ── Update function ──
+  function update() {
+    const tau    = L / R;
+    const Ifinal = Vf / R * 1000;
+
+    chart.data.datasets[0].data = buildDataset();
+    chart.data.datasets[1].data = buildLandmarkDataset();
+
+    const yMax = Math.max(I0, Ifinal);
+    chart.options.scales.y.min = 0;
+    chart.options.scales.y.max = yMax * 1.1 || 1;
+    chart.update('none');
+
+    const vPeak = Math.abs(Ifinal - I0) * R / 1000;
+    chartVoltage.data.datasets[0].data = buildVoltageDataset();
+    chartVoltage.options.scales.y.max  = vPeak > 0 ? vPeak * 1.1 : 1;
+    chartVoltage.update('none');
+
+    const tauMs = tau * 1000;
+    document.getElementById('tauValue').textContent  = tauMs.toFixed(1);
+    document.getElementById('ifinValue').textContent = Ifinal.toFixed(1);
+
+    // Summary sentences — aria-live handles screen-reader announcements
+    const gap = Ifinal - I0;
+    if (Math.abs(gap) < 0.001) {
+      document.getElementById('summaryText').innerHTML =
+        `Initial current equals final current — no transient.`;
+    } else if (I0 < Ifinal) {
+      document.getElementById('summaryText').innerHTML =
+        `At t = τ (<strong>${tauMs.toFixed(1)} ms</strong>), the current has risen ` +
+        `<strong>63.2%</strong> of the way from ` +
+        `<strong>${I0.toFixed(1)} mA</strong> to <strong>${Ifinal.toFixed(1)} mA</strong>.`;
+    } else {
+      document.getElementById('summaryText').innerHTML =
+        `At t = τ (<strong>${tauMs.toFixed(1)} ms</strong>), the current has fallen ` +
+        `<strong>63.2%</strong> of the way from ` +
+        `<strong>${I0.toFixed(1)} mA</strong> toward <strong>${Ifinal.toFixed(1)} mA</strong>.`;
+    }
+
+    if (Math.abs(gap) < 0.001) {
+      document.getElementById('voltageSummaryText').innerHTML =
+        `No transient — inductor voltage is zero.`;
+    } else {
+      const vAtTau = vPeak * Math.exp(-1);
+      document.getElementById('voltageSummaryText').innerHTML =
+        `At t = 0, the inductor voltage is <strong>${vPeak.toFixed(2)} V</strong>. ` +
+        `At t = τ, it has decayed to <strong>${vAtTau.toFixed(2)} V</strong> (36.8% remaining).`;
+    }
+
+    // ADA FIX: Update canvas aria-labels with current parameter values and key result
+    const gapDefined = Math.abs(gap) > 0.001;
+    const currentDesc = gapDefined
+      ? `At one time-constant (${tauMs.toFixed(1)} ms), current reaches ${(Ifinal + (I0 - Ifinal) * Math.exp(-1)).toFixed(1)} mA, 63.2 percent of the way from I0 to Ifinal.`
+      : `No transient — current is constant at ${Ifinal.toFixed(1)} mA.`;
+    document.getElementById('rlChart').setAttribute('aria-label',
+      `Inductor current curve. R = ${fmtR(R)}, L = ${fmtL(L)}, ` +
+      `V = ${Vf.toFixed(1)} V, I0 = ${I0.toFixed(1)} mA, ` +
+      `tau = ${tauMs.toFixed(1)} ms, Ifinal = ${Ifinal.toFixed(1)} mA. ${currentDesc}`
+    );
+
+    const voltageDesc = gapDefined
+      ? `Peak voltage at t=0 is ${vPeak.toFixed(2)} V, decaying exponentially to zero.`
+      : `No inductor voltage — current is already at final value.`;
+    document.getElementById('rlVoltageChart').setAttribute('aria-label',
+      `Inductor voltage decay curve. ${voltageDesc}`
+    );
+    if (_disReady) updateDis();
+  }
+
+  // ── Slider listeners ──
+  document.getElementById('sliderR').addEventListener('input', function () {
+    R = logVal(+this.value, 10, 1000);
+    document.getElementById('valR').textContent = fmtR(R);
+    // ADA FIX: aria-valuetext updated with spoken-friendly value (no Ω symbol)
+    this.setAttribute('aria-valuetext', fmtR_spoken(R));
+    update();
+  });
+
+  document.getElementById('sliderL').addEventListener('input', function () {
+    L = logVal(+this.value, 0.001, 1);
+    document.getElementById('valL').textContent = fmtL(L);
+    this.setAttribute('aria-valuetext', fmtL_spoken(L));
+    update();
+  });
+
+  document.getElementById('sliderV').addEventListener('input', function () {
+    Vf = +this.value;
+    document.getElementById('valV').textContent = Vf.toFixed(1) + ' V';
+    this.setAttribute('aria-valuetext', Vf.toFixed(1) + ' volts');
+    update();
+  });
+
+  document.getElementById('sliderI0').addEventListener('input', function () {
+    I0 = +this.value;
+    document.getElementById('valI0').textContent = I0.toFixed(1) + ' mA';
+    this.setAttribute('aria-valuetext', I0.toFixed(1) + ' milliamps');
+    update();
+  });
+
+  // ── Initialize display labels ──
+  document.getElementById('valR').textContent  = fmtR(R);
+  document.getElementById('valL').textContent  = fmtL(L);
+  document.getElementById('valV').textContent  = Vf.toFixed(1) + ' V';
+  document.getElementById('valI0').textContent = I0.toFixed(1) + ' mA';
+
+  // ── Initial render ──
+  update();
+
+  // ── Panel 5: De-energizing — the voltage spike ──
+  // R_arc declared in Panel 4 state block; I₀ and L are derived from Panel 4 live.
+
+  function buildDisCurrentData() {
+    const Idis  = Vf / R * 1000;   // steady-state current from Panel 4
+    const tau   = L / R_arc;
+    const tDraw = 5 * tau;
+    const pts   = [];
+    for (let i = 0; i <= 400; i++) {
+      const t = (i / 400) * tDraw;
+      pts.push({ x: t, y: Idis * Math.exp(-t / tau) });
+    }
+    return pts;
+  }
+
+  function buildDisVoltageData() {
+    const Idis  = Vf / R * 1000;
+    const tau   = L / R_arc;
+    const vPeak = (Idis / 1000) * R_arc;
+    const tDraw = 5 * tau;
+    const pts   = [];
+    for (let i = 0; i <= 400; i++) {
+      const t = (i / 400) * tDraw;
+      pts.push({ x: t, y: -vPeak * Math.exp(-t / tau) });
+    }
+    return pts;
+  }
+
+  function fmtVoltage(v) {
+    if (v >= 1000) return (v / 1000).toFixed(1) + ' kV';
+    if (v >= 10)   return v.toFixed(0) + ' V';
+    return v.toFixed(2) + ' V';
+  }
+
+  function fmtTimeAxis(v) {
+    const ms = v * 1000;
+    if (ms === 0)   return '0';
+    if (ms < 0.01)  return (ms * 1000).toFixed(1) + ' μs';
+    if (ms < 1)     return ms.toPrecision(2) + ' ms';
+    return ms.toFixed(1) + ' ms';
+  }
+
+  // Current decay chart
+  const ctxDis = document.getElementById('disCurrentChart').getContext('2d');
+  const disCurrentChart = new Chart(ctxDis, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'I_L(t)',
+        data: buildDisCurrentData(),
+        borderColor: '#0891B2',
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.4,
+        fill: false,
+        parsing: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { top: 8, right: 20, bottom: 8, left: 8 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          type: 'linear', min: 0,
+          ticks: { color: chartColors().tick, callback: fmtTimeAxis, maxTicksLimit: 6, font: { family: 'monospace', size: 11 } },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        },
+        y: {
+          min: 0,
+          title: { display: true, text: 'I_L (mA)', color: chartColors().tick, font: { size: 11, family: 'monospace' } },
+          ticks: { color: chartColors().tick, font: { family: 'monospace', size: 11 }, callback: v => v.toFixed(1) + ' mA' },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        }
+      }
+    }
+  });
+
+  // Voltage spike chart (y-axis goes negative — reversed polarity)
+  const ctxSpike = document.getElementById('disSpikeChart').getContext('2d');
+  const disSpikeChart = new Chart(ctxSpike, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'v_L(t)',
+        data: buildDisVoltageData(),
+        borderColor: '#dc2626',
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.4,
+        fill: false,
+        parsing: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { top: 28, right: 20, bottom: 8, left: 8 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          type: 'linear', min: 0,
+          ticks: { color: chartColors().tick, callback: fmtTimeAxis, maxTicksLimit: 6, font: { family: 'monospace', size: 11 } },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        },
+        y: {
+          max: 0,
+          title: { display: true, text: 'v_L (V)  ← reversed polarity', color: chartColors().tick, font: { size: 11, family: 'monospace' } },
+          ticks: {
+            color: chartColors().tick,
+            font: { family: 'monospace', size: 11 },
+            callback: v => {
+              if (v === 0) return '0 V';
+              const abs = Math.abs(v);
+              if (abs >= 1000) return (v / 1000).toFixed(1) + ' kV';
+              if (abs >= 10)   return v.toFixed(0) + ' V';
+              return v.toFixed(2) + ' V';
+            }
+          },
+          grid:   { color: chartColors().grid },
+          border: { color: chartColors().grid }
+        }
+      }
+    },
+    plugins: [{
+      id: 'spikeAnnotation',
+      afterDraw(ch) {
+        const { ctx, scales: { y: ySc }, chartArea } = ch;
+        const vPeak = (Vf / R) * R_arc;   // I₀ (A) × R_arc — uses module-level vars
+        const colors = chartColors();
+        ctx.save();
+        // zero reference line
+        const y0 = ySc.getPixelForValue(0);
+        ctx.beginPath();
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = colors.ifLine;
+        ctx.lineWidth = 1;
+        ctx.moveTo(chartArea.left, y0);
+        ctx.lineTo(chartArea.right, y0);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = colors.tick;
+        ctx.font = '11px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('v = 0  (before switch opens)', chartArea.right - 4, y0 - 5);
+        // peak label
+        const yPeak = ySc.getPixelForValue(-vPeak);
+        ctx.fillStyle = '#dc2626';
+        ctx.font = '600 11px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('−' + fmtVoltage(vPeak) + '  at t = 0⁺', chartArea.left + 4, yPeak + 14);
+        ctx.restore();
+      }
+    }]
+  });
+
+  function updateDis() {
+    const Idis  = Vf / R * 1000;   // live from Panel 4
+    const tau   = L / R_arc;
+    const vPeak = (Idis / 1000) * R_arc;
+    const tauMs = tau * 1000;
+    document.getElementById('valIdis').textContent = Idis.toFixed(1) + ' mA';
+    document.getElementById('valLdis').textContent = fmtL(L);
+
+    disCurrentChart.data.datasets[0].data = buildDisCurrentData();
+    disCurrentChart.options.scales.x.max  = 5 * tau;
+    disCurrentChart.options.scales.y.max  = Idis > 0 ? Idis * 1.15 : 1;
+    disCurrentChart.update('none');
+
+    disSpikeChart.data.datasets[0].data = buildDisVoltageData();
+    disSpikeChart.options.scales.x.max  = 5 * tau;
+    disSpikeChart.options.scales.y.min  = vPeak > 0 ? -vPeak * 1.15 : -1;
+    disSpikeChart.update('none');
+
+    // τ display — switch to μs below 0.1 ms
+    if (tauMs < 0.1) {
+      document.getElementById('tauDisValue').textContent = (tauMs * 1000).toFixed(1);
+      document.getElementById('tauDisUnit').textContent  = 'μs';
+    } else {
+      document.getElementById('tauDisValue').textContent = tauMs.toFixed(3);
+      document.getElementById('tauDisUnit').textContent  = 'ms';
+    }
+
+    // Spike callout
+    const callout = document.getElementById('spikeCallout');
+    document.getElementById('spikeValue').textContent = fmtVoltage(vPeak);
+    const level = vPeak > 50 ? 'danger' : vPeak > 10 ? 'warn' : 'safe';
+    callout.className = 'spike-callout ' + level;
+    document.getElementById('spikeDesc').textContent =
+      'I₀ × R_arc = ' + Idis.toFixed(1) + ' mA × ' + fmtR(R_arc) + ' — ' +
+      (level === 'danger' ? 'can damage or destroy transistors and ICs'
+       : level === 'warn'  ? 'may stress or degrade components over time'
+       : 'within normal operating range');
+
+    // Summary sentence
+    const tDisp = tauMs < 0.1
+      ? (tauMs * 1000).toFixed(1) + ' μs'
+      : tauMs.toFixed(3) + ' ms';
+    document.getElementById('disSummaryText').innerHTML =
+      `At t = τ (<strong>${tDisp}</strong>), current has decayed to ` +
+      `<strong>${(Idis * Math.exp(-1)).toFixed(1)} mA</strong> (36.8% of I₀) ` +
+      `and the spike voltage has fallen to <strong>−${fmtVoltage(vPeak * Math.exp(-1))}</strong>.`;
+
+    // Comparison cards
+    document.getElementById('noFlybackSpike').textContent =
+      'Spike: ' + fmtVoltage(vPeak);
+    document.getElementById('flybackSpike').textContent =
+      'Spike: ' + fmtVoltage(Idis / 1000 * 1);   // 1 Ω flyback path
+  }
+
+  // Panel 5 sliders
+  document.getElementById('sliderRarc').addEventListener('input', function () {
+    R_arc = logVal(+this.value, 10, 100000);
+    document.getElementById('valRarc').textContent = fmtR(R_arc);
+    this.setAttribute('aria-valuetext', fmtR_spoken(R_arc));
+    updateDis();
+  });
+
+  // Initial display + render for Panel 5
+  document.getElementById('valRarc').textContent = fmtR(R_arc);
+  _disReady = true;
+  updateDis();
+
+  // ── Recolor on dark-mode toggle ──
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const c = chartColors();
+    chart.options.scales.x.ticks.color  = c.tick;
+    chart.options.scales.x.grid.color   = c.grid;
+    chart.options.scales.x.title.color  = c.tick;
+    chart.options.scales.y.ticks.color  = c.tick;
+    chart.options.scales.y.grid.color   = c.grid;
+    chart.options.scales.y.title.color  = c.tick;
+    chart.update('none');
+    chartVoltage.options.scales.x.ticks.color = c.tick;
+    chartVoltage.options.scales.x.grid.color  = c.grid;
+    chartVoltage.options.scales.y.ticks.color = c.tick;
+    chartVoltage.options.scales.y.grid.color  = c.grid;
+    chartVoltage.options.scales.y.title.color = c.tick;
+    chartVoltage.update('none');
+    disCurrentChart.options.scales.x.ticks.color = c.tick;
+    disCurrentChart.options.scales.x.grid.color  = c.grid;
+    disCurrentChart.options.scales.y.ticks.color = c.tick;
+    disCurrentChart.options.scales.y.grid.color  = c.grid;
+    disCurrentChart.options.scales.y.title.color = c.tick;
+    disCurrentChart.update('none');
+    disSpikeChart.options.scales.x.ticks.color = c.tick;
+    disSpikeChart.options.scales.x.grid.color  = c.grid;
+    disSpikeChart.options.scales.y.ticks.color = c.tick;
+    disSpikeChart.options.scales.y.grid.color  = c.grid;
+    disSpikeChart.options.scales.y.title.color = c.tick;
+    disSpikeChart.update('none');
+  });
+</script>
+</body>
+</html>
