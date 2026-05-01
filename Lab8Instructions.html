@@ -263,7 +263,7 @@
 <h3>2.0 Team Coordination Plan</h3>
 <p>Submit this plan as the first item of the Team Pre-Lab. It does not require calculations — it requires the team to have a conversation before the lab week begins and to commit that conversation to writing.</p>
 <blockquote>
-<p><strong>Prelab Deliverable: Team Coordination Plan</strong></p>
+<p><strong>Prelab Deliverable #1: Team Coordination Plan</strong></p>
 <p>Provide the following in the order listed below.</p>
 <p><strong>1. Team roster.</strong> List each team member's name and their assigned lab section.</p>
 <p><strong>2. Bring-up stage assignments.</strong> For each bring-up stage, name the team member taking primary responsibility and the lab section in which that stage will be completed. Every member must be assigned primary responsibility for at least one stage.</p>
@@ -338,26 +338,26 @@
 <p>Consult the INA125 datasheet (linked on Canvas) for the pinout, supply limits, and output swing specification.</p>
 <p>The total signal chain gain from bridge output to ADC input is the product of the INA gain and the summing amplifier gain: $G_\text{total} = G_\text{INA} \times G_\text{sum}$. The INA is not required to fill its full output swing on its own. Distributing gain across both stages gives more practical component values: concentrating all gain in the INA forces $R_g$ into the single-digit ohm range, where contact resistance and parasitic effects introduce significant error. A practical lower bound is $R_g \geq 30\,\Omega$. The summing amplifier provides both the DC level shift and additional signal gain through its resistor ratio $R_f/R_a$; a larger $R_f/R_a$ reduces the required INA gain and raises $R_g$ to a more reliable value.</p>
 <blockquote>
-<p><strong>Prelab Deliverable #1</strong></p>
+<p><strong>Prelab Deliverable #2</strong></p>
 <p><strong>INA gain selection.</strong><br/>
 State the selected INA gain and the summing amplifier signal gain ($R_f/R_a$). Show the calculation of $R_g$ from the INA125 gain formula. Identify the nearest standard resistor value and state the gain it produces. Justify the gain split: the INA gain need not fill the full output swing — choose a value that gives $R_g \geq 30\,\Omega$ to avoid contact-resistance errors, and assign the remaining required gain to the summing amplifier. State the resulting total signal chain gain and verify that the INA output at full load stays within the INA125 output swing limit.</p>
-<p><strong>Prelab Deliverable #2</strong></p>
+<p><strong>Prelab Deliverable #3</strong></p>
 <p><strong>Summing amplifier design.</strong><br/>
 Derive the resistor ratios $R_f/R_a$ and $R_f/R_b$ from the two boundary conditions (zero load maps to $+2.5$ V; full load maps to $-2.5$ V). Note that $R_f/R_a$ is the signal gain of the summing stage: it is set by how much the INA output swing must be further amplified to fill the full 5 V ADC window, and its value depends directly on the INA gain chosen in Deliverable #1. $R_f/R_b$ sets the DC offset using the $-5$ V rail and is independent of the INA gain. State the specific standard resistor values selected. Write out the complete transfer function $v_\text{ADC} = f(v_\text{INA})$ and verify it numerically at both endpoints.</p>
-<p><strong>Prelab Deliverable #3</strong></p>
+<p><strong>Prelab Deliverable #4</strong></p>
 <p><strong>Theoretical resolution.</strong><br/>
 Calculate the weight resolution per ADC count (in grams per count) for your chosen gain, the 500 g measurement range, and the M2K 12-bit ADC with a 5 V input range. State how this compares to the 1.1 g jelly bean target.</p>
-<p><strong>Prelab Deliverable #4</strong></p>
+<p><strong>Prelab Deliverable #5</strong></p>
 <p><strong>INA125 pinout diagram.</strong><br/>
 Provide an annotated diagram of the INA125 pinout (from the datasheet or the project document) showing the intended connection for every pin: positive and negative supply, both differential inputs, both gain pins with $R_g$, the reference pin (IAref, pin 5), and the output. No pin should be left unlabeled.</p>
-<p><strong>Prelab Deliverable #5</strong></p>
+<p><strong>Prelab Deliverable #6</strong></p>
 <p><strong>Low-pass filter design.</strong><br/>
 The INA125 gain-bandwidth product is approximately 600 kHz. At your chosen INA gain $G_\text{INA}$, the amplifier already limits signal bandwidth to $f_\text{INA} \approx 600\,\text{kHz}\,/\,G_\text{INA}$. Calculate this bandwidth for your design and state why it is still insufficient to reject 60 Hz power-line interference at the ADC input.</p>
 <p>Select a cutoff frequency $f_c$ in the range of 2–10 Hz for a passive first-order RC low-pass filter placed after the summing amplifier. Calculate $R$ and $C$ using standard component values available in the lab ($f_c = 1/(2\pi RC)$). Choose $R$ in the range 10 k$\Omega$ to 200 k$\Omega$: large enough to keep $C$ in the range where practical film capacitors are available, but small enough that resistor thermal noise does not corrupt the 12-bit ADC reading. For reference: with $R = 100\,\text{k}\Omega$, the required capacitance is 820 nF at $f_c = 2$ Hz, 330 nF at $f_c = 5$ Hz, and 160 nF at $f_c = 10$ Hz — all achievable with standard film capacitors.</p>
 <p><strong>Use a film capacitor (polyester or Mylar), not ceramic and not electrolytic.</strong> Ceramic capacitors exhibit a piezoelectric effect: mechanical vibration or a bump on the table generates a spurious voltage that the ADC reads as a phantom weight change. Electrolytic capacitors have dielectric leakage that acts like a parallel resistor, shifting the cutoff frequency and introducing a DC offset that drifts the zero reading. Both effects directly corrupt a precision scale measurement.</p>
 <p>Calculate the attenuation at 60 Hz in dB: $A = -20\log_{10}\!\sqrt{1+(60/f_c)^2}$. Justify your choice of $f_c$: too high leaves 60 Hz interference in the signal; too low increases settling time and slows the scale response.</p>
 <p>The RC filter output connects to the remaining op-amp in the dual package, wired as a unity-gain voltage follower. Explain in one sentence why the buffer is necessary between the RC filter and the ADC input. Provide a schematic of the complete filter stage with all component values labeled.</p>
-<p><strong>Prelab Deliverable #6</strong></p>
+<p><strong>Prelab Deliverable #7</strong></p>
 <p><strong>Breadboard plan.</strong><br/>
 Provide a sketch of the proposed breadboard layout showing the placement of the INA125, the op-amp used for the summing stage, the RC low-pass filter, the op-amp buffer, power connections, decoupling capacitors, and the load cell interface. Stage separation must be clearly indicated.</p>
 </blockquote>
@@ -446,7 +446,7 @@ Provide a sketch of the proposed breadboard layout showing the placement of the 
 <p>ADC input voltage at zero load and under known weight. Confirmation that signal polarity is as designed (ADC reading decreases as load increases). Photographs of the complete breadboard with load cell connected.</p>
 </blockquote>
 <h3>3.4 Stage 4: Low-Pass Filter Bring-Up</h3>
-<p>This stage verifies the passive RC filter and op-amp buffer added after the summing amplifier. The INA125 at high gain already limits bandwidth to a few hundred Hz, but 60 Hz power-line interference still passes through. The RC filter brings the cutoff frequency down to the 2--10 Hz range selected in Prelab Deliverable #5, and the buffer prevents the ADC input impedance from loading the filter.</p>
+<p>This stage verifies the passive RC filter and op-amp buffer added after the summing amplifier. The INA125 at high gain already limits bandwidth to a few hundred Hz, but 60 Hz power-line interference still passes through. The RC filter brings the cutoff frequency down to the 2--10 Hz range selected in Prelab Deliverable #6, and the buffer prevents the ADC input impedance from loading the filter.</p>
 <p>Bring up the filter independently before inserting it into the signal chain.</p>
 <blockquote>
 <p><strong>Practical note: decoupling.</strong><br/>
@@ -462,7 +462,7 @@ Before powering up this stage, verify that a 0.1 µF ceramic capacitor is placed
 </blockquote>
 <ol>
 <li><strong>60 Hz rejection.</strong><br/>
-   Apply a sine wave at exactly 60 Hz to the filter input. Measure the output amplitude at the buffer output. Compute the measured attenuation: $A_\text{meas} = 20\log_{10}(V_\text{out}/V_\text{in})$. Compare to the value calculated in Prelab Deliverable #5.</li>
+   Apply a sine wave at exactly 60 Hz to the filter input. Measure the output amplitude at the buffer output. Compute the measured attenuation: $A_\text{meas} = 20\log_{10}(V_\text{out}/V_\text{in})$. Compare to the value calculated in Prelab Deliverable #6.</li>
 </ol>
 <blockquote>
 <p><strong>Lab Deliverable #4b</strong></p>
@@ -548,7 +548,7 @@ Before powering up this stage, verify that a 0.1 µF ceramic capacitor is placed
 <blockquote>
 <p><strong>IMPORTANT</strong></p>
 <p><strong>Individual submissions (each team member):</strong> Prelab Deliverables 1a, 1b, and 1c (Reflective AI Exercise) -- submitted individually to Gradescope, due Tuesday noon.</p>
-<p><strong>Team submissions (one per team):</strong> Prelab Deliverables 1--6 (Design Document) -- due Tuesday noon. Phase 1 Milestone Report -- report text entered directly into the Canvas assignment text box; photographs and M2K screenshots uploaded as separate image files in the same assignment -- due Saturday noon. All images must be named by stage and all calculations must be clearly labeled within the text.</p>
+<p><strong>Team submissions (one per team):</strong> Prelab Deliverables 1--7 (Design Document) -- due Tuesday noon. Phase 1 Milestone Report -- report text entered directly into the Canvas assignment text box; photographs and M2K screenshots uploaded as separate image files in the same assignment -- due Saturday noon. All images must be named by stage and all calculations must be clearly labeled within the text.</p>
 <p><strong>In-lab sign-off:</strong> Lab Deliverable #5 (Stage 5 ADC Capture Demonstration) is signed off by the TA during the lab session. The team must obtain the TA signature before leaving. The Stage 5 results are reported in Section 2 of the Milestone Report.</p>
 </blockquote>
 <footer aria-label="License information" class="cc-footer" role="contentinfo">
