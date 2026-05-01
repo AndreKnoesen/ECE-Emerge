@@ -295,37 +295,49 @@
 <h3>Check-Off 1: ADC Capture with Load Cell</h3>
 <p><strong>15 minutes. At least one team member must be present.</strong></p>
 <p>This check-off verifies that the team can acquire and display conditioned weight data from their working Lab 8 breadboard using the M2K-MATLAB skills from Lab 6. No new circuit construction is required.</p>
-<p>Bring to the check-off:<br/>
-- The verified Lab 8 signal conditioning breadboard (all three stages connected end-to-end), with load cell attached.<br/>
-- M2K and ECE Emerge adapter board connected to the project laptop.<br/>
-- A MATLAB script that acquires Ch1, computes the mean and standard deviation over a minimum 0.5-second window of samples, and plots the result.</p>
-<p>The evaluation requires:<br/>
-- The evaluator places 0 g, 250 g, and 500 g loads on the scale. For each load, the script reads and displays the mean voltage and standard deviation.<br/>
-- The conditioned output must span at least 4 V across the full 0–500 g range, confirming adequate ADC utilization.<br/>
-- The voltage must decrease monotonically as load increases (negative slope), consistent with the inverting summing amplifier stage.<br/>
-- The standard deviation reported at each weight must be consistent with noise below 10 mV (approximately 8 ADC counts).</p>
+<p>Bring to the check-off:</p>
+<ul>
+<li>The verified Lab 8 signal conditioning breadboard (all three stages connected end-to-end), with load cell attached.</li>
+<li>M2K and ECE Emerge adapter board connected to the project laptop.</li>
+<li>A MATLAB script that acquires Ch1, computes the mean and standard deviation over a minimum 0.5-second window of samples, and plots the result.</li>
+</ul>
+<p>The evaluation requires:</p>
+<ul>
+<li>The evaluator places 0 g, 250 g, and 500 g loads on the scale. For each load, the script reads and displays the mean voltage and standard deviation.</li>
+<li>The conditioned output must span at least 4 V across the full 0–500 g range, confirming adequate ADC utilization.</li>
+<li>The voltage must decrease monotonically as load increases (negative slope), consistent with the inverting summing amplifier stage.</li>
+<li>The standard deviation reported at each weight must be consistent with noise below 10 mV (approximately 8 ADC counts).</li>
+</ul>
 <h3>Check-Off 2: GUI Prototype</h3>
 <p><strong>15 minutes. At least one team member must be present.</strong></p>
 <p>This check-off verifies the MATLAB App Designer GUI with the actual signal conditioning hardware. Simulation using the DAC is not acceptable at this stage.</p>
-<p>Bring to the check-off:<br/>
-- The working signal conditioning breadboard and load cell from Check-Off 1.<br/>
-- A functioning App Designer GUI.</p>
-<p>The GUI must demonstrate at minimum:<br/>
-- <strong>Calibration:</strong> Collect at least five reference weight standards across the 0–500 g range. The live calibration plot updates as each point is added. The $R^2$ coefficient is displayed. After accepting calibration, the GUI indicates calibrated state and applies the stored slope and intercept to all subsequent readings.<br/>
-- <strong>Taring:</strong> A tare control that zeros the display and maintains the tare offset until reset.<br/>
-- <strong>Output display:</strong> Mean weight in grams, standard deviation, and 95% confidence interval, updated continuously using 0.5-second sample windows.</p>
+<p>Bring to the check-off:</p>
+<ul>
+<li>The working signal conditioning breadboard and load cell from Check-Off 1.</li>
+<li>A functioning App Designer GUI.</li>
+</ul>
+<p>The GUI must demonstrate at minimum:</p>
+<ul>
+<li><strong>Calibration:</strong> Collect at least five reference weight standards across the 0–500 g range. The live calibration plot updates as each point is added. The $R^2$ coefficient is displayed. After accepting calibration, the GUI indicates calibrated state and applies the stored slope and intercept to all subsequent readings.</li>
+<li><strong>Taring:</strong> A tare control that zeros the display and maintains the tare offset until reset.</li>
+<li><strong>Output display:</strong> Mean weight in grams, standard deviation, and 95% confidence interval, updated continuously using 0.5-second sample windows.</li>
+</ul>
 <p>The evaluator will place known weights on the scale and verify that the displayed value agrees with the known weight to within the expected accuracy of the calibrated system.</p>
 <h3>Check-Off 3: Soldered Prototype</h3>
 <p><strong>15 minutes. At least one team member must be present.</strong></p>
 <p>This check-off verifies that the signal conditioning circuit has been successfully transferred from breadboard to the soldered prototype area on the M2K adapter board.</p>
-<p>Bring to the check-off:<br/>
-- All three signal conditioning stages soldered on the M2K adapter board prototype area, with load cell attached.<br/>
-- The GUI from Check-Off 2 (or a more advanced version).</p>
-<p>The evaluation applies the same end-to-end performance standards as Lab 8 Stage 4 and Check-Off 1:<br/>
-- <strong>INA125 stage.</strong> Outputs at 0 g, 250 g, and 500 g must be distinct and within the supply rails; 490 g and 500 g must be distinguishable.<br/>
-- <strong>Summing amplifier stage.</strong> Output maps 0 g to approximately $+2.5$ V and 500 g to approximately $-2.5$ V.<br/>
-- <strong>Low-pass filter stage.</strong> Output at 60 Hz is attenuated by at least 15 dB relative to the DC-coupled signal level.<br/>
-- <strong>End-to-end.</strong> The GUI displays calibrated weight with mean and standard deviation updating continuously. The evaluator will place known weights and verify correct readings.</p>
+<p>Bring to the check-off:</p>
+<ul>
+<li>All three signal conditioning stages soldered on the M2K adapter board prototype area, with load cell attached.</li>
+<li>The GUI from Check-Off 2 (or a more advanced version).</li>
+</ul>
+<p>The evaluation applies the same end-to-end performance standards as Lab 8 Stage 4 and Check-Off 1:</p>
+<ul>
+<li><strong>INA125 stage.</strong> Outputs at 0 g, 250 g, and 500 g must be distinct and within the supply rails; 490 g and 500 g must be distinguishable.</li>
+<li><strong>Summing amplifier stage.</strong> Output maps 0 g to approximately $+2.5$ V and 500 g to approximately $-2.5$ V.</li>
+<li><strong>Low-pass filter stage.</strong> Output at 60 Hz is attenuated by at least 15 dB relative to the DC-coupled signal level.</li>
+<li><strong>End-to-end.</strong> The GUI displays calibrated weight with mean and standard deviation updating continuously. The evaluator will place known weights and verify correct readings.</li>
+</ul>
 <h3>Final Project Demonstration</h3>
 <p>Each team has a 15-minute slot. All team members must be present. Thirty minutes before the demonstration, teams may set up and calibrate using a specified load cell. The evaluator will select one team member to present on behalf of the group.</p>
 <p>The team must:</p>
@@ -517,164 +529,91 @@
 <hr/>
 <h2>Appendix E: Calibration and Taring</h2>
 <h3>E.1 What Calibration Is — and Why It Is Necessary</h3>
-<p>Calibration establishes the quantitative relationship between the ADC reading and<br/>
-the actual weight on the scale. Without calibration, ADC readings are arbitrary<br/>
-numbers. The relationship must be determined experimentally because component<br/>
-tolerances, load cell sensitivity variation, and amplifier offsets make it<br/>
-impossible to compute the correct conversion factor purely from nominal<br/>
-specifications. Two scales built from nominally identical components will have<br/>
-different calibration constants.</p>
-<p>Calibration answers the question: <em>"What weight corresponds to this ADC reading?"</em><br/>
-It is not a one-time factory setting. It should be repeated whenever the circuit<br/>
-is changed, the load cell is remounted, or the supply voltage shifts significantly.</p>
+<p>Calibration establishes the quantitative relationship between the ADC reading and the actual weight on the scale. Without calibration, ADC readings are arbitrary numbers. The relationship must be determined experimentally because component tolerances, load cell sensitivity variation, and amplifier offsets make it impossible to compute the correct conversion factor purely from nominal specifications. Two scales built from nominally identical components will have different calibration constants.</p>
+<p>Calibration answers the question: <em>"What weight corresponds to this ADC reading?"</em> It is not a one-time factory setting. It should be repeated whenever the circuit is changed, the load cell is remounted, or the supply voltage shifts significantly.</p>
 <h3>E.2 Creating Your Own Calibrated Standards</h3>
-<p>The lab does not have enough certified weights for every team. Instead, one<br/>
-reference electronic scale is available in the lab. Your team uses it to create<br/>
-a set of <strong>calibrated standards</strong> — ordinary objects whose weight has been<br/>
-accurately measured and recorded. These standards serve as your reference weights<br/>
-throughout the design, bring-up, and testing phases.</p>
+<p>The lab does not have enough certified weights for every team. Instead, one reference electronic scale is available in the lab. Your team uses it to create a set of <strong>calibrated standards</strong> — ordinary objects whose weight has been accurately measured and recorded. These standards serve as your reference weights throughout the design, bring-up, and testing phases.</p>
 <p><strong>Procedure for creating calibrated standards:</strong></p>
 <ol>
 <li>
-<p>Collect 6–8 small, dense, stable objects that span the 0–500 g range. Good<br/>
-   choices: coins, metal nuts or bolts, small bags of sand or rice tied closed,<br/>
-   sealed water bottles. Avoid food items that dry out, liquids in open containers,<br/>
-   or anything that compresses or deforms.</p>
+<p>Collect 6–8 small, dense, stable objects that span the 0–500 g range. Good choices: coins, metal nuts or bolts, small bags of sand or rice tied closed, sealed water bottles. Avoid food items that dry out, liquids in open containers, or anything that compresses or deforms.</p>
 </li>
 <li>
-<p>Weigh each object individually on the lab reference scale. Record the reading<br/>
-   to the nearest 0.1 g.</p>
+<p>Weigh each object individually on the lab reference scale. Record the reading to the nearest 0.1 g.</p>
 </li>
 <li>
-<p>Label each object clearly and permanently. A small piece of tape with a<br/>
-   written mass works; a luggage tag is better. The label must survive a few weeks<br/>
-   of lab use.</p>
+<p>Label each object clearly and permanently. A small piece of tape with a written mass works; a luggage tag is better. The label must survive a few weeks of lab use.</p>
 </li>
 <li>
-<p>Store all standards together in a labeled zip-lock bag that stays with your<br/>
-   team throughout the project.</p>
+<p>Store all standards together in a labeled zip-lock bag that stays with your team throughout the project.</p>
 </li>
 <li>
-<p>Choose standards that are well distributed across the range — for example,<br/>
-   approximately 50 g, 100 g, 150 g, 200 g, 300 g, 400 g, and 500 g. A cluster<br/>
-   of standards near zero and a gap near full scale produces a poor calibration.</p>
+<p>Choose standards that are well distributed across the range — for example, approximately 50 g, 100 g, 150 g, 200 g, 300 g, 400 g, and 500 g. A cluster of standards near zero and a gap near full scale produces a poor calibration.</p>
 </li>
 <li>
-<p>Before the final demonstration, re-verify two or three of your standards on<br/>
-   the reference scale to confirm they have not changed.</p>
+<p>Before the final demonstration, re-verify two or three of your standards on the reference scale to confirm they have not changed.</p>
 </li>
 </ol>
 <blockquote>
-<p><strong>Important:</strong> Your calibrated standards are only as good as the reference scale<br/>
-reading at the time of weighing. Take the reference reading carefully: place the<br/>
-object gently at the center of the pan, wait for the reading to stabilize, and<br/>
-record the displayed value. Take two readings and average them if the display<br/>
-fluctuates.</p>
+<p><strong>Important:</strong> Your calibrated standards are only as good as the reference scale reading at the time of weighing. Take the reference reading carefully: place the object gently at the center of the pan, wait for the reading to stabilize, and record the displayed value. Take two readings and average them if the display fluctuates.</p>
 </blockquote>
 <h3>E.3 What Taring Is</h3>
-<p><strong>Taring</strong> sets the current scale reading to zero, so that subsequent readings<br/>
-show only the weight added <em>after</em> the tare was applied. It is named after the<br/>
-"tare weight" — the weight of the container or packaging that is not part of<br/>
-the measurement of interest.</p>
-<p><strong>Example:</strong> The evaluator hands the team a closed container of jelly beans and<br/>
-an identical empty container. The team places the empty container on the scale<br/>
-pan and presses the Tare button. The display reads 0.000 g. The team then<br/>
-replaces the empty container with the full one. The display now shows the weight<br/>
-of the jelly beans only, with the container weight automatically excluded.</p>
-<p>Taring does not remove the container from the scale. It stores the current<br/>
-reading as an offset and subtracts it from every subsequent reading in software:</p>
+<p><strong>Taring</strong> sets the current scale reading to zero, so that subsequent readings show only the weight added <em>after</em> the tare was applied. It is named after the "tare weight" — the weight of the container or packaging that is not part of the measurement of interest.</p>
+<p><strong>Example:</strong> The evaluator hands the team a closed container of jelly beans and an identical empty container. The team places the empty container on the scale pan and presses the Tare button. The display reads 0.000 g. The team then replaces the empty container with the full one. The display now shows the weight of the jelly beans only, with the container weight automatically excluded.</p>
+<p>Taring does not remove the container from the scale. It stores the current reading as an offset and subtracts it from every subsequent reading in software:</p>
 <p>$$W_\text{display} = W_\text{measured} - W_\text{tare}.$$</p>
-<p>The tare offset must persist in software until the user explicitly resets it.<br/>
-Pressing Tare with nothing on the scale (or with the container already removed)<br/>
-produces a wrong tare value and corrupts all subsequent readings — the GUI<br/>
-should make the workflow unambiguous.</p>
-<p><strong>Taring is not calibration.</strong> Calibration determines the slope and intercept<br/>
-of the weight-to-ADC conversion. Taring applies a zero-offset <em>after</em> calibration.<br/>
-The correct sequence is always: calibrate first, then tare.</p>
+<p>The tare offset must persist in software until the user explicitly resets it. Pressing Tare with nothing on the scale (or with the container already removed) produces a wrong tare value and corrupts all subsequent readings — the GUI should make the workflow unambiguous.</p>
+<p><strong>Taring is not calibration.</strong> Calibration determines the slope and intercept of the weight-to-ADC conversion. Taring applies a zero-offset <em>after</em> calibration. The correct sequence is always: calibrate first, then tare.</p>
 <h3>E.4 Two-Point Calibration</h3>
-<p>The simplest calibration assumes a linear relationship between weight $W$ and<br/>
-ADC voltage $V$:</p>
+<p>The simplest calibration assumes a linear relationship between weight $W$ and ADC voltage $V$:</p>
 <p>$$W = m \cdot V + b.$$</p>
-<p>Two measurements establish slope $m$ and intercept $b$: one at zero load<br/>
-($V_0$, $W = 0$) and one at a known reference weight ($V_1$, $W_1$):</p>
+<p>Two measurements establish slope $m$ and intercept $b$: one at zero load ($V_0$, $W = 0$) and one at a known reference weight ($V_1$, $W_1$):</p>
 <p>$$m = \frac{W_1}{V_1 - V_0}, \qquad b = -m \cdot V_0.$$</p>
-<p>Because the summing amplifier is inverting, the ADC voltage decreases as load<br/>
-increases. The slope $m$ will therefore be negative. This is expected and does<br/>
-not indicate a wiring error.</p>
-<p>Two-point calibration is accurate at the two calibration points and interpolates<br/>
-between them. Non-linearity in the load cell or amplifier chain degrades accuracy<br/>
-at intermediate points.</p>
+<p>Because the summing amplifier is inverting, the ADC voltage decreases as load increases. The slope $m$ will therefore be negative. This is expected and does not indicate a wiring error.</p>
+<p>Two-point calibration is accurate at the two calibration points and interpolates between them. Non-linearity in the load cell or amplifier chain degrades accuracy at intermediate points.</p>
 <h3>E.5 Multi-Point Calibration (Recommended)</h3>
-<p>Measuring at several known weights distributed across the full 0 to 500 g range<br/>
-and fitting a line by least squares provides a better estimate of slope and<br/>
-intercept. Specific advantages:</p>
+<p>Measuring at several known weights distributed across the full 0 to 500 g range and fitting a line by least squares provides a better estimate of slope and intercept. Specific advantages:</p>
 <ul>
-<li>Random measurement noise in individual readings is averaged out across all<br/>
-  calibration points.</li>
-<li>The quality of the linear assumption can be assessed from the residual errors<br/>
-  and the $R^2$ coefficient.</li>
-<li>Non-linear behavior, if present, becomes visible in the residuals and can be<br/>
-  addressed with a higher-order polynomial fit.</li>
+<li>Random measurement noise in individual readings is averaged out across all calibration points.</li>
+<li>The quality of the linear assumption can be assessed from the residual errors and the $R^2$ coefficient.</li>
+<li>Non-linear behavior, if present, becomes visible in the residuals and can be addressed with a higher-order polynomial fit.</li>
 </ul>
-<p>A linear fit to calibrated standards distributed across the full range provides<br/>
-substantially better accuracy than a two-point calibration and is the required<br/>
-approach for the final demonstration.</p>
+<p>A linear fit to calibrated standards distributed across the full range provides substantially better accuracy than a two-point calibration and is the required approach for the final demonstration.</p>
 <h3>E.6 Practical Calibration Procedure</h3>
 <p>Follow this sequence each time the scale is calibrated.</p>
 <ol>
 <li>
-<p><strong>Warm up.</strong> Power on the circuit and allow at least 30 minutes before<br/>
-   beginning calibration. Load cell output drifts during warm-up; calibrating<br/>
-   on a cold system produces a shifted zero that changes as the circuit reaches<br/>
-   thermal equilibrium.</p>
+<p><strong>Warm up.</strong> Power on the circuit and allow at least 30 minutes before beginning calibration. Load cell output drifts during warm-up; calibrating on a cold system produces a shifted zero that changes as the circuit reaches thermal equilibrium.</p>
 </li>
 <li>
-<p><strong>Verify supply voltages.</strong> Confirm that $+5$ V and $-5$ V are present at<br/>
-   the INA125 supply pins before applying any load.</p>
+<p><strong>Verify supply voltages.</strong> Confirm that $+5$ V and $-5$ V are present at the INA125 supply pins before applying any load.</p>
 </li>
 <li>
-<p><strong>Zero-load baseline.</strong> With nothing on the scale pan, record the ADC reading<br/>
-   ($V_0$). This is the unloaded reference. Record at least 10 consecutive readings<br/>
-   and take the mean.</p>
+<p><strong>Zero-load baseline.</strong> With nothing on the scale pan, record the ADC reading ($V_0$). This is the unloaded reference. Record at least 10 consecutive readings and take the mean.</p>
 </li>
 <li>
-<p><strong>Place standards in sequence.</strong> Place each calibrated standard on the pan<br/>
-   one at a time, from lightest to heaviest. For each standard, wait for the<br/>
-   reading to stabilize (approximately 3–5 seconds), record at least 10 readings,<br/>
-   and take the mean.</p>
+<p><strong>Place standards in sequence.</strong> Place each calibrated standard on the pan one at a time, from lightest to heaviest. For each standard, wait for the reading to stabilize (approximately 3–5 seconds), record at least 10 readings, and take the mean.</p>
 </li>
 <li>
-<p><strong>Fit the calibration line.</strong> In MATLAB, use <code>polyfit(V, W, 1)</code> with the<br/>
-   voltage readings as $V$ and the known weights as $W$. Store the returned slope<br/>
-   and intercept. Inspect the fit: plot the calibration data and the fitted line<br/>
-   on the same axes and verify that no point deviates by more than 2–3 g from<br/>
-   the line. A poor fit indicates a measurement error, a mislabeled standard,<br/>
-   or non-linearity in the signal chain.</p>
+<p><strong>Fit the calibration line.</strong> In MATLAB, use <code>polyfit(V, W, 1)</code> with the voltage readings as $V$ and the known weights as $W$. Store the returned slope and intercept. Inspect the fit: plot the calibration data and the fitted line on the same axes and verify that no point deviates by more than 2–3 g from the line. A poor fit indicates a measurement error, a mislabeled standard, or non-linearity in the signal chain.</p>
 </li>
 <li>
-<p><strong>Verify at a midpoint.</strong> Place a standard that was not used in the calibration<br/>
-   fit. The displayed weight should agree with the labeled value within the<br/>
-   expected resolution. If it does not, check for a mislabeled standard or a<br/>
-   non-linearity in the signal chain.</p>
+<p><strong>Verify at a midpoint.</strong> Place a standard that was not used in the calibration fit. The displayed weight should agree with the labeled value within the expected resolution. If it does not, check for a mislabeled standard or a non-linearity in the signal chain.</p>
 </li>
 <li>
-<p><strong>Apply tare only after calibration is complete.</strong> Do not tare before or<br/>
-   during calibration.</p>
+<p><strong>Apply tare only after calibration is complete.</strong> Do not tare before or during calibration.</p>
 </li>
 </ol>
 <h3>E.7 Calibration in the GUI</h3>
-<p>The calibration routine must be integrated into the GUI so that it can be<br/>
-repeated without modifying code. The GUI should:</p>
+<p>The calibration routine must be integrated into the GUI so that it can be repeated without modifying code. The GUI should:</p>
 <ul>
 <li>Guide the user through placing each standard in sequence with on-screen prompts</li>
 <li>Accept the known mass of each standard as a text input or from a pre-loaded list</li>
-<li>Display a live calibration plot (ADC voltage vs. known weight) as points are<br/>
-  added, updating with each measurement</li>
+<li>Display a live calibration plot (ADC voltage vs. known weight) as points are added, updating with each measurement</li>
 <li>Compute and store the calibration slope and intercept automatically</li>
 <li>Display the $R^2$ value of the fit so the user can assess calibration quality</li>
 <li>Apply the stored calibration to all subsequent weight readings</li>
-<li>Include a clearly labeled Tare button that stores the current calibrated reading<br/>
-  as the tare offset and resets the display to zero</li>
+<li>Include a clearly labeled Tare button that stores the current calibrated reading as the tare offset and resets the display to zero</li>
 <li>Show the active tare value and provide a Reset Tare button</li>
 </ul>
 <hr/>
