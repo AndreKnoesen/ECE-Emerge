@@ -327,30 +327,14 @@
 </ol>
 <hr/>
 <h2>Project Check-Offs</h2>
-<p>Three graded check-offs are scheduled, followed by a final demonstration. At each check-off, different team members are expected to lead the demonstration. Evaluators note which team members are present and engaged across all check-offs.</p>
-<p>Lab 8 serves as the breadboard bring-up milestone: the three signal conditioning stages (INA125, summing amplifier, and RC low-pass filter with buffer) are verified individually and end-to-end as Lab 8 deliverables. The M2K-MATLAB interface is established in Lab 6. The three project check-offs build on these completed foundations.</p>
-<h3>Check-Off 1: ADC Capture with Load Cell</h3>
-<p><strong>15 minutes. At least one team member must be present.</strong></p>
-<p>This check-off verifies that the team can acquire and display conditioned weight data from their working Lab 8 breadboard using the M2K-MATLAB skills from Lab 6. No new circuit construction is required.</p>
-<p>Bring to the check-off:</p>
-<ul>
-<li>The verified Lab 8 signal conditioning breadboard (all three stages connected end-to-end), with load cell attached.</li>
-<li>M2K and ECE Emerge adapter board connected to the project laptop.</li>
-<li>A MATLAB script that acquires Ch1, computes the mean and standard deviation over a minimum 0.5-second window of samples, and plots the result.</li>
-</ul>
-<p>The evaluation requires:</p>
-<ul>
-<li>The evaluator places 0 g, 250 g, and 500 g loads on the scale. For each load, the script reads and displays the mean voltage and standard deviation.</li>
-<li>The conditioned output must span at least 4 V across the full 0–500 g range, confirming adequate ADC utilization.</li>
-<li>The voltage must decrease monotonically as load increases (negative slope), consistent with the inverting summing amplifier stage.</li>
-<li>The standard deviation reported at each weight must be consistent with noise below 10 mV (approximately 8 ADC counts).</li>
-</ul>
-<h3>Check-Off 2: GUI Prototype</h3>
+<p>Two graded check-offs are scheduled, followed by a final demonstration. At each check-off, different team members are expected to lead the demonstration. Evaluators note which team members are present and engaged across all check-offs.</p>
+<p>Lab 8 serves as the breadboard bring-up and ADC capture milestone. The four signal conditioning stages (INA125, summing amplifier, RC low-pass filter, and unity-gain buffer) are verified individually, end-to-end, and with MATLAB acquisition as Lab 8 deliverables — including a TA-witnessed ADC capture demonstration (Lab 8, Stage 5). The M2K-MATLAB interface is established in Lab 6. The two project check-offs build on these completed foundations.</p>
+<h3>Check-Off 1: GUI Prototype</h3>
 <p><strong>15 minutes. At least one team member must be present.</strong></p>
 <p>This check-off verifies the MATLAB App Designer GUI with the actual signal conditioning hardware. Simulation using the DAC is not acceptable at this stage.</p>
 <p>Bring to the check-off:</p>
 <ul>
-<li>The working signal conditioning breadboard and load cell from Check-Off 1.</li>
+<li>The working signal conditioning breadboard (verified in Lab 8) with load cell attached.</li>
 <li>A functioning App Designer GUI.</li>
 </ul>
 <p>The GUI must demonstrate at minimum:</p>
@@ -360,15 +344,15 @@
 <li><strong>Output display:</strong> Mean weight in grams, standard deviation, and 95% confidence interval, updated continuously using 0.5-second sample windows.</li>
 </ul>
 <p>The evaluator will place known weights on the scale and verify that the displayed value agrees with the known weight to within the expected accuracy of the calibrated system.</p>
-<h3>Check-Off 3: Soldered Prototype</h3>
+<h3>Check-Off 2: Soldered Prototype</h3>
 <p><strong>15 minutes. At least one team member must be present.</strong></p>
 <p>This check-off verifies that the signal conditioning circuit has been successfully transferred from breadboard to the soldered prototype area on the M2K adapter board.</p>
 <p>Bring to the check-off:</p>
 <ul>
-<li>All three signal conditioning stages soldered on the M2K adapter board prototype area, with load cell attached.</li>
-<li>The GUI from Check-Off 2 (or a more advanced version).</li>
+<li>All four signal conditioning stages soldered on the M2K adapter board prototype area, with load cell attached.</li>
+<li>The GUI from Check-Off 1 (or a more advanced version).</li>
 </ul>
-<p>The evaluation applies the same end-to-end performance standards as Lab 8 Stage 4 and Check-Off 1:</p>
+<p>The evaluation applies the same end-to-end performance standards as Lab 8 Stage 5:</p>
 <ul>
 <li><strong>INA125 stage.</strong> Outputs at 0 g, 250 g, and 500 g must be distinct and within the supply rails; 490 g and 500 g must be distinguishable.</li>
 <li><strong>Summing amplifier stage.</strong> Output maps 0 g to approximately $+2.5$ V and 500 g to approximately $-2.5$ V.</li>
