@@ -195,18 +195,22 @@
 <p><strong>Spring 2026</strong></p>
 <hr/>
 <h2>Overview</h2>
-<p>This lab session launches the ECE Emerge capstone project. The complete project description, system architecture, technical requirements, check-off criteria, and deliverables are specified in the <strong>ECE Emerge Project Document</strong>. Read that document in full before this session.</p>
-<p>Phase 1 covers the analog signal conditioning chain: the INA125 instrumentation amplifier and the inverting summing amplifier. During this lab session, the team builds and verifies the critical signal conditioning chain on a solderless breadboard. After this session, one team member will transfer the verified design to a soldered prototype on the M2K adapter board. The breadboard circuit must be working before any soldering begins.</p>
-<p>Unlike previous labs, no fixed procedure is provided. The team's pre-lab design document is the guide. The checkpoints below define the minimum progress required for a satisfactory Phase 1 milestone.</p>
+<p>This lab launches the ECE Emerge capstone project. The complete project description, system architecture, technical requirements, check-off criteria, and deliverables are specified in the <strong>ECE Emerge Project Document</strong>. Read that document in full before the first lab session.</p>
+<p>Phase 1 covers the full analog signal conditioning chain and its first connection to MATLAB. Working in teams of three to four, the group builds and verifies five bring-up stages on a solderless breadboard. After Phase 1, one team member transfers the verified design to a soldered prototype on the M2K adapter board. The breadboard circuit must be working before any soldering begins.</p>
+<p>Lab 8 is different from Labs 1 through 7 in two important ways. First, all work except the Reflective AI Exercise is team work — the team designs together, builds together, and reports together. Second, teams are not restricted to a single assigned lab section. The five bring-up stages may be completed across any combination of available lab sections during the lab week. A team member can complete a stage in any open section, as long as the result is documented and shared with the rest of the team immediately.</p>
+<p>Because no fixed procedure is given, the team's pre-lab design document is the guide. The checkpoints below define the minimum progress required for a satisfactory Phase 1 milestone.</p>
 <blockquote>
 <p><strong>IMPORTANT</strong></p>
 <p>Each team member must have completed Lab 7 before the team receives an INA125. The INA125 is a precision integrated circuit. <strong>Apply supply voltages carefully.</strong> A replacement for a destroyed device may be available subject to a grading penalty.</p>
 </blockquote>
 <hr/>
 <h2>Individual and Team Work</h2>
-<p>This project involves both individual and team deliverables. Understanding which is which matters for academic integrity.</p>
-<p><strong>Individual work.</strong> The Reflective AI Exercise (Section 1) is completed independently by each team member before the lab session. Each member submits their own reflection to Gradescope. Discussing the concepts with teammates is encouraged; the written submission must be each person's own work.</p>
-<p><strong>Team work.</strong> The pre-lab design document (Section 2), the breadboard bring-up, and the Phase 1 Milestone Report (Section 4) are team deliverables. One submission per team. All team members are expected to contribute to the design, the lab session, and the report. The exit survey at the end of the project (see the project document) asks each member to describe their individual contributions specifically.</p>
+<p><strong>Individual work.</strong> The Reflective AI Exercise (Section 1) is completed independently by each team member before the first lab session. Each member submits their own reflection to Gradescope. Discussing the concepts with teammates is encouraged; the written submission must be each person's own work.</p>
+<p><strong>Team work.</strong> Everything else — the pre-lab design document, the five bring-up stages, Stage 5 MATLAB demonstration, and the Phase 1 Milestone Report — is a team deliverable. One submission per team.</p>
+<p><strong>How team work functions in Lab 8.</strong> In Labs 1–7, each student worked independently at their own station and submitted their own results. Lab 8 is structured differently. The team divides the bring-up stages among its members, with each person taking primary responsibility for one or more stages. Primary responsibility means that person leads the task during the lab session, makes sure the measurements are taken and documented, and can explain the results in detail to the team and to the evaluator.</p>
+<p>Taking primary responsibility for a stage does not mean the rest of the team is absent or uninvolved. All team members must understand every stage well enough to discuss it, contribute to the milestone report, and answer questions at project check-offs. The evaluator will ask questions of any team member, not only the person who performed the measurement. If one member cannot explain a result that another member produced, that is a team failure, not an individual one.</p>
+<p><strong>Using multiple lab sections.</strong> The team is not restricted to its own assigned section. Any team member may attend any open lab section during the lab week. A common pattern is for two members to complete Stages 1–2 in one section, then two others (or the same pair) to complete Stages 3–4 in a later section, with all meeting together for Stage 5 and the TA sign-off. Whatever the plan, results and photographs must be shared with the full team in real time — not after the fact.</p>
+<p><strong>Coordination plan.</strong> The first deliverable in Section 2 is a written team coordination plan submitted with the pre-lab. It specifies who takes primary responsibility for each stage and how the team will keep all members informed. Submitting this plan is required; it is also useful — teams that plan explicitly make fewer coordination errors during bring-up.</p>
 <hr/>
 <h2>1. Individual Pre-Lab: Reflective AI Exercise</h2>
 <p><strong>Completed individually. Due: Tuesday noon, submitted before entering the lab.</strong></p>
@@ -256,6 +260,79 @@
 <hr/>
 <h2>2. Team Pre-Lab: Design Document</h2>
 <p><strong>One submission per team. Due: Tuesday noon, submitted to Gradescope before entering the lab.</strong></p>
+<h3>2.0 Team Coordination Plan</h3>
+<p>Submit this plan as the first item of the Team Pre-Lab. It does not require calculations — it requires the team to have a conversation before the lab week begins and to commit that conversation to writing.</p>
+<blockquote>
+<p><strong>Prelab Deliverable: Team Coordination Plan</strong></p>
+<p>Provide the following in the order listed below.</p>
+<p><strong>1. Team roster.</strong> List each team member's name and their assigned lab section.</p>
+<p><strong>2. Bring-up stage assignments.</strong> For each bring-up stage, name the team member taking primary responsibility and the lab section in which that stage will be completed. Every member must be assigned primary responsibility for at least one stage.</p>
+<div aria-label="2.0 Team Coordination Plan" class="table-wrapper" role="region" tabindex="0"><table><caption>2.0 Team Coordination Plan</caption>
+<thead>
+<tr>
+<th scope="col">Stage</th>
+<th scope="col">Primary</th>
+<th scope="col">Lab section planned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stage 1: INA125 bring-up</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Stage 2: Summing amplifier</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Stage 3: Load cell and end-to-end</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Stage 4: Low-pass filter</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Stage 5: MATLAB capture and TA sign-off</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>3. Report writing assignments.</strong> For each section of the Milestone Report, name the team member who will write the first draft.</p>
+<div aria-label="2.0 Team Coordination Plan" class="table-wrapper" role="region" tabindex="0"><table><caption>2.0 Team Coordination Plan</caption>
+<thead>
+<tr>
+<th scope="col">Report section</th>
+<th scope="col">First-draft author</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Section 1: Design Decisions</td>
+<td></td>
+</tr>
+<tr>
+<td>Section 2: Bring-Up Results</td>
+<td></td>
+</tr>
+<tr>
+<td>Section 3: Discrepancy Analysis</td>
+<td></td>
+</tr>
+<tr>
+<td>Section 4: Plan for Phase 2</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>4. Communication plan.</strong> In two to three sentences, describe how the team will share measurements, photographs, and circuit notes with members who are not present at a given lab session. The plan must ensure that every member has the information they need to contribute to the milestone report and to answer questions at project check-offs, regardless of which stages they personally performed.</p>
+</blockquote>
+<hr/>
 <p>This is the team's engineering design document, not a worksheet. It is the evidence that the team has thought through the system before picking up a component. The signal chain design procedure is worked through in full in Example 11.2 of Chapter 11. The INA125 gain formula is:</p>
 <p>$$G = 4 + \frac{60\,\text{k}\Omega}{R_g}.$$</p>
 <p>Consult the INA125 datasheet (linked on Canvas) for the pinout, supply limits, and output swing specification.</p>
