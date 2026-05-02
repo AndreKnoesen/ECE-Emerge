@@ -194,7 +194,7 @@
 <hr/>
 <h2>Overview</h2>
 <p>The Jelly Belly factory is transitioning from selling jelly beans by weight to charging per individual bean. This change demands a measurement system capable of resolving a single jelly bean from the total weight on the pan.</p>
-<p>Your team will design, build, and demonstrate a high-resolution digital scale that measures weights up to 500 g with sufficient accuracy to detect a single jelly bean. <em>(Note: The average mass of a Jelly Belly bean is approximately 1.10 grams; see Appendix C for relevant statistical background.)</em> The system must operate as a standalone measurement solution: hardware, signal conditioning, analog-to-digital conversion, software, and a user interface are all the team's responsibility.</p>
+<p>Teams consist of four members; three-member teams are permitted when enrollment does not divide evenly into groups of four. Your team will design, build, and demonstrate a high-resolution digital scale that measures weights up to 500 g with sufficient accuracy to detect a single jelly bean. <em>(Note: The average mass of a Jelly Belly bean is approximately 1.10 grams; see Appendix C for relevant statistical background.)</em> The system must operate as a standalone measurement solution: hardware, signal conditioning, analog-to-digital conversion, software, and a user interface are all the team's responsibility.</p>
 <p>Unlike the structured lab experiments completed earlier in the course, this project does not specify how to build the system. Chapter 11 of the reader (<em>The Signal in the Difference</em>) and Chapters 10 and 9 provide the theoretical foundation. The team is expected to draw on that material, consult datasheets, and make engineering decisions independently.</p>
 <hr/>
 <h2>Project Objectives</h2>
@@ -257,7 +257,7 @@
 <p><strong>Supply configuration.</strong> The INA125 must be powered from the $\pm 5$ V split supply on the M2K adapter board, with the reference pin (IAref, pin 5) connected to ground. The summing amplifier second stage uses the $-5$ V rail to generate the DC offset required to shift the signal to the lower ADC boundary at zero load.</p>
 </li>
 <li>
-<p><strong>Signal polarity.</strong> The inverting topology of the summing amplifier means that the ADC reading decreases as load increases: zero load produces approximately $+2.5$ V at the ADC input and full load produces approximately $-2.5$ V. This inversion is expected and is not a fault. The calibration software must account for the resulting negative slope when converting ADC readings to weight.</p>
+<p><strong>Signal polarity.</strong> The ADC reading decreases as load increases: zero load produces approximately $+2.5$ V at the ADC input and full load produces approximately $-2.5$ V. This negative slope results from two factors acting together: the inverting topology of the summing amplifier, and the orientation of the load cell signal wires at the INA125 inputs. Both matter. The summing amplifier is designed for a <em>positive</em> INA output at full load — it inverts that positive swing to reach $-2.5$ V at the ADC. If the load cell signal wires are reversed (IN$+$ and IN$-$ swapped at the INA125), the INA output goes negative with increasing load; the inverting summing amplifier then drives the ADC input <em>above</em> $+2.5$ V, causing saturation — not a correctable slope reversal. Verify INA output polarity immediately after connecting the load cell: the INA output must increase (become more positive) as weight is added. If it decreases, swap the two signal wires at the INA125 inputs before proceeding. The calibration software must account for the negative slope when converting ADC readings to weight.</p>
 </li>
 <li>
 <p><strong>Linearity.</strong> No amplifier stage shall saturate and the ADC input shall not clip at any point across the full 0–500 g measurement range. The conditioned signal must map the full weight range monotonically to within the $\pm 2.5$ V ADC window. Saturation at either end of the range is the most common signal chain failure mode and produces a hard limit on effective measurement range that calibration cannot correct.</p>
@@ -364,7 +364,7 @@
 <p>The team must:</p>
 <ul>
 <li>
-<p>Produce a plot of weight versus ADC output voltage using <a href="https://drive.google.com/file/d/1cvzQnWN2NxrCuvVuC6KTP3q3qRAWrsc7/view?usp=sharing" rel="noopener noreferrer" target="_blank"><strong>the provided script</strong></a>, demonstrating that the design achieves close to a 5 V swing without saturating any amplifier stage. The plot should show a negative slope: approximately $+2.5$ V at zero load decreasing to approximately $-2.5$ V at full load.</p>
+<p>Produce a plot of weight versus ADC output voltage using <a href="https://drive.google.com/file/d/1cvzQnWN2NxrCuvVuC6KTP3q3qRAWrsc7/view?usp=sharing" rel="noopener noreferrer" target="_blank"><strong>the provided script</strong></a>, demonstrating that the design achieves close to a 5 V swing without saturating any amplifier stage. The plot should show a negative slope — approximately $+2.5$ V at zero load decreasing to approximately $-2.5$ V at full load — provided the load cell signal wires are connected as verified in Lab 8 Stage 3. A positive slope indicates the signal wires were reversed at the INA125 inputs; correct the wiring before the demonstration.</p>
 </li>
 <li>
 <p>Estimate the number of jelly beans in a closed container. A similar empty container will be provided for taring.</p>
@@ -378,6 +378,8 @@
 <p>Each team member must complete an individual exit project survey. The survey asks each member to describe their personal contributions to the project and to evaluate the contributions of each teammate. General statements such as "we all participated equally" are not acceptable and will not be credited.</p>
 <hr/>
 <h2>Logistics</h2>
+<h3>Team Composition</h3>
+<p>Teams consist of four members. A three-member team is permitted when enrollment does not divide evenly into groups of four. All team members share responsibility for design, construction, and reporting. The individual exit survey (see Deliverables) requires each member to document their personal contributions.</p>
 <h3>Lab and Support Schedule</h3>
 <p>After Lab 7, no further lab sessions are scheduled. To facilitate project work:</p>
 <ul>
@@ -390,10 +392,16 @@
 </ul>
 <h3>Equipment Access</h3>
 <ul>
-<li>Approximately 25 load cells are available. A check-out system allows teams to borrow a load cell for approximately three days. Detailed check-out procedures will be announced separately.</li>
 <li>A reference electronic scale is available in the lab. Teams use it to create their own calibrated weight standards from available objects (see Appendix E).</li>
 <li>Each team receives one INA125 instrumentation amplifier after at least one team member has completed Lab 7. <em>(Note: The INA125 is a precision integrated circuit. Apply supply voltages carefully. If the device is destroyed, a replacement may be available subject to a grading penalty.)</em></li>
 </ul>
+<h3>Load Cell Checkout</h3>
+<p>A limited number of load cells are available for 48-hour checkout to allow teams to work outside the lab. Sign the checkout log at the equipment station: record your name, team number, the date, and the tag number on the unit. Inspect the load cell before leaving the lab and note any pre-existing condition on the log.</p>
+<p><strong>Transport and storage.</strong> The load cell must be transported and stored in the provided protective enclosure. Do not carry it loose in a bag or backpack. Keep the enclosure upright; do not stack heavy items on top of it. Keep the load cell dry.</p>
+<p><strong>Handling.</strong> Apply forces only along the primary measurement axis — vertically, through the pan mounting point. Side loads, twisting, and impacts can permanently shift the zero output or crack the strain gauge bond, producing a unit that reads incorrectly even though it looks undamaged. Do not apply loads greater than 500 g during experiments. Do not attempt to disassemble the unit or touch the strain gauge area at the center of the beam.</p>
+<p><strong>Cable care.</strong> Do not bend, kink, or sharply fold the cable, especially near the connector. Cable damage at the strain relief is the most common failure mode on checked-out units and produces intermittent, noisy readings that are very difficult to distinguish from a circuit problem.</p>
+<p><strong>Returning.</strong> Return the load cell within 48 hours so other teams can use it. The number of units is limited; a late return may block another team's work.</p>
+<p><strong>Reporting damage.</strong> If the load cell is dropped, the cable is kinked, or readings behave unexpectedly — zero that drifts continuously, output that does not return to baseline after removing a weight, or an erratic signal at rest — report it to course staff or a TA immediately. Do not return a damaged unit without reporting it. A load cell that appears functional but is out of calibration will corrupt another team's results, and that is a more serious outcome than the original damage. Damage happens; concealing it is the problem.</p>
 <hr/>
 <h2>Appendix A: Load Cell Specifications</h2>
 <h3>A.1 General Specifications</h3>
@@ -638,27 +646,66 @@
 <li>Show the active tare value and provide a Reset Tare button</li>
 </ul>
 <hr/>
-<h2>Appendix F: Project Report</h2>
-<h3>Instructions</h3>
-<p>The team report documents the system implementation and provides a critical evaluation of design decisions. It is submitted via the course submission app using the provided template. All team members are expected to contribute to the preparation of the report and to agree to its content before submission. One submission per team.</p>
-<h3>Report Prompts</h3>
-<ol>
-<li>
-<p><strong>Technical System Design and Implementation.</strong> Describe the complete system architecture: signal conditioning circuit design decisions, M2K ADC interface, and MATLAB communication. Provide photographs of the hardware implementation (front and back of prototype board). Explain the key design choices made by the team and the trade-offs encountered. (Less than one page.)</p>
-</li>
-<li>
-<p><strong>Calibration and Performance Analysis.</strong> Detail the calibration procedure and present quantitative results including accuracy, precision, linearity, and effective measurement range. Discuss sources of error and how they were addressed. Include relevant plots and statistical analysis. (Less than one page.)</p>
-</li>
-<li>
-<p><strong>MATLAB GUI Development and User Experience.</strong> Explain the GUI design rationale and implementation. Describe the key features included, how real-time data acquisition and display were handled, and any challenges encountered. Include screenshots. (Less than one page.)</p>
-</li>
-<li>
-<p><strong>Team Collaboration and Project Management.</strong> Reflect on how the team organized work, made decisions, and resolved technical and interpersonal challenges. Describe communication strategies, the division of responsibilities, and what the team learned about working effectively on a technical project. (Less than one page.)</p>
-</li>
-<li>
-<p><strong>Problem-Solving and Learning Outcomes.</strong> Analyze the most significant technical challenges encountered and the approach taken to resolve them. Reflect on the skills and knowledge gained through this project and how the experience prepares team members for subsequent engineering coursework and work. (Less than one page.)</p>
-</li>
-</ol>
+<h2>Appendix F: Final Project Report</h2>
+<h3>Submission Process</h3>
+<p>The final report is submitted through the course submission system via Canvas. Submit <strong>one section at a time</strong>: after submitting a section, the system returns AI-generated feedback identifying missing elements, unsupported claims, or unclear reasoning within that section. You may resubmit a section <strong>at most twice</strong> to receive AI feedback — use those submissions deliberately. Read the feedback carefully and revise thoroughly before resubmitting.</p>
+<p><strong>AI feedback is formative only.</strong> It flags gaps and weaknesses; it does not grade your work and it cannot assess whether your technical reasoning is correct or your analysis is sound. The final report is evaluated by a human grader. A clean AI feedback response is not a guarantee of a high grade.</p>
+<p>All team members must have read and agreed to the content before submission. One submission per team.</p>
+<h3>Format</h3>
+<p>Five sections, each approximately one page — treat this as a guide, not a hard limit. Submit each section under its heading. Upload figures, calibration plots, and photographs as separate image files in the same assignment; name each file by section (e.g., <code>S1_Prototype_Front.jpg</code>, <code>S2_CalibrationPlot.png</code>, <code>S3_GUI_Screenshot.png</code>).</p>
+<hr/>
+<h3>Section 1: Technical System Design and Implementation</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>INA gain selection.</strong> State the gain chosen, the $R_g$ calculated, and the nearest standard resistor value used. Explain why gain was split between the INA and the summing amplifier — not just that it was, but what would have gone wrong without the split.</li>
+<li><strong>Summing amplifier design.</strong> State the $R_f/R_a$ and $R_f/R_b$ ratios and the standard resistor values selected. Write the transfer function and verify it numerically at zero load and full load.</li>
+<li><strong>Low-pass filter.</strong> State the cutoff frequency, $R$ and $C$ values, and calculated 60 Hz attenuation in dB. Explain in one sentence why the unity-gain buffer is required after the RC network.</li>
+<li><strong>Hardware photographs.</strong> Completed breadboard with all four stages visible and labeled by stage, and front and back of the soldered prototype.</li>
+<li><strong>Design trade-offs.</strong> Identify one decision where competing constraints had to be balanced and explain the reasoning.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The numbers are present and correct, but reasoning is what distinguishes it. "We chose $R_g = 120\,\Omega$ because it gives $G_\text{INA} = 504$ and keeps contact resistance below 1% of $R_g$" is strong; "We chose $R_g = 120\,\Omega$ to get a gain of approximately 500" is weak — a result without the engineering reasoning. Photographs show a neat, clearly staged circuit where individual components and ICs are identifiable.</p>
+<hr/>
+<h3>Section 2: Calibration and Performance Analysis</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>Calibration procedure.</strong> Number of calibration points used, what weights, and how they were distributed across the 0–500 g range. State whether standards were re-verified on the lab reference scale before the final demonstration.</li>
+<li><strong>Calibration results.</strong> The calibration plot (ADC voltage vs. known weight) with the linear fit overlaid. Slope, intercept, and $R^2$ of the fit.</li>
+<li><strong>Resolution and accuracy.</strong> Weight resolution per ADC count derived from the calibration slope, compared to the theoretical limit of 0.12 g/count. Explain any gap between achieved and theoretical resolution.</li>
+<li><strong>Precision.</strong> Standard deviation of repeated readings at two or more test weights. 95% confidence interval on the mean at each.</li>
+<li><strong>Error sources.</strong> Identify the dominant source of measurement error in the system and explain how you know it was dominant.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The calibration plot is included as a figure, not just described. The analysis connects measured performance to design choices — if resolution fell short of 0.12 g/count, the report identifies specifically why (unused ADC range, noise floor, resistor tolerance) rather than noting the gap without explanation. The report states clearly whether the system can reliably detect a single jelly bean (≈ 1.1 g) given the measured noise floor.</p>
+<hr/>
+<h3>Section 3: MATLAB GUI Development and User Experience</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>Calibration workflow.</strong> How the multi-point calibration routine is implemented in App Designer: how the user enters each reference weight, how the live calibration plot updates as points are added, where $R^2$ is displayed, and how calibration parameters are stored and applied to subsequent readings.</li>
+<li><strong>Tare implementation.</strong> How the tare offset is stored and applied, and how the GUI makes the tare state visible to the user.</li>
+<li><strong>Real-time display.</strong> How the 0.5-second acquisition window is implemented; what is displayed (mean weight, standard deviation, 95% CI, sample count $N$, jelly bean estimate); how frequently the display updates.</li>
+<li><strong>Screenshots.</strong> GUI during calibration and during live measurement — with real data visible, not placeholders.</li>
+<li><strong>Challenges.</strong> One significant implementation challenge and how it was resolved.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The description of the calibration workflow is specific enough that a reader could reproduce it — not "the user enters weights and the GUI fits a line" but a description of the actual controls, prompts, and sequence. The report explains design choices, not just features: why the display was organized as it was, what update rate was chosen and why.</p>
+<hr/>
+<h3>Section 4: Team Collaboration and Project Management</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>Division of responsibilities.</strong> Who took primary responsibility for which bring-up stages and which parts of the software and report. Be specific — statements such as "we all contributed equally" will not be credited.</li>
+<li><strong>Cross-section coordination.</strong> How the team shared measurements, photographs, and circuit notes when members worked in different lab sections.</li>
+<li><strong>One challenge, resolved.</strong> One specific coordination or interpersonal challenge and how it was handled.</li>
+<li><strong>Retrospective.</strong> One thing the team would do differently if starting the project again, and why.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> It is specific and honest. It names individuals and their contributions. A team that divided work unevenly but recognized and corrected it mid-project demonstrates more maturity than one that claims perfect balance. The challenge described is real and the resolution explained, not glossed over.</p>
+<hr/>
+<h3>Section 5: Problem-Solving and Learning Outcomes</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>One significant technical challenge.</strong> The most difficult technical problem encountered — not a list, one specific problem described in enough detail that a reader understands what was observed, what was tried, and how it was resolved.</li>
+<li><strong>Diagnostic process.</strong> How the root cause was identified: what measurements were taken, what hypotheses were ruled out.</li>
+<li><strong>Individual learning.</strong> Each team member states in one or two sentences what they personally learned that they did not know before. These must be individual statements, not a single team-level reflection.</li>
+<li><strong>Connection to future work.</strong> Two to three sentences connecting what the team built to a real engineering application beyond this course.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The technical challenge is described with specificity: not "we had noise problems" but "we observed 180 mV peak-to-peak noise at the summing amplifier output at rest, which we traced to absent decoupling capacitors on the LMC662 supply pins; adding 0.1 µF ceramic capacitors reduced the noise to under 20 mV." Individual learning statements are genuinely individual — different team members learned different things.</p>
 <footer aria-label="License information" class="cc-footer" role="contentinfo">
 <img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
 <span>
