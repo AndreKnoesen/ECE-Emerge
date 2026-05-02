@@ -61,7 +61,11 @@ Each lab manual is a self-contained HTML file (all images embedded, KaTeX math r
 
 ## Capstone Project
 
-[ECE Emerge Digital Scale Project](https://aknoesen.github.io/ECE-Emerge/Project/htmlconversion/ECE_Emerge_Project.html)
+| Document | Link |
+|---|---|
+| ECE Emerge Digital Scale Project | [ECE_Emerge_Project.html](https://aknoesen.github.io/ECE-Emerge/Project/htmlconversion/ECE_Emerge_Project.html) |
+| Lab 8 — Phase 1 Signal Conditioning Bring-Up | [Lab8Instructions.html](https://aknoesen.github.io/ECE-Emerge/Lab8/htmlconversion/Lab8Instructions.html) |
+| Working in an Engineering Team | [TeamGuide.html](https://aknoesen.github.io/ECE-Emerge/TeamGuide.html) |
 
 ---
 
