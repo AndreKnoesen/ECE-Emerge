@@ -197,7 +197,7 @@
 <h2>Overview</h2>
 <p>This lab launches the ECE Emerge capstone project. The complete project description, system architecture, technical requirements, check-off criteria, and deliverables are specified in the <strong>ECE Emerge Project Document</strong>. Read that document in full before the first lab session.</p>
 <p>Phase 1 covers the full analog signal conditioning chain and its first connection to MATLAB. The four hardware stages build and verify the INA125 instrumentation amplifier, the inverting summing amplifier, and the RC low-pass filter with buffer on a solderless breadboard. The fifth stage is a MATLAB demonstration: the team connects the verified breadboard to the M2K, runs an acquisition script adapted from Lab 6, and shows a TA that the complete chain produces the expected voltage swing and noise level as weight changes. After Phase 1, one team member transfers the verified design to a soldered prototype on the M2K adapter board. The breadboard circuit must be fully working — hardware and MATLAB — before any soldering begins.</p>
-<p>Lab 8 is different from Labs 1 through 7 in two important ways. First, all work except the Reflective AI Exercise is team work — the team designs together, builds together, and reports together. Second, teams are not restricted to a single assigned lab section. The five bring-up stages may be completed across any combination of available lab sections during the lab week. A team member can complete a stage in any open section, as long as the result is documented and shared with the rest of the team immediately.</p>
+<p>Lab 8 is different from Labs 1 through 7 in two important ways. First, all work except the Reflective AI Exercise is team work — teams of four students design, build, and report together; three-member teams are permitted when enrollment does not divide evenly into groups of four. Second, teams are not restricted to a single assigned lab section. The five bring-up stages may be completed across any combination of available lab sections during the lab week. A team member can complete a stage in any open section, as long as the result is documented and shared with the rest of the team immediately.</p>
 <p>Because no fixed procedure is given, the team's pre-lab design document is the guide. The checkpoints below define the minimum progress required for a satisfactory Phase 1 milestone.</p>
 <blockquote>
 <p><strong>IMPORTANT</strong></p>
@@ -420,6 +420,13 @@ Provide a sketch of the proposed breadboard layout showing the placement of the 
 <blockquote>
 <p><strong>WARNING</strong></p>
 <p>Handle the load cell carefully. Do not apply forces beyond the 500 g maximum design load. Do not bend the cable sharply near the connector.</p>
+</blockquote>
+<ol>
+<li><strong>Polarity verification.</strong><br/>
+   Place a small weight on the load cell and measure the INA125 output voltage. The output must increase (become more positive) as weight is added. If it decreases, the signal wires are reversed at the INA125 inputs — swap the connections to IN$+$ and IN$-$ and re-verify before proceeding.</li>
+</ol>
+<blockquote>
+<p><strong>Why this matters:</strong> the summing amplifier stage is designed for a positive INA output at full load. Reversed signal wires produce a negative INA output, which the inverting summing amplifier drives above $+2.5$ V — saturation, not a correctable slope reversal. Catching this here takes thirty seconds; catching it after Stage 2 is already wired costs much more.</p>
 </blockquote>
 <ol>
 <li><strong>Unloaded baseline.</strong><br/>
