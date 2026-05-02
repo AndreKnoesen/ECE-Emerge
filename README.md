@@ -67,8 +67,6 @@ Each lab manual is a self-contained HTML file (all images embedded, KaTeX math r
 | Lab 8 — Phase 1 Signal Conditioning Bring-Up | [Lab8Instructions.html](https://aknoesen.github.io/ECE-Emerge/Lab8/htmlconversion/Lab8Instructions.html) |
 | Working in an Engineering Team | [TeamGuide.html](https://aknoesen.github.io/ECE-Emerge/TeamGuide.html) |
 
-> **Orphan files at repo root:** `ECE_Emerge_Project.html` and `Lab8Instructions.html` exist at the root due to a push-script routing fallback. They are not linked from anywhere and should be ignored. Canonical files are in `Project/htmlconversion/` and `Lab8/htmlconversion/` respectively. See each subdirectory's `README.md` for details.
-
 ---
 
 ## Learning Objectives
