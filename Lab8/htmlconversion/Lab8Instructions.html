@@ -81,28 +81,9 @@
       color: #1a1a1a;
     }
 
-    /* ── Code blocks ── */
-    pre {
-      background: #f4f4f4;
-      border: 1px solid #cccccc;
-      border-left: 4px solid #005a9c;
-      border-radius: 4px;
-      padding: 0.85rem 1rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-      line-height: 1.45;
-    }
-    pre code {
-      background: none;
-      padding: 0;
-      border-radius: 0;
-      font-size: 0.88em;
-      color: #1a1a1a;
-    }
-
     /* ── Images ── */
     img {
-      max-width: 70%;
+      max-width: 95%;   /* hard cap — inline style controls actual width */
       height: auto;
       display: block;
       margin: 1rem auto;
@@ -170,14 +151,38 @@
       outline: 3px solid #005a9c;
       outline-offset: 2px;
     }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
   </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
     onload="renderMathInElement(document.body, {
       delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$',  right: '$',  display: false}
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
       ],
       throwOnError: false
     });"></script>
@@ -417,6 +422,13 @@ Provide a sketch of the proposed breadboard layout showing the placement of the 
 <p>Handle the load cell carefully. Do not apply forces beyond the 500 g maximum design load. Do not bend the cable sharply near the connector.</p>
 </blockquote>
 <ol>
+<li><strong>Polarity verification.</strong><br/>
+   Place a small weight on the load cell and measure the INA125 output voltage. The output must increase (become more positive) as weight is added. If it decreases, the signal wires are reversed at the INA125 inputs — swap the connections to IN$+$ and IN$-$ and re-verify before proceeding.</li>
+</ol>
+<blockquote>
+<p><strong>Why this matters:</strong> the summing amplifier stage is designed for a positive INA output at full load. Reversed signal wires produce a negative INA output, which the inverting summing amplifier drives above $+2.5$ V — saturation, not a correctable slope reversal. Catching this here takes thirty seconds; catching it after Stage 2 is already wired costs much more.</p>
+</blockquote>
+<ol>
 <li><strong>Unloaded baseline.</strong><br/>
    With the load cell connected and no weight applied, record the INA125 output voltage and the ADC reading from the M2K.</li>
 </ol>
@@ -546,6 +558,15 @@ Before powering up this stage, verify that a 0.1 µF ceramic capacitor is placed
 <p><strong>Team submissions (one per team):</strong> Prelab Deliverables 1--7 (Design Document) -- due Tuesday noon. Phase 1 Milestone Report -- report text entered directly into the Canvas assignment text box; photographs and M2K screenshots uploaded as separate image files in the same assignment -- due Saturday noon. All images must be named by stage and all calculations must be clearly labeled within the text.</p>
 <p><strong>In-lab sign-off:</strong> Lab Deliverable #5 (Stage 5 ADC Capture Demonstration) is signed off by the TA during the lab session. The team must obtain the TA signature before leaving. The Stage 5 results are reported in Section 2 of the Milestone Report.</p>
 </blockquote>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
   </main>
 </body>
 </html>

@@ -83,7 +83,7 @@
 
     /* ── Images ── */
     img {
-      max-width: 70%;
+      max-width: 95%;   /* hard cap — inline style controls actual width */
       height: auto;
       display: block;
       margin: 1rem auto;
@@ -151,14 +151,38 @@
       outline: 3px solid #005a9c;
       outline-offset: 2px;
     }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
   </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
     onload="renderMathInElement(document.body, {
       delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$',  right: '$',  display: false}
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
       ],
       throwOnError: false
     });"></script>
@@ -170,28 +194,38 @@
 <hr/>
 <h2>Overview</h2>
 <p>The Jelly Belly factory is transitioning from selling jelly beans by weight to charging per individual bean. This change demands a measurement system capable of resolving a single jelly bean from the total weight on the pan.</p>
-<p>Your team will design, build, and demonstrate a high-resolution digital scale that measures weights up to 2 kg with sufficient accuracy to detect a single jelly bean. <em>(Note: The average mass of a Jelly Belly bean is approximately 1.10 grams; see Appendix C for relevant statistical background.)</em> The system must operate as a standalone measurement solution: hardware, signal conditioning, analog-to-digital conversion, software, and a user interface are all the team's responsibility.</p>
+<p>Teams consist of four members; three-member teams are permitted when enrollment does not divide evenly into groups of four. Your team will design, build, and demonstrate a high-resolution digital scale that measures weights up to 500 g with sufficient accuracy to detect a single jelly bean. <em>(Note: The average mass of a Jelly Belly bean is approximately 1.10 grams; see Appendix C for relevant statistical background.)</em> The system must operate as a standalone measurement solution: hardware, signal conditioning, analog-to-digital conversion, software, and a user interface are all the team's responsibility.</p>
 <p>Unlike the structured lab experiments completed earlier in the course, this project does not specify how to build the system. Chapter 11 of the reader (<em>The Signal in the Difference</em>) and Chapters 10 and 9 provide the theoretical foundation. The team is expected to draw on that material, consult datasheets, and make engineering decisions independently.</p>
 <hr/>
 <h2>Project Objectives</h2>
 <p>Design and build a digital scale that:</p>
 <ul>
-<li>Weighs objects from 0 to 2 kg.</li>
+<li>Weighs objects from 0 to 500 g.</li>
 <li>Achieves a resolution sufficient to detect the addition or removal of a single jelly bean.</li>
 <li>Provides a user-friendly interface for calibration, taring, and weight display.</li>
 <li>Functions as a complete standalone system suitable for practical use.</li>
 </ul>
 <hr/>
+<h2>Scale Performance Criteria</h2>
+<p>An effective scale design satisfies six performance criteria. Each criterion is defined below and motivates specific design choices described in the sections that follow.</p>
+<p><strong>Resolution</strong> is the smallest weight change the scale can reliably detect. It is set by how fully the signal conditioning chain uses the 12-bit ADC input window. With a 500 g range, the theoretical limit is $500/4096 \approx 0.12$ g per count. Reaching this limit requires the conditioned signal to span as close as possible to the full $\pm 2.5$ V ADC input range. Every unused volt of ADC range is wasted resolution.</p>
+<p><strong>Accuracy</strong> is the closeness of the displayed weight to the true weight. It cannot be achieved from nominal component specifications alone. Tolerances, load cell sensitivity variation, and amplifier offsets produce systematic errors that differ from unit to unit. Accuracy is established through calibration against known reference weights and maintained through a tare function that zeros out the container weight before measurement.</p>
+<p><strong>Linearity</strong> is the consistency of sensitivity across the full 0–500 g range. It requires that no stage in the signal chain saturates or clips at any point in the measurement range. The load cell itself contributes less than 0.03% non-linearity at full scale; signal chain saturation from incorrect gain selection is the dominant risk.</p>
+<p><strong>Settling time</strong> is how quickly the reading stabilizes after a weight is placed. It is governed primarily by the low-pass filter cutoff frequency. A lower cutoff frequency rejects more 60 Hz interference but slows the response. At a cutoff of 5 Hz, the filter settles to within 2% of its final value in approximately 120 ms, which is adequate for a practical weighing application.</p>
+<p><strong>Zero stability</strong> is the constancy of the unloaded reading over time. It is affected by thermal drift in the load cell (rated at 0.3% of full scale per 10°C) and by warm-up drift in the electronics during the first 30 minutes of operation. It is managed by allowing at least 30 minutes of warm-up before calibration and by providing a tare reset in the software.</p>
+<p><strong>Noise floor</strong> is the minimum signal distinguishable from random variation. It is dominated in this system by 60 Hz power-line interference coupled into the load cell wiring and breadboard. It is mitigated by twisted-pair wiring, single-point grounding, the anti-alias low-pass filter, and software averaging of multiple ADC readings.</p>
+<p>These six criteria are not independent. Resolution and settling time trade against each other through the filter cutoff frequency: a lower cutoff improves noise rejection but slows response. Accuracy and linearity both require that the signal chain cover the full measurement range without saturation. The system architecture and technical requirements in the sections that follow are chosen to satisfy all six criteria simultaneously within the constraints of the available hardware.</p>
+<hr/>
 <h2>System Architecture</h2>
 <p>The scale consists of five subsystems. The team is responsible for the design and integration of all five.</p>
-<p><img alt="Block diagram showing a signal processing chain from sensor to user interface, arranged left to right. The first block is Wheatstone Bridge Loadcell. The second and third blocks are grouped inside a dashed rounded rectangle labeled Signal Conditioning: Instrumentation Amplifier followed by Level Shifter and Amplifier. The fourth block is ADC. The fifth block is Computer Interface. The sixth block is GUI. Arrows connect each block to the next in sequence, showing the flow of the sensor signal through conditioning, digitization, and display." src="data:image/png;base64,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" style="width: 90%; display: block; margin: 0 auto;"/></p>
+<p><img alt="Block diagram showing a signal processing chain from sensor to user interface, arranged left to right. The first block is Wheatstone Bridge Loadcell. Three blocks are grouped inside a rounded rectangle labeled Signal Conditioning: Instrumentation Amplifier, followed by Level Shifter and Amplifier, followed by Anti-Alias LPF. The next block is ADC. Then Computer Interface. Then GUI. Arrows connect each block to the next in sequence, showing the flow of the sensor signal through conditioning, filtering, digitization, and display." src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDA1IDIxMCIgd2lkdGg9IjEwMDUiIGhlaWdodD0iMjEwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMxQTFBMUEiPgoKICA8ZGVmcz4KICAgIDxtYXJrZXIgaWQ9ImFycm93aGVhZCIgbWFya2VyV2lkdGg9IjgiIG1hcmtlckhlaWdodD0iNiIgcmVmWD0iNyIgcmVmWT0iMyIgb3JpZW50PSJhdXRvIj4KICAgICAgPHBvbHlnb24gcG9pbnRzPSIwIDAsIDggMywgMCA2IiBmaWxsPSIjNDA0MDQwIi8+CiAgICA8L21hcmtlcj4KICA8L2RlZnM+CgogIDwhLS0g4pSA4pSAIFdoZWF0c3RvbmUgQnJpZGdlIExvYWRjZWxsIOKUgOKUgCB4PTEwLCB3PTEzMCwgeT05MCwgaD02MCwgY3g9NzUgLS0+CiAgPHJlY3QgeD0iMTAiIHk9IjkwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjYwIiByeD0iMyIgZmlsbD0iI0M1RTNGMiIgc3Ryb2tlPSIjMkU3NUI2IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDx0ZXh0IHg9Ijc1IiB5PSIxMDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldoZWF0c3RvbmU8L3RleHQ+CiAgPHRleHQgeD0iNzUiIHk9IjEyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QnJpZGdlPC90ZXh0PgogIDx0ZXh0IHg9Ijc1IiB5PSIxNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxvYWRjZWxsPC90ZXh0PgoKICA8IS0tIEFycm93OiBXaGVhdHN0b25lIOKGkiBTQyBncm91cCAtLT4KICA8bGluZSB4MT0iMTQwIiB5MT0iMTIwIiB4Mj0iMTY0IiB5Mj0iMTIwIiBzdHJva2U9IiM0MDQwNDAiIHN0cm9rZS13aWR0aD0iMS41IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93aGVhZCkiLz4KCiAgPCEtLSDilIDilIAgU2lnbmFsIENvbmRpdGlvbmluZyBncm91cCDilIDilIAgeD0xNjgsIHk9NjIsIHc9NDQyLCBoPTExNiAtLT4KICA8cmVjdCB4PSIxNjgiIHk9IjYyIiB3aWR0aD0iNDQyIiBoZWlnaHQ9IjExNiIgcng9IjE1IiBmaWxsPSJub25lIiBzdHJva2U9IiM5MDkwOTAiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHRleHQgeD0iMzg5IiB5PSI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiI+U2lnbmFsIENvbmRpdGlvbmluZzwvdGV4dD4KCiAgPCEtLSBJbnN0cnVtZW50YXRpb24gQW1wbGlmaWVyOiB4PTE4Mywgdz0xMjAsIGN4PTI0MyAtLT4KICA8cmVjdCB4PSIxODMiIHk9IjkwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjYwIiByeD0iMyIgZmlsbD0iI0M1RTNGMiIgc3Ryb2tlPSIjMkU3NUI2IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDx0ZXh0IHg9IjI0MyIgeT0iMTE2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbnN0cnVtZW50YXRpb248L3RleHQ+CiAgPHRleHQgeD0iMjQzIiB5PSIxMzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFtcGxpZmllcjwvdGV4dD4KCiAgPCEtLSBBcnJvdyBpbnNpZGUgU0M6IElOQSDihpIgTGV2ZWwgU2hpZnRlciAtLT4KICA8bGluZSB4MT0iMzAzIiB5MT0iMTIwIiB4Mj0iMzIxIiB5Mj0iMTIwIiBzdHJva2U9IiM0MDQwNDAiIHN0cm9rZS13aWR0aD0iMS41IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93aGVhZCkiLz4KCiAgPCEtLSBMZXZlbCBTaGlmdGVyIGFuZCBBbXBsaWZpZXI6IHg9MzI0LCB3PTEyMCwgY3g9Mzg0IC0tPgogIDxyZWN0IHg9IjMyNCIgeT0iOTAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIzIiBmaWxsPSIjQzVFM0YyIiBzdHJva2U9IiMyRTc1QjYiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHRleHQgeD0iMzg0IiB5PSIxMDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxldmVsIFNoaWZ0ZXI8L3RleHQ+CiAgPHRleHQgeD0iMzg0IiB5PSIxMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmFuZDwvdGV4dD4KICA8dGV4dCB4PSIzODQiIHk9IjE0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QW1wbGlmaWVyPC90ZXh0PgoKICA8IS0tIEFycm93IGluc2lkZSBTQzogTGV2ZWwgU2hpZnRlciDihpIgQW50aS1BbGlhcyBMUEYgLS0+CiAgPGxpbmUgeDE9IjQ0NCIgeTE9IjEyMCIgeDI9IjQ2MiIgeTI9IjEyMCIgc3Ryb2tlPSIjNDA0MDQwIiBzdHJva2Utd2lkdGg9IjEuNSIgbWFya2VyLWVuZD0idXJsKCNhcnJvd2hlYWQpIi8+CgogIDwhLS0gQW50aS1BbGlhcyBMUEY6IHg9NDY1LCB3PTEyMCwgY3g9NTI1IC0tPgogIDxyZWN0IHg9IjQ2NSIgeT0iOTAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIzIiBmaWxsPSIjQzVFM0YyIiBzdHJva2U9IiMyRTc1QjYiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHRleHQgeD0iNTI1IiB5PSIxMTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFudGktQWxpYXM8L3RleHQ+CiAgPHRleHQgeD0iNTI1IiB5PSIxMzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkxQRjwvdGV4dD4KCiAgPCEtLSBBcnJvdzogU0MgZ3JvdXAg4oaSIEFEQyAtLT4KICA8bGluZSB4MT0iNjEwIiB5MT0iMTIwIiB4Mj0iNjM0IiB5Mj0iMTIwIiBzdHJva2U9IiM0MDQwNDAiIHN0cm9rZS13aWR0aD0iMS41IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93aGVhZCkiLz4KCiAgPCEtLSDilIDilIAgQURDIOKUgOKUgCB4PTYzNywgdz04OCwgY3g9NjgxIC0tPgogIDxyZWN0IHg9IjYzNyIgeT0iOTAiIHdpZHRoPSI4OCIgaGVpZ2h0PSI2MCIgcng9IjMiIGZpbGw9IiNDNUUzRjIiIHN0cm9rZT0iIzJFNzVCNiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8dGV4dCB4PSI2ODEiIHk9IjEyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QURDPC90ZXh0PgoKICA8IS0tIEFycm93OiBBREMg4oaSIENvbXB1dGVyIEludGVyZmFjZSAtLT4KICA8bGluZSB4MT0iNzI1IiB5MT0iMTIwIiB4Mj0iNzQ5IiB5Mj0iMTIwIiBzdHJva2U9IiM0MDQwNDAiIHN0cm9rZS13aWR0aD0iMS41IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93aGVhZCkiLz4KCiAgPCEtLSDilIDilIAgQ29tcHV0ZXIgSW50ZXJmYWNlIOKUgOKUgCB4PTc1Miwgdz0xMjAsIGN4PTgxMiAtLT4KICA8cmVjdCB4PSI3NTIiIHk9IjkwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjYwIiByeD0iMyIgZmlsbD0iI0M1RTNGMiIgc3Ryb2tlPSIjMkU3NUI2IiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDx0ZXh0IHg9IjgxMiIgeT0iMTE2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Db21wdXRlcjwvdGV4dD4KICA8dGV4dCB4PSI4MTIiIHk9IjEzMiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SW50ZXJmYWNlPC90ZXh0PgoKICA8IS0tIEFycm93OiBDb21wdXRlciBJbnRlcmZhY2Ug4oaSIEdVSSAtLT4KICA8bGluZSB4MT0iODcyIiB5MT0iMTIwIiB4Mj0iODk2IiB5Mj0iMTIwIiBzdHJva2U9IiM0MDQwNDAiIHN0cm9rZS13aWR0aD0iMS41IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93aGVhZCkiLz4KCiAgPCEtLSDilIDilIAgR1VJIOKUgOKUgCB4PTg5OSwgdz04MCwgY3g9OTM5IC0tPgogIDxyZWN0IHg9Ijg5OSIgeT0iOTAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgcng9IjMiIGZpbGw9IiNDNUUzRjIiIHN0cm9rZT0iIzJFNzVCNiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8dGV4dCB4PSI5MzkiIHk9IjEyNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R1VJPC90ZXh0PgoKPC9zdmc+Cg==" style="width: 90%; display: block; margin: 0 auto;"/></p>
 <p><em>Figure 1: System overview: five subsystems from sensor to user interface.</em></p>
 <ol>
 <li>
 <p><strong>Sensing Element.</strong> A 2 kg Wheatstone bridge load cell converts applied weight into a small differential voltage. See Appendix A for load cell specifications.</p>
 </li>
 <li>
-<p><strong>Signal Conditioning.</strong> Two amplification stages raise the millivolt-level bridge output to a level that spans the full ADC input range. The INA125 instrumentation amplifier is provided as the first stage; it must be powered from the $\pm 5$ V split supply available on the M2K adapter board. The team designs the second stage, a summing amplifier, which applies an inverting gain and a DC offset derived from the $-5$ V rail to map the full measurement range to the full ADC window. Relevant theory is covered in Section 11.4 of the reader.</p>
+<p><strong>Signal Conditioning.</strong> Three stages process the millivolt-level bridge output before it reaches the ADC. The INA125 instrumentation amplifier (first stage) amplifies the differential bridge signal; it must be powered from the $\pm 5$ V split supply on the M2K adapter board. The team designs the second stage, a summing amplifier, which applies an inverting gain and a DC offset derived from the $-5$ V rail to map the full measurement range to the full ADC window. The third stage is a passive RC anti-alias low-pass filter followed by a unity-gain buffer, which attenuates 60 Hz power-line interference and band-limits the signal before digitization. Relevant theory is covered in Section 11.4 of the reader.</p>
 </li>
 <li>
 <p><strong>Data Acquisition.</strong> The M2K analog-to-digital converter (ADC) digitizes the conditioned signal. The M2K communicates with MATLAB over USB.</p>
@@ -210,28 +244,68 @@
 <h3>Signal Conditioning Requirements</h3>
 <ul>
 <li>
-<p><strong>ADC utilization.</strong> The M2K ADC has a 12-bit resolution and an input range of $-2.5$ V to $+2.5$ V (5 V total). The signal conditioning chain must be designed so that the full 2 kg measurement range corresponds to as close to the full 5 V ADC input range as is achievable. Signal conditioning that uses only a fraction of the ADC range wastes resolution proportionally. Section 11.4 of the reader quantifies how unused ADC range degrades effective resolution.</p>
+<p><strong>ADC utilization.</strong> The M2K ADC has a 12-bit resolution and an input range of $-2.5$ V to $+2.5$ V (5 V total). The signal conditioning chain must be designed so that the full 500 g measurement range corresponds to as close to the full 5 V ADC input range as is achievable. Signal conditioning that uses only a fraction of the ADC range wastes resolution proportionally. Section 11.4 of the reader quantifies how unused ADC range degrades effective resolution.</p>
 </li>
 <li>
-<p><strong>Theoretical resolution.</strong> With a 5 V ADC range and 12-bit conversion, the ADC partitions the input into 4,096 levels of approximately 1.2 mV each. At 2 kg full scale, this corresponds to a theoretical weight resolution of:</p>
+<p><strong>Theoretical resolution.</strong> With a 5 V ADC range and 12-bit conversion, the ADC partitions the input into 4,096 levels of approximately 1.2 mV each. At 500 g full scale, this corresponds to a theoretical weight resolution of:</p>
 </li>
 </ul>
-<p>$$\frac{2000\,\text{g}}{4096} \approx 0.49\,\text{g per level}.$$</p>
+<p>$$\frac{500\,\text{g}}{4096} \approx 0.12\,\text{g per level}.$$</p>
 <p>The objective is to approach this limit as closely as practical constraints allow.</p>
 <ul>
 <li>
 <p><strong>Supply configuration.</strong> The INA125 must be powered from the $\pm 5$ V split supply on the M2K adapter board, with the reference pin (IAref, pin 5) connected to ground. The summing amplifier second stage uses the $-5$ V rail to generate the DC offset required to shift the signal to the lower ADC boundary at zero load.</p>
 </li>
 <li>
-<p><strong>Signal polarity.</strong> The inverting topology of the summing amplifier means that the ADC reading decreases as load increases: zero load produces approximately $+2.5$ V at the ADC input and full load produces approximately $-2.5$ V. This inversion is expected and is not a fault. The calibration software must account for the resulting negative slope when converting ADC readings to weight.</p>
+<p><strong>Signal polarity.</strong> The ADC reading decreases as load increases: zero load produces approximately $+2.5$ V at the ADC input and full load produces approximately $-2.5$ V. This negative slope results from two factors acting together: the inverting topology of the summing amplifier, and the orientation of the load cell signal wires at the INA125 inputs. Both matter. The summing amplifier is designed for a <em>positive</em> INA output at full load — it inverts that positive swing to reach $-2.5$ V at the ADC. If the load cell signal wires are reversed (IN$+$ and IN$-$ swapped at the INA125), the INA output goes negative with increasing load; the inverting summing amplifier then drives the ADC input <em>above</em> $+2.5$ V, causing saturation — not a correctable slope reversal. Verify INA output polarity immediately after connecting the load cell: the INA output must increase (become more positive) as weight is added. If it decreases, swap the two signal wires at the INA125 inputs before proceeding. The calibration software must account for the negative slope when converting ADC readings to weight.</p>
 </li>
 <li>
-<p><strong>Linearity.</strong> The conditioned signal should exhibit consistent linearity across the full measurement range.</p>
+<p><strong>Linearity.</strong> No amplifier stage shall saturate and the ADC input shall not clip at any point across the full 0–500 g measurement range. The conditioned signal must map the full weight range monotonically to within the $\pm 2.5$ V ADC window. Saturation at either end of the range is the most common signal chain failure mode and produces a hard limit on effective measurement range that calibration cannot correct.</p>
 </li>
 <li>
-<p><strong>Noise.</strong> The team is responsible for identifying noise sources in the system and mitigating them through circuit design, wiring practice, and software averaging. See Appendix B for applicable techniques.</p>
+<p><strong>Anti-alias low-pass filter.</strong> A passive first-order RC low-pass filter followed by a unity-gain op-amp buffer must be placed between the summing amplifier output and the ADC input. The cutoff frequency must be in the range of 2–10 Hz, providing a minimum of 15 dB attenuation at 60 Hz. The buffer is required to prevent the ADC input impedance from loading the filter and shifting the cutoff frequency.</p>
+</li>
+<li>
+<p><strong>Noise.</strong> The dominant noise source in this system is 60 Hz power-line interference. The combined effect of the anti-alias filter, twisted-pair load cell wiring, single-point grounding, and software averaging must reduce measurement noise to below one ADC count at the displayed output. See Appendix B for required wiring and grounding practices.</p>
 </li>
 </ul>
+<h3>Sampling Rate Selection</h3>
+<p>The M2K ADC supports a set of discrete sampling rates (you listed these in Lab 6, Deliverable #12). Choosing the right rate for this application requires balancing three considerations.</p>
+<p><strong>Anti-aliasing.</strong> The RC low-pass filter limits the conditioned signal to at most $f_c$ Hz before it reaches the ADC. The Nyquist criterion requires the ADC sampling rate to exceed $2 f_c$. With a 10 Hz filter cutoff, any rate above 20 sps satisfies anti-aliasing — every valid M2K rate exceeds this by orders of magnitude. The filter is doing its job; aliasing is not the binding constraint here.</p>
+<p><strong>Statistical averaging.</strong> Each displayed weight reading is computed from a 0.5-second window of samples. The number of samples in that window is $N = 0.5 \times f_s$. A well-estimated mean and standard deviation require $N$ to be reasonably large. The standard error of the mean decreases as $1/\sqrt{N}$, so doubling the sample count improves the estimate by $\sqrt{2}$. Practical targets:</p>
+<div aria-label="Sampling Rate Selection" class="table-wrapper" role="region" tabindex="0"><table><caption>Sampling Rate Selection</caption>
+<thead>
+<tr>
+<th scope="col">Sampling rate</th>
+<th scope="col">Samples in 0.5 s</th>
+<th scope="col">Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 sps</td>
+<td>50</td>
+<td>Marginal — barely adequate</td>
+</tr>
+<tr>
+<td>1,000 sps (1 kHz)</td>
+<td>500</td>
+<td>Good — 22× improvement in standard error vs. 50 samples</td>
+</tr>
+<tr>
+<td>10,000 sps (10 kHz)</td>
+<td>5,000</td>
+<td>Excellent — further improvement modest beyond this</td>
+</tr>
+<tr>
+<td>1,000,000 sps (1 MHz)</td>
+<td>500,000</td>
+<td>No averaging benefit over 10 kHz; USB and memory overhead increases</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>USB throughput and memory.</strong> At 1 MHz, each 0.5-second acquisition transfers 500,000 double-precision values (4 MB). This is not a problem for a single acquisition, but it sets an upper limit on how quickly the display can update. At 10 kHz, the same window transfers 5,000 values and completes in well under a millisecond of processing time. There is no benefit to running the ADC faster than the application requires.</p>
+<p><strong>Design recommendation.</strong> For this scale, a sampling rate in the range of 1 kHz to 100 kHz is appropriate. Choose the valid M2K rate in this range that you prefer, document the choice, and compute the sample count $N = 0.5 \times f_s$ in your code. Report $N$ alongside every displayed reading so the evaluator can verify your averaging window. Using 1 MHz (as in the Lab 6 script) is acceptable but unnecessary; if you retain it, explain why in your design decisions.</p>
 <h3>GUI Requirements</h3>
 <p>The graphical user interface must support the following functions.</p>
 <ol>
@@ -239,65 +313,58 @@
 <p><strong>Interface design.</strong> Intuitive layout with clearly labeled controls, status indicators for calibration and tare state, and real-time display updates.</p>
 </li>
 <li>
-<p><strong>Calibration.</strong> A calibration routine using reference weight standards, with user input for calibration mass and real-time feedback.</p>
+<p><strong>Calibration.</strong> A multi-point calibration routine using a minimum of five reference weight standards distributed across the 0–500 g range. The user enters the known mass of each standard; the GUI records the corresponding ADC voltage, displays a live calibration plot (ADC voltage versus known weight) that updates as each point is added, and computes a linear least-squares fit. The $R^2$ coefficient of the fit must be displayed so the user can assess calibration quality before accepting it. Calibration parameters (slope and intercept) are stored and applied automatically to all subsequent weight readings. The GUI must indicate persistently whether the scale is in a calibrated state.</p>
 </li>
 <li>
 <p><strong>Taring.</strong> A tare control that resets the displayed weight to zero, adjusts live readings to exclude the tared weight, and maintains the tare state until explicitly reset.</p>
 </li>
 <li>
-<p><strong>Output display.</strong> Weight in grams with accuracy and reliability quantified; jelly bean count estimate derived from the measured weight; dual display of weight and estimated count.</p>
+<p><strong>Output display.</strong> Each displayed weight reading is computed as the mean of at least 0.5 seconds of consecutive ADC samples. The display shows the mean weight in grams, the standard deviation of the sample set, and a 95% confidence interval on the mean. A jelly bean count estimate is derived from the calibrated mean weight using the reference mean bean mass of 1.10 g; the display shows weight and estimated count simultaneously and updates continuously as new sample windows complete.</p>
+</li>
+<li>
+<p><strong>Software averaging.</strong> All weight readings displayed to the user must be based on a minimum of 0.5 seconds of ADC samples. Individual raw ADC readings must not be displayed as weight values. The sample count used for each reading must be reported alongside the measurement.</p>
 </li>
 </ol>
 <hr/>
 <h2>Project Check-Offs</h2>
-<p>Three graded check-offs are scheduled. At each check-off, different team members are expected to lead the demonstration for different aspects of the system. Evaluators take note of team member engagement across check-offs.</p>
-<h3>Pre-Project Check-Offs</h3>
-<p>Each check-off is 15 minutes. At least one team member must be present.</p>
-<ol>
-<li><strong>Software Check-Off 1: M2K Interface Demonstration.</strong> Demonstrate MATLAB's ability to configure the ADC and acquire data.</li>
-</ol>
-<p>The evaluation requires:<br/>
-   - An M2K and ECE Emerge adapter board (solderless breadboard, no signal conditioning circuits) connected to the project laptop.<br/>
-   - MATLAB code to acquire the voltage on Ch1 and compute the mean and standard deviation over intervals of at least 0.5 seconds. Scripts must be prepared and ready to run from the command line.<br/>
-   - A plot of computed mean and standard deviation over a 5-second duration, using sample rate to determine timing.<br/>
-   - The evaluator will supply a voltage between $-2.5$ V and $+2.5$ V; the team must read and display it correctly.</p>
-<ol>
-<li>
-<p><strong>Hardware Check-Off 1: Solderless Breadboard Demonstration.</strong> Demonstrate, on a solderless breadboard, two separate circuits:</p>
-</li>
-<li>
-<p><strong>Instrumentation amplifier stage.</strong> The evaluator will place 0 kg, 1 kg, and 2 kg loads on the scale. The output voltage must be measurably different at 1950 g and 2000 g. The output must not saturate at 2 kg.</p>
-</li>
-<li>
-<p><strong>Summing amplifier stage, tested independently.</strong> The evaluator will supply a test input voltage. The stage must demonstrate inverting behavior with DC offset: a 0 V input must produce approximately $+2.5$ V at the output, and a $+4$ V input must produce approximately $-2.5$ V. The two stages must not be connected at this check-off.</p>
-</li>
-</ol>
-<h3>Mid-Project Check-Offs</h3>
-<p>Each check-off is 15 minutes. At least one team member must be present.</p>
-<ol>
-<li><strong>Software Check-Off 2: GUI Prototype Demonstration.</strong> Demonstrate the GUI prototype as developed with MATLAB App Designer. The GUI does not need to be finalized. Test voltages should be generated from MATLAB on the DAC and read through Ch1 to simulate the load cell, without any signal conditioning circuits present.</li>
-</ol>
-<p>The prototype must show at minimum:<br/>
-   - Interface layout for calibration<br/>
-   - Taring control<br/>
-   - Output display showing mean, standard deviation, and confidence intervals of the measurement</p>
-<ol>
-<li>
-<p><strong>Hardware Check-Off 2: Robust Soldered Prototype.</strong> Demonstrate two separately soldered circuits on the M2K adapter board prototype area. The two stages must not be connected at this check-off. MATLAB readout of ADC values is required (as implemented in Software Check-Off 1); the full GUI is not required at this stage.</p>
-</li>
-<li>
-<p><strong>Instrumentation amplifier stage.</strong> Same requirements as Hardware Check-Off 1: 0 kg, 1 kg, 2 kg outputs must be distinct and within the rail limits; 1950 g and 2000 g must be distinguishable.</p>
-</li>
-<li>
-<p><strong>Summing amplifier stage.</strong> The evaluator will supply a test input voltage. The same inverting behavior required at Check-Off 1 applies: 0 V input must produce approximately $+2.5$ V output, and $+4$ V input must produce approximately $-2.5$ V output.</p>
-</li>
-</ol>
+<p>Two graded check-offs are scheduled, followed by a final demonstration. At each check-off, different team members are expected to lead the demonstration. Evaluators note which team members are present and engaged across all check-offs.</p>
+<p>Lab 8 serves as the breadboard bring-up and ADC capture milestone. The four signal conditioning stages (INA125, summing amplifier, RC low-pass filter, and unity-gain buffer) are verified individually, end-to-end, and with MATLAB acquisition as Lab 8 deliverables — including a TA-witnessed ADC capture demonstration (Lab 8, Stage 5). The M2K-MATLAB interface is established in Lab 6. The two project check-offs build on these completed foundations.</p>
+<h3>Check-Off 1: GUI Prototype</h3>
+<p><strong>15 minutes. At least one team member must be present.</strong></p>
+<p>This check-off verifies the MATLAB App Designer GUI with the actual signal conditioning hardware. Simulation using the DAC is not acceptable at this stage.</p>
+<p>Bring to the check-off:</p>
+<ul>
+<li>The working signal conditioning breadboard (verified in Lab 8) with load cell attached.</li>
+<li>A functioning App Designer GUI.</li>
+</ul>
+<p>The GUI must demonstrate at minimum:</p>
+<ul>
+<li><strong>Calibration:</strong> Collect at least five reference weight standards across the 0–500 g range. The live calibration plot updates as each point is added. The $R^2$ coefficient is displayed. After accepting calibration, the GUI indicates calibrated state and applies the stored slope and intercept to all subsequent readings.</li>
+<li><strong>Taring:</strong> A tare control that zeros the display and maintains the tare offset until reset.</li>
+<li><strong>Output display:</strong> Mean weight in grams, standard deviation, and 95% confidence interval, updated continuously using 0.5-second sample windows.</li>
+</ul>
+<p>The evaluator will place known weights on the scale and verify that the displayed value agrees with the known weight to within the expected accuracy of the calibrated system.</p>
+<h3>Check-Off 2: Soldered Prototype</h3>
+<p><strong>15 minutes. At least one team member must be present.</strong></p>
+<p>This check-off verifies that the signal conditioning circuit has been successfully transferred from breadboard to the soldered prototype area on the M2K adapter board.</p>
+<p>Bring to the check-off:</p>
+<ul>
+<li>All four signal conditioning stages soldered on the M2K adapter board prototype area, with load cell attached.</li>
+<li>The GUI from Check-Off 1 (or a more advanced version).</li>
+</ul>
+<p>The evaluation applies the same end-to-end performance standards as Lab 8 Stage 5:</p>
+<ul>
+<li><strong>INA125 stage.</strong> Outputs at 0 g, 250 g, and 500 g must be distinct and within the supply rails; 490 g and 500 g must be distinguishable.</li>
+<li><strong>Summing amplifier stage.</strong> Output maps 0 g to approximately $+2.5$ V and 500 g to approximately $-2.5$ V.</li>
+<li><strong>Low-pass filter stage.</strong> Output at 60 Hz is attenuated by at least 15 dB relative to the DC-coupled signal level.</li>
+<li><strong>End-to-end.</strong> The GUI displays calibrated weight with mean and standard deviation updating continuously. The evaluator will place known weights and verify correct readings.</li>
+</ul>
 <h3>Final Project Demonstration</h3>
 <p>Each team has a 15-minute slot. All team members must be present. Thirty minutes before the demonstration, teams may set up and calibrate using a specified load cell. The evaluator will select one team member to present on behalf of the group.</p>
 <p>The team must:</p>
 <ul>
 <li>
-<p>Produce a plot of weight versus ADC output voltage using <a href="https://drive.google.com/file/d/1cvzQnWN2NxrCuvVuC6KTP3q3qRAWrsc7/view?usp=sharing" rel="noopener noreferrer" target="_blank"><strong>the provided script</strong></a>, demonstrating that the design achieves close to a 5 V swing without saturating any amplifier stage. The plot should show a negative slope: approximately $+2.5$ V at zero load decreasing to approximately $-2.5$ V at full load.</p>
+<p>Produce a plot of weight versus ADC output voltage using <a href="https://drive.google.com/file/d/1cvzQnWN2NxrCuvVuC6KTP3q3qRAWrsc7/view?usp=sharing" rel="noopener noreferrer" target="_blank"><strong>the provided script</strong></a>, demonstrating that the design achieves close to a 5 V swing without saturating any amplifier stage. The plot should show a negative slope — approximately $+2.5$ V at zero load decreasing to approximately $-2.5$ V at full load — provided the load cell signal wires are connected as verified in Lab 8 Stage 3. A positive slope indicates the signal wires were reversed at the INA125 inputs; correct the wiring before the demonstration.</p>
 </li>
 <li>
 <p>Estimate the number of jelly beans in a closed container. A similar empty container will be provided for taring.</p>
@@ -311,6 +378,8 @@
 <p>Each team member must complete an individual exit project survey. The survey asks each member to describe their personal contributions to the project and to evaluate the contributions of each teammate. General statements such as "we all participated equally" are not acceptable and will not be credited.</p>
 <hr/>
 <h2>Logistics</h2>
+<h3>Team Composition</h3>
+<p>Teams consist of four members. A three-member team is permitted when enrollment does not divide evenly into groups of four. All team members share responsibility for design, construction, and reporting. The individual exit survey (see Deliverables) requires each member to document their personal contributions.</p>
 <h3>Lab and Support Schedule</h3>
 <p>After Lab 7, no further lab sessions are scheduled. To facilitate project work:</p>
 <ul>
@@ -323,10 +392,16 @@
 </ul>
 <h3>Equipment Access</h3>
 <ul>
-<li>Approximately 25 load cells are available. A check-out system allows teams to borrow a load cell for approximately three days. Detailed check-out procedures will be announced separately.</li>
-<li>Calibration weights from 1 g to 2 kg are available in the lab.</li>
+<li>A reference electronic scale is available in the lab. Teams use it to create their own calibrated weight standards from available objects (see Appendix E).</li>
 <li>Each team receives one INA125 instrumentation amplifier after at least one team member has completed Lab 7. <em>(Note: The INA125 is a precision integrated circuit. Apply supply voltages carefully. If the device is destroyed, a replacement may be available subject to a grading penalty.)</em></li>
 </ul>
+<h3>Load Cell Checkout</h3>
+<p>A limited number of load cells are available for 48-hour checkout to allow teams to work outside the lab. Sign the checkout log at the equipment station: record your name, team number, the date, and the tag number on the unit. Inspect the load cell before leaving the lab and note any pre-existing condition on the log.</p>
+<p><strong>Transport and storage.</strong> The load cell must be transported and stored in the provided protective enclosure. Do not carry it loose in a bag or backpack. Keep the enclosure upright; do not stack heavy items on top of it. Keep the load cell dry.</p>
+<p><strong>Handling.</strong> Apply forces only along the primary measurement axis — vertically, through the pan mounting point. Side loads, twisting, and impacts can permanently shift the zero output or crack the strain gauge bond, producing a unit that reads incorrectly even though it looks undamaged. Do not apply loads greater than 500 g during experiments. Do not attempt to disassemble the unit or touch the strain gauge area at the center of the beam.</p>
+<p><strong>Cable care.</strong> Do not bend, kink, or sharply fold the cable, especially near the connector. Cable damage at the strain relief is the most common failure mode on checked-out units and produces intermittent, noisy readings that are very difficult to distinguish from a circuit problem.</p>
+<p><strong>Returning.</strong> Return the load cell within 48 hours so other teams can use it. The number of units is limited; a late return may block another team's work.</p>
+<p><strong>Reporting damage.</strong> If the load cell is dropped, the cable is kinked, or readings behave unexpectedly — zero that drifts continuously, output that does not return to baseline after removing a weight, or an erratic signal at rest — report it to course staff or a TA immediately. Do not return a damaged unit without reporting it. A load cell that appears functional but is out of calibration will corrupt another team's results, and that is a more serious outcome than the original damage. Damage happens; concealing it is the problem.</p>
 <hr/>
 <h2>Appendix A: Load Cell Specifications</h2>
 <h3>A.1 General Specifications</h3>
@@ -481,46 +556,165 @@
 <li>Do not use a soldering iron on a powered circuit.</li>
 </ul>
 <hr/>
-<h2>Appendix E: Calibration</h2>
-<p>Calibration establishes the quantitative relationship between the ADC output and the actual weight applied to the scale. Without calibration, ADC readings are arbitrary numbers. The relationship must be determined experimentally because component tolerances, load cell sensitivity variation, and amplifier offsets make it impossible to compute the conversion factor purely from nominal specifications.</p>
-<h3>Two-Point Calibration</h3>
-<p>The simplest calibration assumes a linear relationship between weight $W$ and measured voltage $V$:</p>
+<h2>Appendix E: Calibration and Taring</h2>
+<h3>E.1 What Calibration Is — and Why It Is Necessary</h3>
+<p>Calibration establishes the quantitative relationship between the ADC reading and the actual weight on the scale. Without calibration, ADC readings are arbitrary numbers. The relationship must be determined experimentally because component tolerances, load cell sensitivity variation, and amplifier offsets make it impossible to compute the correct conversion factor purely from nominal specifications. Two scales built from nominally identical components will have different calibration constants.</p>
+<p>Calibration answers the question: <em>"What weight corresponds to this ADC reading?"</em> It is not a one-time factory setting. It should be repeated whenever the circuit is changed, the load cell is remounted, or the supply voltage shifts significantly.</p>
+<h3>E.2 Creating Your Own Calibrated Standards</h3>
+<p>The lab does not have enough certified weights for every team. Instead, one reference electronic scale is available in the lab. Your team uses it to create a set of <strong>calibrated standards</strong> — ordinary objects whose weight has been accurately measured and recorded. These standards serve as your reference weights throughout the design, bring-up, and testing phases.</p>
+<p><strong>Procedure for creating calibrated standards:</strong></p>
+<ol>
+<li>
+<p>Collect 6–8 small, dense, stable objects that span the 0–500 g range. Good choices: coins, metal nuts or bolts, small bags of sand or rice tied closed, sealed water bottles. Avoid food items that dry out, liquids in open containers, or anything that compresses or deforms.</p>
+</li>
+<li>
+<p>Weigh each object individually on the lab reference scale. Record the reading to the nearest 0.1 g.</p>
+</li>
+<li>
+<p>Label each object clearly and permanently. A small piece of tape with a written mass works; a luggage tag is better. The label must survive a few weeks of lab use.</p>
+</li>
+<li>
+<p>Store all standards together in a labeled zip-lock bag that stays with your team throughout the project.</p>
+</li>
+<li>
+<p>Choose standards that are well distributed across the range — for example, approximately 50 g, 100 g, 150 g, 200 g, 300 g, 400 g, and 500 g. A cluster of standards near zero and a gap near full scale produces a poor calibration.</p>
+</li>
+<li>
+<p>Before the final demonstration, re-verify two or three of your standards on the reference scale to confirm they have not changed.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Important:</strong> Your calibrated standards are only as good as the reference scale reading at the time of weighing. Take the reference reading carefully: place the object gently at the center of the pan, wait for the reading to stabilize, and record the displayed value. Take two readings and average them if the display fluctuates.</p>
+</blockquote>
+<h3>E.3 What Taring Is</h3>
+<p><strong>Taring</strong> sets the current scale reading to zero, so that subsequent readings show only the weight added <em>after</em> the tare was applied. It is named after the "tare weight" — the weight of the container or packaging that is not part of the measurement of interest.</p>
+<p><strong>Example:</strong> The evaluator hands the team a closed container of jelly beans and an identical empty container. The team places the empty container on the scale pan and presses the Tare button. The display reads 0.000 g. The team then replaces the empty container with the full one. The display now shows the weight of the jelly beans only, with the container weight automatically excluded.</p>
+<p>Taring does not remove the container from the scale. It stores the current reading as an offset and subtracts it from every subsequent reading in software:</p>
+<p>$$W_\text{display} = W_\text{measured} - W_\text{tare}.$$</p>
+<p>The tare offset must persist in software until the user explicitly resets it. Pressing Tare with nothing on the scale (or with the container already removed) produces a wrong tare value and corrupts all subsequent readings — the GUI should make the workflow unambiguous.</p>
+<p><strong>Taring is not calibration.</strong> Calibration determines the slope and intercept of the weight-to-ADC conversion. Taring applies a zero-offset <em>after</em> calibration. The correct sequence is always: calibrate first, then tare.</p>
+<h3>E.4 Two-Point Calibration</h3>
+<p>The simplest calibration assumes a linear relationship between weight $W$ and ADC voltage $V$:</p>
 <p>$$W = m \cdot V + b.$$</p>
-<p>Two measurements establish the slope $m$ and intercept $b$: one at zero load ($V_0$, $W = 0$) and one at a known reference weight ($V_1$, $W_1$). From these:</p>
+<p>Two measurements establish slope $m$ and intercept $b$: one at zero load ($V_0$, $W = 0$) and one at a known reference weight ($V_1$, $W_1$):</p>
 <p>$$m = \frac{W_1}{V_1 - V_0}, \qquad b = -m \cdot V_0.$$</p>
-<p>Because the summing amplifier stage is inverting, the ADC voltage decreases as load increases. The slope $m$ will therefore be negative: heavier loads produce lower ADC readings. This is expected behavior and does not indicate a wiring error. Two-point calibration is accurate at the two calibration points and interpolates linearly between them. Non-linearity in the load cell or amplifier chain degrades accuracy at intermediate points.</p>
-<h3>Multi-Point Calibration</h3>
-<p>Measuring at several known weights distributed across the full 0 to 2 kg range and fitting a line by least squares provides a better estimate of slope and intercept. Specific advantages are:</p>
+<p>Because the summing amplifier is inverting, the ADC voltage decreases as load increases. The slope $m$ will therefore be negative. This is expected and does not indicate a wiring error.</p>
+<p>Two-point calibration is accurate at the two calibration points and interpolates between them. Non-linearity in the load cell or amplifier chain degrades accuracy at intermediate points.</p>
+<h3>E.5 Multi-Point Calibration (Recommended)</h3>
+<p>Measuring at several known weights distributed across the full 0 to 500 g range and fitting a line by least squares provides a better estimate of slope and intercept. Specific advantages:</p>
 <ul>
 <li>Random measurement noise in individual readings is averaged out across all calibration points.</li>
 <li>The quality of the linear assumption can be assessed from the residual errors and the $R^2$ coefficient.</li>
 <li>Non-linear behavior, if present, becomes visible in the residuals and can be addressed with a higher-order polynomial fit.</li>
 </ul>
-<p>Weight standards in 250 g increments from 0 to 2 kg are available in the lab. A linear fit to nine calibration points provides substantially better accuracy than a two-point calibration, and is the recommended approach for the final system.</p>
-<h3>Calibration in the GUI</h3>
-<p>The calibration routine should be integrated into the GUI so that it can be repeated without modifying code. The user should be guided through placing known weights on the scale in sequence, and the GUI should store the resulting calibration parameters and apply them to all subsequent measurements.</p>
-<hr/>
-<h2>Appendix F: Project Report</h2>
-<h3>Instructions</h3>
-<p>The team report documents the system implementation and provides a critical evaluation of design decisions. It is submitted via the course submission app using the provided template. All team members are expected to contribute to the preparation of the report and to agree to its content before submission. One submission per team.</p>
-<h3>Report Prompts</h3>
+<p>A linear fit to calibrated standards distributed across the full range provides substantially better accuracy than a two-point calibration and is the required approach for the final demonstration.</p>
+<h3>E.6 Practical Calibration Procedure</h3>
+<p>Follow this sequence each time the scale is calibrated.</p>
 <ol>
 <li>
-<p><strong>Technical System Design and Implementation.</strong> Describe the complete system architecture: signal conditioning circuit design decisions, M2K ADC interface, and MATLAB communication. Provide photographs of the hardware implementation (front and back of prototype board). Explain the key design choices made by the team and the trade-offs encountered. (Less than one page.)</p>
+<p><strong>Warm up.</strong> Power on the circuit and allow at least 30 minutes before beginning calibration. Load cell output drifts during warm-up; calibrating on a cold system produces a shifted zero that changes as the circuit reaches thermal equilibrium.</p>
 </li>
 <li>
-<p><strong>Calibration and Performance Analysis.</strong> Detail the calibration procedure and present quantitative results including accuracy, precision, linearity, and effective measurement range. Discuss sources of error and how they were addressed. Include relevant plots and statistical analysis. (Less than one page.)</p>
+<p><strong>Verify supply voltages.</strong> Confirm that $+5$ V and $-5$ V are present at the INA125 supply pins before applying any load.</p>
 </li>
 <li>
-<p><strong>MATLAB GUI Development and User Experience.</strong> Explain the GUI design rationale and implementation. Describe the key features included, how real-time data acquisition and display were handled, and any challenges encountered. Include screenshots. (Less than one page.)</p>
+<p><strong>Zero-load baseline.</strong> With nothing on the scale pan, record the ADC reading ($V_0$). This is the unloaded reference. Record at least 10 consecutive readings and take the mean.</p>
 </li>
 <li>
-<p><strong>Team Collaboration and Project Management.</strong> Reflect on how the team organized work, made decisions, and resolved technical and interpersonal challenges. Describe communication strategies, the division of responsibilities, and what the team learned about working effectively on a technical project. (Less than one page.)</p>
+<p><strong>Place standards in sequence.</strong> Place each calibrated standard on the pan one at a time, from lightest to heaviest. For each standard, wait for the reading to stabilize (approximately 3–5 seconds), record at least 10 readings, and take the mean.</p>
 </li>
 <li>
-<p><strong>Problem-Solving and Learning Outcomes.</strong> Analyze the most significant technical challenges encountered and the approach taken to resolve them. Reflect on the skills and knowledge gained through this project and how the experience prepares team members for subsequent engineering coursework and work. (Less than one page.)</p>
+<p><strong>Fit the calibration line.</strong> In MATLAB, use <code>polyfit(V, W, 1)</code> with the voltage readings as $V$ and the known weights as $W$. Store the returned slope and intercept. Inspect the fit: plot the calibration data and the fitted line on the same axes and verify that no point deviates by more than 2–3 g from the line. A poor fit indicates a measurement error, a mislabeled standard, or non-linearity in the signal chain.</p>
+</li>
+<li>
+<p><strong>Verify at a midpoint.</strong> Place a standard that was not used in the calibration fit. The displayed weight should agree with the labeled value within the expected resolution. If it does not, check for a mislabeled standard or a non-linearity in the signal chain.</p>
+</li>
+<li>
+<p><strong>Apply tare only after calibration is complete.</strong> Do not tare before or during calibration.</p>
 </li>
 </ol>
+<h3>E.7 Calibration in the GUI</h3>
+<p>The calibration routine must be integrated into the GUI so that it can be repeated without modifying code. The GUI should:</p>
+<ul>
+<li>Guide the user through placing each standard in sequence with on-screen prompts</li>
+<li>Accept the known mass of each standard as a text input or from a pre-loaded list</li>
+<li>Display a live calibration plot (ADC voltage vs. known weight) as points are added, updating with each measurement</li>
+<li>Compute and store the calibration slope and intercept automatically</li>
+<li>Display the $R^2$ value of the fit so the user can assess calibration quality</li>
+<li>Apply the stored calibration to all subsequent weight readings</li>
+<li>Include a clearly labeled Tare button that stores the current calibrated reading as the tare offset and resets the display to zero</li>
+<li>Show the active tare value and provide a Reset Tare button</li>
+</ul>
+<hr/>
+<h2>Appendix F: Final Project Report</h2>
+<h3>Submission Process</h3>
+<p>The final report is submitted through the course submission system via Canvas. Submit <strong>one section at a time</strong>: after submitting a section, the system returns AI-generated feedback identifying missing elements, unsupported claims, or unclear reasoning within that section. You may resubmit a section <strong>at most twice</strong> to receive AI feedback — use those submissions deliberately. Read the feedback carefully and revise thoroughly before resubmitting.</p>
+<p><strong>AI feedback is formative only.</strong> It flags gaps and weaknesses; it does not grade your work and it cannot assess whether your technical reasoning is correct or your analysis is sound. The final report is evaluated by a human grader. A clean AI feedback response is not a guarantee of a high grade.</p>
+<p>All team members must have read and agreed to the content before submission. One submission per team.</p>
+<h3>Format</h3>
+<p>Five sections, each approximately one page — treat this as a guide, not a hard limit. Submit each section under its heading. Upload figures, calibration plots, and photographs as separate image files in the same assignment; name each file by section (e.g., <code>S1_Prototype_Front.jpg</code>, <code>S2_CalibrationPlot.png</code>, <code>S3_GUI_Screenshot.png</code>).</p>
+<hr/>
+<h3>Section 1: Technical System Design and Implementation</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>INA gain selection.</strong> State the gain chosen, the $R_g$ calculated, and the nearest standard resistor value used. Explain why gain was split between the INA and the summing amplifier — not just that it was, but what would have gone wrong without the split.</li>
+<li><strong>Summing amplifier design.</strong> State the $R_f/R_a$ and $R_f/R_b$ ratios and the standard resistor values selected. Write the transfer function and verify it numerically at zero load and full load.</li>
+<li><strong>Low-pass filter.</strong> State the cutoff frequency, $R$ and $C$ values, and calculated 60 Hz attenuation in dB. Explain in one sentence why the unity-gain buffer is required after the RC network.</li>
+<li><strong>Hardware photographs.</strong> Completed breadboard with all four stages visible and labeled by stage, and front and back of the soldered prototype.</li>
+<li><strong>Design trade-offs.</strong> Identify one decision where competing constraints had to be balanced and explain the reasoning.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The numbers are present and correct, but reasoning is what distinguishes it. "We chose $R_g = 120\,\Omega$ because it gives $G_\text{INA} = 504$ and keeps contact resistance below 1% of $R_g$" is strong; "We chose $R_g = 120\,\Omega$ to get a gain of approximately 500" is weak — a result without the engineering reasoning. Photographs show a neat, clearly staged circuit where individual components and ICs are identifiable.</p>
+<hr/>
+<h3>Section 2: Calibration and Performance Analysis</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>Calibration procedure.</strong> Number of calibration points used, what weights, and how they were distributed across the 0–500 g range. State whether standards were re-verified on the lab reference scale before the final demonstration.</li>
+<li><strong>Calibration results.</strong> The calibration plot (ADC voltage vs. known weight) with the linear fit overlaid. Slope, intercept, and $R^2$ of the fit.</li>
+<li><strong>Resolution and accuracy.</strong> Weight resolution per ADC count derived from the calibration slope, compared to the theoretical limit of 0.12 g/count. Explain any gap between achieved and theoretical resolution.</li>
+<li><strong>Precision.</strong> Standard deviation of repeated readings at two or more test weights. 95% confidence interval on the mean at each.</li>
+<li><strong>Error sources.</strong> Identify the dominant source of measurement error in the system and explain how you know it was dominant.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The calibration plot is included as a figure, not just described. The analysis connects measured performance to design choices — if resolution fell short of 0.12 g/count, the report identifies specifically why (unused ADC range, noise floor, resistor tolerance) rather than noting the gap without explanation. The report states clearly whether the system can reliably detect a single jelly bean (≈ 1.1 g) given the measured noise floor.</p>
+<hr/>
+<h3>Section 3: MATLAB GUI Development and User Experience</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>Calibration workflow.</strong> How the multi-point calibration routine is implemented in App Designer: how the user enters each reference weight, how the live calibration plot updates as points are added, where $R^2$ is displayed, and how calibration parameters are stored and applied to subsequent readings.</li>
+<li><strong>Tare implementation.</strong> How the tare offset is stored and applied, and how the GUI makes the tare state visible to the user.</li>
+<li><strong>Real-time display.</strong> How the 0.5-second acquisition window is implemented; what is displayed (mean weight, standard deviation, 95% CI, sample count $N$, jelly bean estimate); how frequently the display updates.</li>
+<li><strong>Screenshots.</strong> GUI during calibration and during live measurement — with real data visible, not placeholders.</li>
+<li><strong>Challenges.</strong> One significant implementation challenge and how it was resolved.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The description of the calibration workflow is specific enough that a reader could reproduce it — not "the user enters weights and the GUI fits a line" but a description of the actual controls, prompts, and sequence. The report explains design choices, not just features: why the display was organized as it was, what update rate was chosen and why.</p>
+<hr/>
+<h3>Section 4: Team Collaboration and Project Management</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>Division of responsibilities.</strong> Who took primary responsibility for which bring-up stages and which parts of the software and report. Be specific — statements such as "we all contributed equally" will not be credited.</li>
+<li><strong>Cross-section coordination.</strong> How the team shared measurements, photographs, and circuit notes when members worked in different lab sections.</li>
+<li><strong>One challenge, resolved.</strong> One specific coordination or interpersonal challenge and how it was handled.</li>
+<li><strong>Retrospective.</strong> One thing the team would do differently if starting the project again, and why.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> It is specific and honest. It names individuals and their contributions. A team that divided work unevenly but recognized and corrected it mid-project demonstrates more maturity than one that claims perfect balance. The challenge described is real and the resolution explained, not glossed over.</p>
+<hr/>
+<h3>Section 5: Problem-Solving and Learning Outcomes</h3>
+<p><strong>What to include:</strong></p>
+<ul>
+<li><strong>One significant technical challenge.</strong> The most difficult technical problem encountered — not a list, one specific problem described in enough detail that a reader understands what was observed, what was tried, and how it was resolved.</li>
+<li><strong>Diagnostic process.</strong> How the root cause was identified: what measurements were taken, what hypotheses were ruled out.</li>
+<li><strong>Individual learning.</strong> Each team member states in one or two sentences what they personally learned that they did not know before. These must be individual statements, not a single team-level reflection.</li>
+<li><strong>Connection to future work.</strong> Two to three sentences connecting what the team built to a real engineering application beyond this course.</li>
+</ul>
+<p><strong>What a strong submission looks like.</strong> The technical challenge is described with specificity: not "we had noise problems" but "we observed 180 mV peak-to-peak noise at the summing amplifier output at rest, which we traced to absent decoupling capacitors on the LMC662 supply pins; adding 0.1 µF ceramic capacitors reduced the noise to under 20 mV." Individual learning statements are genuinely individual — different team members learned different things.</p>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
   </main>
 </body>
 </html>
