@@ -81,9 +81,28 @@
       color: #1a1a1a;
     }
 
+    /* ── Code blocks ── */
+    pre {
+      background: #f4f4f4;
+      border: 1px solid #cccccc;
+      border-left: 4px solid #005a9c;
+      border-radius: 4px;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      line-height: 1.45;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      font-size: 0.88em;
+      color: #1a1a1a;
+    }
+
     /* ── Images ── */
     img {
-      max-width: 95%;   /* hard cap — inline style controls actual width */
+      max-width: 70%;
       height: auto;
       display: block;
       margin: 1rem auto;
@@ -151,38 +170,14 @@
       outline: 3px solid #005a9c;
       outline-offset: 2px;
     }
-
-    /* ── CC license footer ── */
-    .cc-footer {
-      margin-top: 3rem;
-      padding-top: 1rem;
-      border-top: 2px solid #cccccc;
-      font-size: 0.85rem;
-      color: #555555;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .cc-footer img {
-      width: 88px;
-      height: auto;
-      display: inline;
-      margin: 0;
-      flex-shrink: 0;
-    }
-    .cc-footer a {
-      color: #00008B;
-    }
   </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
     onload="renderMathInElement(document.body, {
       delimiters: [
-        {left: '$$',  right: '$$',  display: true},
-        {left: '$',   right: '$',   display: false},
-        {left: '\\(', right: '\\)', display: false},
-        {left: '\\[', right: '\\]', display: true}
+        {left: '$$', right: '$$', display: true},
+        {left: '$',  right: '$',  display: false}
       ],
       throwOnError: false
     });"></script>
@@ -343,7 +338,7 @@
 State the selected INA gain and the summing amplifier signal gain ($R_f/R_a$). Show the calculation of $R_g$ from the INA125 gain formula. Identify the nearest standard resistor value and state the gain it produces. Justify the gain split: the INA gain need not fill the full output swing — choose a value that gives $R_g \geq 30\,\Omega$ to avoid contact-resistance errors, and assign the remaining required gain to the summing amplifier. State the resulting total signal chain gain and verify that the INA output at full load stays within the INA125 output swing limit.</p>
 <p><strong>Prelab Deliverable #3</strong></p>
 <p><strong>Summing amplifier design.</strong><br/>
-Derive the resistor ratios $R_f/R_a$ and $R_f/R_b$ from the two boundary conditions (zero load maps to $+2.5$ V; full load maps to $-2.5$ V). Note that $R_f/R_a$ is the signal gain of the summing stage: it is set by how much the INA output swing must be further amplified to fill the full 5 V ADC window, and its value depends directly on the INA gain chosen in Deliverable #1. $R_f/R_b$ sets the DC offset using the $-5$ V rail and is independent of the INA gain. State the specific standard resistor values selected. Write out the complete transfer function $v_\text{ADC} = f(v_\text{INA})$ and verify it numerically at both endpoints.</p>
+Derive the resistor ratios $R_f/R_a$ and $R_f/R_b$ from the two boundary conditions (zero load maps to $+2.5$ V; full load maps to $-2.5$ V). Note that $R_f/R_a$ is the signal gain of the summing stage: it is set by how much the INA output swing must be further amplified to fill the full 5 V ADC window, and its value depends directly on the INA gain chosen in Deliverable #2. $R_f/R_b$ sets the DC offset using the $-5$ V rail and is independent of the INA gain. State the specific standard resistor values selected. Write out the complete transfer function $v_\text{ADC} = f(v_\text{INA})$ and verify it numerically at both endpoints.</p>
 <p><strong>Prelab Deliverable #4</strong></p>
 <p><strong>Theoretical resolution.</strong><br/>
 Calculate the weight resolution per ADC count (in grams per count) for your chosen gain, the 500 g measurement range, and the M2K 12-bit ADC with a 5 V input range. State how this compares to the 1.1 g jelly bean target.</p>
@@ -558,15 +553,6 @@ Before powering up this stage, verify that a 0.1 µF ceramic capacitor is placed
 <p><strong>Team submissions (one per team):</strong> Prelab Deliverables 1--7 (Design Document) -- due Tuesday noon. Phase 1 Milestone Report -- report text entered directly into the Canvas assignment text box; photographs and M2K screenshots uploaded as separate image files in the same assignment -- due Saturday noon. All images must be named by stage and all calculations must be clearly labeled within the text.</p>
 <p><strong>In-lab sign-off:</strong> Lab Deliverable #5 (Stage 5 ADC Capture Demonstration) is signed off by the TA during the lab session. The team must obtain the TA signature before leaving. The Stage 5 results are reported in Section 2 of the Milestone Report.</p>
 </blockquote>
-<footer aria-label="License information" class="cc-footer" role="contentinfo">
-<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
-<span>
-    This work is licensed under a
-    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
-    Please attribute this work to André Knoesen.
-  </span>
-</footer>
-
   </main>
 </body>
 </html>
