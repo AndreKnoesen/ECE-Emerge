@@ -20,3 +20,7 @@ The following teams have been successfully formed.
 | 4 | Benjamin | Loh |
 | 4 | Maximus | Vang |
 | 4 | Naomi | Yeo |
+| 5 | Imran | Shaikh |
+| 5 | David | Tran |
+| 5 | Garen | Yang |
+| 5 | Noah | Yang |
