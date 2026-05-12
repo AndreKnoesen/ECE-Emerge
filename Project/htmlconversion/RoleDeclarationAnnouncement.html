@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EEC1 Final Project: Role Declaration</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>EEC1 Final Project: Role Declaration</h1>
+<p><strong>To:</strong> EEC1 Spring 2026<br/>
+<strong>From:</strong> Andre Knoesen<br/>
+<strong>Date:</strong> May 12, 2026<br/>
+<strong>Subject:</strong> Declaring your team's role assignments — deadline Friday, May 22 at noon</p>
+<hr/>
+<p>Your project teams are now finalized and posted on the course website. The next step is for each team to assign its four specialist roles.</p>
+<h2>Why we are declaring roles</h2>
+<p>The digital scale project naturally divides into four areas of specialist focus: the analog signal chain, the M2K–MATLAB interface and GUI, calibration and performance analysis, and system integration and reporting. Within a team, every member contributes to every area — but each member also takes one of these four roles as their <strong>point of deepest ownership</strong>: the area where they go furthest, the area they speak for at check-offs and in the report, and the area where the rest of the team turns to them first.</p>
+<p>The role is about ownership and expertise, <strong>not exclusion</strong>. The role holder is the team's designated integrator for that area, not its gatekeeper.</p>
+<p>Three-member teams take three of the four roles and distribute the System Integration responsibilities as described in the project document.</p>
+<h2>Read this first</h2>
+<p>The four roles, what each one owns, which check-off each one leads, and which report section each one authors are described in detail here:</p>
+<blockquote>
+<p><strong><a href="https://aknoesen.github.io/ECE-Emerge/Project/htmlconversion/ECE_Emerge_Project.html#project-roles">Project Roles — full descriptions</a></strong></p>
+</blockquote>
+<p>Read that section together as a team <strong>before</strong> you decide. The descriptions are specific: each role names the lab work it builds on (Role 1 builds on Lab 8, Role 2 builds on Lab 6 Section 4.2), the report section it owns, and the check-off where it takes the lead. Picking based on the headings alone will get you a poor fit.</p>
+<h2>How to choose roles within your team</h2>
+<ol>
+<li><strong>Read all four role descriptions individually first.</strong> Then come together as a team to discuss.</li>
+<li><strong>Match interests and strengths to roles, not the other way around.</strong> A teammate who enjoyed Lab 8's signal-chain bring-up is a natural fit for Role 1; a teammate who wrote clean App Designer code in MP5 is a natural fit for Role 2; a teammate who is meticulous with calibration plots and statistics is a natural fit for Role 3; a teammate who keeps the team on schedule and writes clearly is a natural fit for Role 4.</li>
+<li><strong>No role is more important than another.</strong> All four carry equal weight in the project's scope and in grading.</li>
+<li><strong>For three-member teams:</strong> decide which two of the remaining three teammates will absorb the System Integration responsibilities (typically the Calibration &amp; Performance lead does most of this, but agree on it explicitly).</li>
+<li><strong>Reach consensus before submitting.</strong> The submission is one form per team, not one per member — disagreement within a team blocks the submission.</li>
+</ol>
+<h2>What you will submit</h2>
+<p>One submission per team. The form will collect:</p>
+<ul>
+<li>Your team number (as posted on the course teams page).</li>
+<li>For each team member: their name and which of the four roles they will hold.</li>
+<li>For three-member teams: a brief note on how the integration responsibilities are distributed.</li>
+</ul>
+<p>The submission process (form link and any account requirements) will be announced separately before the deadline.</p>
+<h2>Deadline</h2>
+<blockquote>
+<p><strong>Friday, May 22, 2026 at 12:00 PM (noon).</strong></p>
+</blockquote>
+<p>After the deadline, role assignments are recorded and used to identify each role's POC for TA workshops, check-off coordination, and report submissions. Changing roles after the declaration is disruptive — choose carefully.</p>
+<h2>Next Steps</h2>
+<ol>
+<li>Read the <strong>Project Roles</strong> section of the project document with your teammates.</li>
+<li>Discuss role fit openly; pick interests and strengths over convenience.</li>
+<li>Reach agreement as a team.</li>
+<li>Watch for the submission form (announced separately).</li>
+<li>Submit one role declaration per team by <strong>Friday, May 22 at noon</strong>.</li>
+</ol>
+<p>Andre</p>
+<hr/>
+<p><em>Version 1.0</em></p>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>
