@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technical Report Requirements and Writing Guide</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 95%;   /* hard cap — inline style controls actual width */
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>Technical Report Requirements and Writing Guide</h1>
+<h2>ECE Emerge — EEC1 Spring 2026</h2>
+<p><strong>Read this before writing the Phase 1 Milestone Report.</strong></p>
+<p>The Phase 1 Milestone Report is a structured practice run for the full technical<br/>
+report due at the end of the project. The section structure maps directly onto a<br/>
+full engineering report. The expectations — precision, justification, team process<br/>
+— are the same. Getting these habits right in Phase 1 makes the final report<br/>
+significantly easier to write and significantly better.</p>
+<hr/>
+<h2>Why Technical Reports Matter</h2>
+<p>A technical report is not a record of what you did. It is a document that allows<br/>
+a qualified engineer who was not present to:</p>
+<ul>
+<li>Understand what problem was being solved and why the design approach was chosen</li>
+<li>Verify the results independently from your raw data</li>
+<li>Identify limitations or discrepancies and assess whether they affect the design</li>
+<li>Decide whether the design is ready to proceed to the next phase</li>
+</ul>
+<p>Your audience is a competent ECE engineer, not your lab partner. Do not explain<br/>
+Ohm's law. Do explain why you chose $G_\text{INA} = 500$ instead of $G_\text{INA} = 8000$.</p>
+<hr/>
+<h2>How the Phase 1 Milestone Maps to a Full Technical Report</h2>
+<div aria-label="How the Phase 1 Milestone Maps to a Full Technical Report" class="table-wrapper" role="region" tabindex="0"><table><caption>How the Phase 1 Milestone Maps to a Full Technical Report</caption>
+<thead>
+<tr>
+<th scope="col">Phase 1 Milestone Section</th>
+<th scope="col">Full Technical Report Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Section 1: Design Decisions</td>
+<td>Design / Methods</td>
+</tr>
+<tr>
+<td>Section 2: Bring-Up Results</td>
+<td>Results</td>
+</tr>
+<tr>
+<td>Section 3: Discrepancy Analysis</td>
+<td>Discussion</td>
+</tr>
+<tr>
+<td>Section 4: Plan for Phase 2</td>
+<td>Conclusion / Future Work</td>
+</tr>
+</tbody>
+</table></div>
+<p>A full technical report also requires an <strong>Abstract</strong> and <strong>Introduction</strong>, which<br/>
+are not required for Phase 1 but will be required for the final report. Guidance<br/>
+for those sections is included at the end of this document.</p>
+<hr/>
+<h2>What Belongs in Each Section</h2>
+<h3>Section 1 — Design Decisions (Design)</h3>
+<p><strong>Purpose:</strong> Explain what was designed and, critically, <em>why.</em></p>
+<p>This section answers the question: "What engineering choices did the team make,<br/>
+and what was the reasoning behind each choice?"</p>
+<p><strong>Must include:</strong></p>
+<ul>
+<li>The chosen value and the calculation that produced it</li>
+<li>The justification for the choice — why this value and not another</li>
+<li>The standard component actually used, its value, and the resulting performance</li>
+</ul>
+<p><strong>Does NOT include:</strong></p>
+<ul>
+<li>A description of how the breadboard was wired</li>
+<li>A repetition of the lab instructions or the design procedure</li>
+</ul>
+<p><strong>Weak:</strong></p>
+<blockquote>
+<p>"We chose $R_g = 120\,\Omega$ for the INA125."</p>
+</blockquote>
+<p><strong>Strong:</strong></p>
+<blockquote>
+<p>"A total gain of 10,000 is required to map the 0.5 mV bridge output at 500 g<br/>
+to the full 5 V ADC window. Concentrating this gain in the INA125 alone would<br/>
+require $R_g = 6\,\Omega$, where contact resistance is comparable to $R_g$<br/>
+itself and would introduce significant gain error. Distributing gain as<br/>
+$G_\text{INA} = 500$ and $G_\text{sum} = 20$ raises $R_g$ to $120\,\Omega$,<br/>
+well above the $30\,\Omega$ practical lower bound. The nearest standard 1%<br/>
+value, $121\,\Omega$, produces $G_\text{INA} = 500.8$, a 0.16% deviation<br/>
+from target."</p>
+</blockquote>
+<p>The difference: the weak version states a fact. The strong version demonstrates<br/>
+engineering judgment — the author considered an alternative, identified its failure<br/>
+mode, and justified the chosen approach quantitatively.</p>
+<hr/>
+<h3>Section 2 — Bring-Up Results (Results)</h3>
+<p><strong>Purpose:</strong> Report what the instruments measured. Numbers, units, photographs.</p>
+<p>This section answers: "What did the measurements show?"</p>
+<p><strong>Must include:</strong></p>
+<ul>
+<li>Every required measurement with its numerical value and unit</li>
+<li>Percent error from the designed value where applicable</li>
+<li>Photographs with figure numbers and captions (see Style section below)</li>
+<li>Organized presentation — a table is almost always clearer than prose for<br/>
+  multiple measurements</li>
+</ul>
+<p><strong>Does NOT include:</strong></p>
+<ul>
+<li>Explanations of why numbers differ from design (that is Discussion)</li>
+<li>Descriptions of the procedure for taking the measurement</li>
+</ul>
+<p><strong>Weak:</strong></p>
+<blockquote>
+<p>"The summing amplifier output at zero load was close to $+2.5$ V."</p>
+</blockquote>
+<p><strong>Strong:</strong></p>
+<blockquote>
+<p>"At 0 V INA input, the summing amplifier output measured $+2.47$ V, a 1.2%<br/>
+error from the designed $+2.50$ V. At the full-scale input of $+1.00$ V, the<br/>
+output measured $-2.51$ V, a 0.4% error from $-2.50$ V. The measured transfer<br/>
+function slope is $-4.98$ V/V, compared to the designed $-5.00$ V/V."</p>
+</blockquote>
+<p>Numbers in context, with units, with comparisons to design — that is a Results<br/>
+section.</p>
+<hr/>
+<h3>Section 3 — Discrepancy Analysis (Discussion)</h3>
+<p><strong>Purpose:</strong> Explain what the results mean, especially where they depart from design.</p>
+<p>This section answers: "Why did the measurements differ from design, and does it matter?"</p>
+<p><strong>Must include:</strong></p>
+<ul>
+<li>For every measurement that deviated more than 10% from the design value:<br/>
+  a specific proposed cause</li>
+<li>A statement of whether the discrepancy affects the system's ability to meet<br/>
+  specifications</li>
+<li>The measurement that provided the highest confidence in the design, and why</li>
+</ul>
+<p><strong>Does NOT include:</strong></p>
+<ul>
+<li>New results (those belong in Section 2)</li>
+<li>Vague attributions like "human error" without identifying a specific mechanism</li>
+</ul>
+<p><strong>Weak:</strong></p>
+<blockquote>
+<p>"The gain was slightly off because of resistor tolerances."</p>
+</blockquote>
+<p><strong>Strong:</strong></p>
+<blockquote>
+<p>"The measured INA gain of 487 V/V is 2.6% below the designed 500 V/V. The<br/>
+most likely cause is the combined effect of the 1% resistor tolerance on the<br/>
+$121\,\Omega$ gain resistor and the $\pm20$ ppm/°C temperature coefficient<br/>
+over the lab temperature range. This deviation shifts the full-scale ADC<br/>
+output by approximately 107 counts out of 4096 — within the correction range<br/>
+of the MATLAB calibration routine, so the specification is still met."</p>
+</blockquote>
+<p>The key move: state the deviation, propose a <em>specific</em> physical cause, and<br/>
+evaluate whether it matters for the system.</p>
+<hr/>
+<h3>Section 4 — Plan for Phase 2 (Conclusion / Future Work)</h3>
+<p><strong>Purpose:</strong> State what comes next and what must change before proceeding.</p>
+<p><strong>Must include:</strong></p>
+<ul>
+<li>Specific Phase 2 objectives (MATLAB interface, calibration routine, GUI)</li>
+<li>Any design changes identified during bring-up that must be incorporated<br/>
+  before Phase 2 begins</li>
+<li>If no design changes are needed, state that explicitly and identify the<br/>
+  measurement that confirms it</li>
+</ul>
+<p>A conclusion is not a summary of what was already said. It looks forward.</p>
+<hr/>
+<h2>Abstract and Introduction (Required for Final Report, Not Phase 1)</h2>
+<h3>Abstract</h3>
+<p>The abstract is a self-contained summary of the entire report: what was done,<br/>
+the key numerical results, and the key conclusion. It is written last and is<br/>
+typically 100–150 words.</p>
+<p>It does NOT preview the report ("Section 3 discusses..."). It reports the<br/>
+outcome directly.</p>
+<p><strong>Template structure:</strong><br/>
+1. One sentence on what was built and its purpose<br/>
+2. One to two sentences on the key design parameters or approach<br/>
+3. One to two sentences on the key measured results (numbers)<br/>
+4. One sentence on the conclusion or readiness for next phase</p>
+<h3>Introduction</h3>
+<p>The introduction establishes context and states the objective. It answers:<br/>
+"What is the system, what does it need to do, and what does this report cover?"</p>
+<p>It does NOT describe results or design decisions — those belong in later sections.<br/>
+Typically 150–250 words for a lab-scale report.</p>
+<hr/>
+<h2>Team Writing Process</h2>
+<p>Teams that skip these steps produce reports that read as four separate documents<br/>
+stapled together.</p>
+<h3>Step 1 — Meet before anyone writes (30 minutes)</h3>
+<p>As a team, reach agreement on:</p>
+<ul>
+<li>What the key results were, stated as numbers</li>
+<li>What the most significant discrepancy was and why it happened</li>
+<li>Which design decisions most need justification (not just statement)</li>
+</ul>
+<p>This is not about assigning paragraphs. It is about establishing a shared<br/>
+narrative before writing begins. If the team does not agree on what happened<br/>
+before writing, the report will contradict itself.</p>
+<h3>Step 2 — Assign sections</h3>
+<p>Assign one team member as primary author for each section. Sections are written<br/>
+independently. Every member contributes.</p>
+<h3>Step 3 — Assemble and read aloud</h3>
+<p>One member assembles all sections into the complete document. The team then reads<br/>
+the full draft <strong>aloud</strong> — one person reads while the others follow. Do not skip<br/>
+this step.</p>
+<p>Reading aloud forces every sentence to be heard, not just skimmed. This catches:</p>
+<ul>
+<li>Sections that contradict each other on the same numbers</li>
+<li>Design decisions stated in Section 1 that are not consistent with Section 2<br/>
+  results</li>
+<li>Sentences that were clear to the author but are ambiguous when spoken</li>
+<li>Inconsistent notation, units, or figure references</li>
+</ul>
+<h3>Step 4 — Revise and submit</h3>
+<p>Only after the read-aloud pass is the document ready to submit. One member<br/>
+submits on behalf of the team; all member names appear on the title page.</p>
+<hr/>
+<h2>Style Requirements</h2>
+<h3>Units</h3>
+<p>Every number requires a unit. No exceptions.</p>
+<div aria-label="Units" class="table-wrapper" role="region" tabindex="0"><table><caption>Units</caption>
+<thead>
+<tr>
+<th scope="col">Wrong</th>
+<th scope="col">Right</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The gain was 487.</td>
+<td>The gain was 487 V/V.</td>
+</tr>
+<tr>
+<td>The resistance was 121.</td>
+<td>The resistance was $121\,\Omega$.</td>
+</tr>
+<tr>
+<td>The output was 2.47.</td>
+<td>The output voltage was $+2.47$ V.</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Figures and photographs</h3>
+<p>Every figure (photograph, schematic, plot, oscilloscope screenshot) must have:</p>
+<ol>
+<li>A figure number: <em>Figure 1, Figure 2,</em> etc.</li>
+<li>A caption that states what is shown <strong>and</strong> what the key observation is</li>
+<li>A reference in the body text: "...as shown in Figure 3."</li>
+</ol>
+<p>A photograph without a caption is decoration, not evidence.</p>
+<p><strong>Weak caption:</strong> <em>Figure 2: Breadboard.</em></p>
+<p><strong>Strong caption:</strong> <em>Figure 2: Completed Stage 2 breadboard. The summing amplifier<br/>
+(LMC662, center) is tested in isolation with a DC input from the M2K power supply.<br/>
+Decoupling capacitors are visible at the supply pins.</em></p>
+<h3>Tense and person</h3>
+<ul>
+<li><strong>Past tense</strong> for actions performed: "The gain resistor was measured at $119\,\Omega$."</li>
+<li><strong>Present tense</strong> for general principles: "The INA125 gain formula is<br/>
+  $G = 4 + 60\,\text{k}\Omega / R_g$."</li>
+<li><strong>Third person</strong> throughout: not "we measured" — "the gain was measured"; not<br/>
+  "I chose" — "the gain was selected."</li>
+</ul>
+<h3>Significant figures</h3>
+<p>Report measurements to the precision of the instrument. The M2K voltmeter resolves<br/>
+to approximately 1 mV; report voltages to 1 mV, not 1 µV. Reporting<br/>
+$V_\text{out} = 2.4700013$ V implies a precision the instrument does not have.</p>
+<h3>Equations and symbols</h3>
+<p>Define every symbol the first time it appears. Use consistent notation throughout:<br/>
+if Section 1 calls the gain resistor $R_g$, Sections 2 and 3 must also call it $R_g$.</p>
+<hr/>
+<h2>What a Technical Report Is Not</h2>
+<div aria-label="What a Technical Report Is Not" class="table-wrapper" role="region" tabindex="0"><table><caption>What a Technical Report Is Not</caption>
+<thead>
+<tr>
+<th scope="col">This is NOT a technical report</th>
+<th scope="col">This IS a technical report</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A restatement of the lab instructions</td>
+<td>A record of engineering decisions and measured outcomes</td>
+</tr>
+<tr>
+<td>A lab notebook ("first we did X, then we did Y")</td>
+<td>A structured document: Design, Results, Discussion</td>
+</tr>
+<tr>
+<td>A list of raw numbers</td>
+<td>Numbers in context, with units, comparisons, and interpretation</td>
+</tr>
+<tr>
+<td>Separate sections with different voices and formats</td>
+<td>A consistent document that reads as if one author wrote it</td>
+</tr>
+<tr>
+<td>"The results were good"</td>
+<td>"The measured gain of 487 V/V is within 2.6% of the 500 V/V design target"</td>
+</tr>
+<tr>
+<td>"Error was due to human error"</td>
+<td>"The 2.6% gain error is consistent with the 1% tolerance of the gain resistor"</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2>Submission Checklist</h2>
+<p>Complete this before submitting.</p>
+<ul>
+<li>[ ] All team member names appear on the title page</li>
+<li>[ ] Every number has a unit</li>
+<li>[ ] Every figure has a number, a descriptive caption, and a reference in the text</li>
+<li>[ ] Section 1 (Design) explains <em>why</em> each choice was made, not just <em>what</em> was chosen</li>
+<li>[ ] Section 2 (Results) contains measured values only — no interpretation</li>
+<li>[ ] Section 3 (Discussion) proposes a specific physical cause for every deviation &gt; 10%</li>
+<li>[ ] Section 3 states whether each discrepancy affects the ability to meet specifications</li>
+<li>[ ] Section 4 (Plan for Phase 2) identifies any required design changes before Phase 2</li>
+<li>[ ] The complete draft was read aloud by the team before submission</li>
+<li>[ ] Notation and units are consistent across all sections</li>
+</ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png"/>
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</footer>
+
+  </main>
+</body>
+</html>
