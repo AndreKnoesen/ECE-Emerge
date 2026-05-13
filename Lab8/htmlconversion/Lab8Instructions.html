@@ -330,7 +330,7 @@
 <hr/>
 <p>This is the team's engineering design document, not a worksheet. It is the evidence that the team has thought through the system before picking up a component. The signal chain design procedure is worked through in full in Example 11.2 of Chapter 11. The INA125 gain formula is:</p>
 <p>$$G = 4 + \frac{60\,\text{k}\Omega}{R_g}.$$</p>
-<p>Consult the <a href="https://www.ti.com/lit/ds/symlink/ina125.pdf?ts=1778682638903&amp;ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FINA125%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dasc-null-null-GPN_E">INA125 datasheet</a> for the pinout, supply limits, and output swing specification.</p>
+<p>Consult the <a href="https://aknoesen.github.io/ECE-Emerge/Lab8/ina125.pdf" rel="noopener noreferrer" target="_blank">INA125 datasheet</a> for the pinout, supply limits, and output swing specification.</p>
 <p>The total signal chain gain from bridge output to ADC input is the product of the INA gain and the summing amplifier gain: $G_\text{total} = G_\text{INA} \times G_\text{sum}$. The INA is not required to fill its full output swing on its own. Distributing gain across both stages gives more practical component values: concentrating all gain in the INA forces $R_g$ into the single-digit ohm range, where contact resistance and parasitic effects introduce significant error. A practical lower bound is $R_g \geq 30\,\Omega$. The summing amplifier provides both the DC level shift and additional signal gain through its resistor ratio $R_f/R_a$; a larger $R_f/R_a$ reduces the required INA gain and raises $R_g$ to a more reliable value.</p>
 <blockquote>
 <p><strong>Prelab Deliverable #2</strong></p>
@@ -553,7 +553,7 @@ Before powering up this stage, verify that a 0.1 µF ceramic capacitor is placed
 <p><strong>Team submissions (one per team):</strong> Prelab Deliverables 1--7 (Design Document) -- due Tuesday noon. Phase 1 Milestone Report -- report text entered directly into the Canvas assignment text box; photographs and M2K screenshots uploaded as separate image files in the same assignment -- due Saturday noon. All images must be named by stage and all calculations must be clearly labeled within the text.</p>
 <p><strong>In-lab sign-off:</strong> Lab Deliverable #5 (Stage 5 ADC Capture Demonstration) is signed off by the TA during the lab session. The team must obtain the TA signature before leaving. The Stage 5 results are reported in Section 2 of the Milestone Report.</p>
 </blockquote>
-<p>V1.0</p>
+<p>V1.1</p>
   </main>
 </body>
 </html>
