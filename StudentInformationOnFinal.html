@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EEC1 Final Exam — Spring 2026</title>
+  <style>
+    /* ── Skip navigation (ADA requirement) ── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      display: block;
+      padding: 8px 16px;
+      background: #005a9c;
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ── Base typography ── */
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid #005a9c;
+      padding-bottom: 0.4rem;
+      color: #003366;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2.25rem;
+      color: #003366;
+      border-left: 5px solid #005a9c;
+      padding-left: 0.6rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      color: #003366;
+    }
+
+    /* ── Blockquote (callout boxes) ── */
+    blockquote {
+      border-left: 4px solid #6699cc;
+      margin: 0.75rem 0;
+      padding: 0.5rem 1rem;
+      background: #f0f5ff;
+      color: #1a1a1a;
+    }
+
+    /* ── Inline code ── */
+    code {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9em;
+      background: #f4f4f4;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: #1a1a1a;
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #f4f4f4;
+      border: 1px solid #cccccc;
+      border-left: 4px solid #005a9c;
+      border-radius: 4px;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      line-height: 1.45;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      font-size: 0.88em;
+      color: #1a1a1a;
+    }
+
+    /* ── Images ── */
+    img {
+      max-width: 70%;
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+    }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #cccccc;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Responsive table wrapper ── */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid #aaaaaa;
+      border-radius: 4px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+    caption {
+      caption-side: top;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+      background: #003366;
+      color: #ffffff;
+    }
+    th {
+      background: #005a9c;
+      color: #ffffff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.45rem 0.75rem;
+      border-top: 1px solid #dddddd;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background: #f7f9ff;
+    }
+    tr:hover td {
+      background: #eef3ff;
+    }
+
+    /* ── Strong / emphasis ── */
+    strong {
+      color: #8b0000;  /* dark red — passes 4.5:1 contrast on white */
+    }
+    em {
+      color: #555555;
+    }
+
+    /* ── Focus visible for keyboard navigation ── */
+    a:focus, button:focus, [tabindex]:focus {
+      outline: 3px solid #005a9c;
+      outline-offset: 2px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$',  right: '$',  display: false}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" role="main">
+    <h1>EEC1 Final Exam — Spring 2026</h1>
+<h2>Location and Time</h2>
+<p><strong>Max Kleiber Hall 3, Wednesday, June 10, 8:00–10:00 AM</strong></p>
+<h2>Exam Day &amp; Check-In</h2>
+<h3>Check-In Timeline</h3>
+<ul>
+<li><strong>7:45 AM</strong> — arrive and wait outside Kleiber 3.</li>
+<li>Have your <strong>student ID ready</strong> to present.</li>
+<li>Once checked in, enter the classroom.</li>
+</ul>
+<h3>Personal Items</h3>
+<p><strong>All you need are your pencils and eraser.</strong> No electronic devices are allowed on your person during the exam — no cell phones, no calculators, no smart watches, no earbuds.</p>
+<ul>
+<li><strong>Best option:</strong> leave backpacks, phones, and personal items at home or in your dorm.</li>
+<li><strong>If you bring items:</strong> place all backpacks, phones, and personal belongings at the front of the lecture hall inside Kleiber 3 before taking your seat.</li>
+</ul>
+<h3>Seating</h3>
+<ul>
+<li>After securing your belongings, take a seat with <strong>several empty seats between you and other students in the same row</strong>.</li>
+<li>We will reorganize seating as needed to ensure proper spacing.</li>
+<li>Once seating is sorted, exams will be handed out.</li>
+</ul>
+<h3>Critical Exam Instructions</h3>
+<p>⚠ <strong>DOUBLE-SIDED EXAM — WRITE YOUR NAME AND STUDENT ID ON EVERY PAGE (FRONT AND BACK).</strong><br/>
+Each page includes a header; complete it on every page you use.</p>
+<p>⚠ <strong>USE A DARK, CLEAR-WRITING PENCIL.</strong><br/>
+Your exam will be scanned and graded digitally via Gradescope—faint marks may not be captured and can result in loss of credit.</p>
+<p>⚠ <strong>LEGIBLE HANDWRITING REQUIRED.</strong><br/>
+If we cannot read your answers, we cannot award points. Write clearly and organize your responses. Sloppy or unclear handwriting will result in loss of credit.</p>
+<h2>Final Exam</h2>
+<p>The final emphasizes <strong>conceptual understanding</strong> of the fundamental topics covered in the course. Everything on the final has already been presented to you in the assigned reader chapters, the lectures, the module assessments (pre- and post-lecture), and the labs. <strong>You have already engaged with every topic on this exam.</strong> The exam tests how well you can connect those ideas and apply them to new situations.</p>
+<h3>Where to Find the Material</h3>
+<p>The exam covers material from <strong>Modules 1 through 7</strong> of the course. Module 8 (instrumentation amplifiers, Wheatstone bridge) and the capstone project work in Modules 9–10 are <em>not</em> examined on the final — those are assessed through lab reports and the project demonstration.</p>
+<p>For each topic area below, the source material is:</p>
+<ul>
+<li>The reader: <a href="https://aknoesen.github.io/ECE-Emerge/Reader/ECEConfidential.html"><strong>ECE Confidential: Cracking The Code</strong></a></li>
+<li>The Module Descriptor for the corresponding module (review the pre- and post-lecture checklists — those are the topics you are expected to know)</li>
+<li>Your lecture notes and your own lab reports</li>
+</ul>
+<h3>Subject Categories</h3>
+<h4>1. Fundamental Concepts and DC Circuits</h4>
+<p><em>Modules 1–2  |  Reader Ch. 1–4</em></p>
+<ul>
+<li>Electric charge, current, voltage, energy, and power; conventional current; DC vs AC<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/TheFlashlight.html">Ch. 1 — The Flashlight</a></li>
+<li>Schematics, nodes, branches, loops, ground references, open/short circuits<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/LanguageofCircuits.html">Ch. 2 — Language of Circuits</a></li>
+<li>Ohm's Law; Kirchhoff's Current Law (KCL) and Voltage Law (KVL); series and parallel resistance; the voltage divider and loading<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/SecretsofDCCircuits.html">Ch. 3 — Secrets of DC Circuits</a></li>
+<li>I–V curves; linear vs nonlinear components; the I–V curve of an ideal resistor, an ideal voltage source, and a diode<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/IVMenagerie.html">Ch. 4 — The I–V Menagerie</a></li>
+</ul>
+<h4>2. Electrical Signals: Time and Frequency Domains</h4>
+<p><em>Module 3  |  Reader Ch. 5–6</em></p>
+<ul>
+<li>Sinusoidal signals: amplitude, frequency, period, phase; peak vs RMS; leading and lagging</li>
+<li>Analog vs digital signals; the role of an ADC</li>
+<li>Periodic waveforms: square, triangle, and sawtooth<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/SignalsInTime.html">Ch. 5 — Signals in Time</a></li>
+<li>Frequency-domain representation; spectrum of a pure sine wave; Fourier synthesis and the harmonic recipes of common waveforms</li>
+<li>The Nyquist sampling criterion; aliasing and when it occurs<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/SignalsInFrequency.html">Ch. 6 — Signals in Frequency</a></li>
+</ul>
+<h4>3. Dynamic Component Behavior: Inductors and Capacitors</h4>
+<p><em>Module 4  |  Reader Ch. 7</em></p>
+<ul>
+<li>Capacitors store energy in the electric field; voltage cannot change instantaneously; open-circuit behavior at DC steady state</li>
+<li>Inductors store energy in the magnetic field; current cannot change instantaneously; short-circuit behavior at DC steady state</li>
+<li>RC step response: charging and discharging equations; time constant $\tau = RC$; the 63.2% point</li>
+<li>RL step response: current rise equation; time constant $\tau = L/R$</li>
+<li>Comparing RC and RL behavior; recognizing when source resistance matters<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/InductorsCapacitors.html">Ch. 7 — Circuits That Remember</a></li>
+</ul>
+<h4>4. AC Circuit Analysis: Phasors, Impedance, and Filters</h4>
+<p><em>Module 5  |  Reader Ch. 8–9</em></p>
+<ul>
+<li>Complex numbers in rectangular and polar form; the complex plane; the $j$ operator as a 90° rotation; Euler's formula</li>
+<li>Phasors: encoding amplitude and phase; converting between time-domain expressions and phasors<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/ComplexNumbers.html">Ch. 8 — The Imaginary Made Useful</a></li>
+<li>Impedance as the generalization of resistance; capacitor impedance $Z_C = 1/(j\omega C)$; inductor impedance $Z_L = j\omega L$; behavior at DC and high frequency</li>
+<li>Impedance voltage divider; identifying low-pass and high-pass RC topologies; deriving transfer functions</li>
+<li>Cutoff frequency $f_c = 1/(2\pi RC)$; the decibel scale; the $-3$ dB point and what it means for power and voltage<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/ACAnalysis.html">Ch. 9 — The Impedance Code</a></li>
+</ul>
+<h4>5. Operational Amplifiers</h4>
+<p><em>Modules 6–7  |  Reader Ch. 10</em></p>
+<ul>
+<li>The op-amp as a device: five terminals; open-loop gain; supply rails and output saturation</li>
+<li>Ideal op-amp assumptions: infinite open-loop gain, infinite input impedance, zero output impedance</li>
+<li>Negative feedback and the Golden Rules: the virtual short ($v_+ = v_-$) and the virtual open ($i_+ = i_- = 0$)</li>
+<li>Voltage follower (unity-gain buffer); the loading problem it solves</li>
+<li>Inverting amplifier and non-inverting amplifier: topology, gain formulas, phase relationship<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/OperationalAmplifiers.html">Ch. 10 — How Op-Amps Hide Complexity (Section 1)</a></li>
+<li>Summing amplifier: virtual ground; output as a weighted sum of inputs</li>
+<li>DC level shifting: using a summing amplifier to add a DC offset to an AC signal</li>
+<li>Real-device limits: output saturation, gain–bandwidth product, slew rate<br/>
+<a href="https://aknoesen.github.io/ECE-Emerge/Reader/OperationalAmplifiers.html">Ch. 10 — How Op-Amps Hide Complexity (Section 2)</a></li>
+</ul>
+<p><em>The instrumentation amplifier and Wheatstone bridge (covered in Module 8) are </em><em>not</em><em> on this exam — those concepts are assessed through your labs and your capstone scale project.</em></p>
+<p><em>Programming, soldering, and instrument operation are likewise not part of the written final. Those skills are evaluated in the labs and the project.</em></p>
+<h2>Exam Format</h2>
+<p>The final exam is <strong>closed book</strong>. You may use a pencil, an eraser, and a basic calculator. No other electronic devices are allowed. A reference notes sheet will be provided; see <strong>ECE Emerge Fact Sheet</strong>.</p>
+<blockquote>
+<p><strong>Write your answers legibly. If your handwriting is unclear or illegible, we cannot grade your work.</strong></p>
+</blockquote>
+<p>The 2-hour exam consists of the following question types:</p>
+<div aria-label="Exam Format" class="table-wrapper" role="region" tabindex="0"><table><caption>Exam Format</caption>
+<thead>
+<tr>
+<th scope="col">Type of Question</th>
+<th scope="col" style="text-align: center;">Questions</th>
+<th scope="col" style="text-align: center;">Points per Question</th>
+<th scope="col" style="text-align: center;">% of Exam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Short Answer — Fundamental Level</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">7 points each</td>
+<td style="text-align: center;">24.5%</td>
+</tr>
+<tr>
+<td>Short Answer — Medium Level</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">8 points each</td>
+<td style="text-align: center;">20%</td>
+</tr>
+<tr>
+<td>Short Answer — Advanced Level</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">5.5 points each</td>
+<td style="text-align: center;">5.5%</td>
+</tr>
+<tr>
+<td>Essay — Medium Length</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">25 points each</td>
+<td style="text-align: center;">37.5%</td>
+</tr>
+<tr>
+<td>Essay — Advanced Length</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">12.5 points each</td>
+<td style="text-align: center;">12.5%</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Example Questions</h2>
+<p>The examples below are taken from the 2025 final and illustrate the style and depth expected at each level. The 2026 final will draw from the same topic areas listed above.</p>
+<h3>Short Answer — Fundamental (Multiple Choice)</h3>
+<p>Multiple-choice questions evaluating basic recall of definitions, fundamental concepts, and simple relationships in electrical circuits.</p>
+<p><em>What is the fundamental difference between energy and power in electrical systems?</em></p>
+<p>a. Energy is the rate of power consumption.<br/>
+b. Power is the capacity to do work, while energy is the rate at which it's done.<br/>
+c. <strong>Energy is the total amount of work done, while power is the rate at which energy is transferred or converted.</strong><br/>
+d. Power is measured in joules, and energy is measured in watts.<br/>
+e. There is no fundamental difference between energy and power.</p>
+<h3>Short Answer — Medium</h3>
+<p>Goes beyond simple recall. Explain how concepts relate to each other and apply them to a specific situation. Show a clear understanding of underlying mechanisms and key properties. Keep your response well-structured, typically 2 to 4 sentences.</p>
+<p><em>What is the key property of a capacitor that differentiates its behavior from a resistor when a voltage is suddenly applied?</em></p>
+<p><strong>Answer:</strong> When voltage is first applied to a resistor, the current immediately becomes proportional to the applied voltage ($I = V/R$). A capacitor, however, resists changes in voltage. When voltage is first applied to a capacitor, it initially looks like a short circuit (allowing current to flow easily). The voltage across the capacitor starts at zero and increases gradually as it charges.</p>
+<h3>Short Answer — Advanced</h3>
+<p>Expects critical thinking and analysis. Define key principles relevant to the question, then show how different concepts connect. Use equations or diagrams where they help. Aim for 4 to 6 sentences combining theory with practical problem-solving.</p>
+<p><em>What happens to the voltage across an inductor when the current flowing through it is suddenly interrupted?</em></p>
+<p><strong>Answer:</strong> When the current flowing through an inductor is suddenly interrupted, the inductor resists this sudden change in current by generating a voltage spike in the opposite direction. This voltage surge tries to maintain the current flow. In practical circuits, this "back EMF" can generate very high voltages, sometimes causing arcing across switch contacts or damaging components.</p>
+<h3>Essay — Medium Length</h3>
+<p>Focus on explaining fundamental circuit principles and how they apply in real situations. Connect different concepts clearly, structure your response, and show how circuit components interact and how mathematical principles support your reasoning.</p>
+<p><em>Describe the concept of ground in circuit analysis, differentiate between a true ground connection to earth and a circuit ground reference, and explain why having a reference point is crucial for voltage measurements.</em></p>
+<p><strong>Answer:</strong> In circuit analysis, "ground" serves as a reference point for measuring voltages. A true ground connection to earth refers to a physical connection to the Earth's potential, often important for safety and for establishing a common reference in power distribution. A circuit ground reference, however, is a designated point within a circuit that is defined as having zero potential (0 V) for analysis purposes; it may or may not be physically connected to the Earth. Having a defined reference point is crucial because voltage is always measured as a difference in potential between two points. Without a specified reference, stating the voltage at a single point is ambiguous. By defining one point as ground (0 V), the voltage at any other point can be meaningfully measured as the potential difference between that point and ground.</p>
+<h3>Essay — Advanced Length</h3>
+<p>Apply circuit theory to complex or new situations. Connect different concepts, use strong problem-solving skills, and write in a structured way. Include equations or diagrams where they support your points.</p>
+<p><em>Compare the energy storage mechanisms of inductors and capacitors, and explain how each component initially responds when a DC voltage is suddenly applied. Include the key equations that describe their behavior.</em></p>
+<p><strong>Answer:</strong> Inductors and capacitors are both passive components that store energy, but they do so through different mechanisms. Inductors store energy in a magnetic field when current flows through them, $E_L = \tfrac{1}{2} L i^2$. Capacitors store energy in an electric field when a voltage is applied across their plates, $E_C = \tfrac{1}{2} C v^2$. When a DC voltage is suddenly applied to an inductor (in series with a resistor), the inductor resists the sudden change in current; the current starts at zero and rises exponentially toward $I_{\text{final}} = V/R$, with the inductor voltage initially equal to the applied voltage and decaying to zero. The defining relationship is $v_L = L\,di/dt$. When a DC voltage is suddenly applied to a capacitor (in series with a resistor), the capacitor resists the sudden change in voltage; the voltage starts at zero and rises exponentially toward the applied voltage, while the current is initially maximum ($I_{\text{initial}} = V/R$) and decays to zero. The defining relationship is $i_C = C\,dv/dt$.</p>
+  </main>
+</body>
+</html>
