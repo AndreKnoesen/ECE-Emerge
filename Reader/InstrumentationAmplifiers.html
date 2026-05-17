@@ -299,14 +299,14 @@
 <p>$$R_g = \frac{60\,\text{k}\Omega}{8000 - 4} \approx 7.5\,\Omega,$$</p>
 <p>which is too small to build reliably. Three practical issues appear together at this resistance level:</p>
 <ul>
-<li><em>Parasitics dominate.</em> PCB trace, solder-joint, and socket-pin resistance each contribute on the order of 10–50 mΩ. Against a 7.5 Ω target this is a 0.1–0.7% gain error per connection — comparable to or larger than the tolerance of $R_g$ itself.</li>
+<li><em>Parasitics dominate.</em> PCB trace, solder-joint, and socket-pin resistance each contribute on the order of 10–50 mΩ. Against a 7.5 Ω target this is a 0.1–0.7% gain error per connection, comparable to or larger than the tolerance of $R_g$ itself.</li>
 <li><em>Standard values are coarse.</em> Precision E96 resistors below ~10 Ω are rare; available values are quantized in steps that make it hard to land on an arbitrary target gain.</li>
 <li><em>Temperature drift adds up.</em> The temperature coefficient of the parasitic resistance in series with $R_g$ feeds directly into gain drift, and at single-digit ohms even modest self-heating of the resistor itself shifts the gain measurably.</li>
 </ul>
-<p>The remedy is to split the overall amplification between the INA and the summing amplifier, which is the next stage anyway. The first-stage gain still dominates the input-referred noise of the chain — so the INA should provide most of the amplification — but the gain-setting resistor must remain in a range where its value is well-defined. A practical compromise is to choose $G_\text{INA}$ so that $R_g$ lands in the tens-to-hundreds of ohms range.</p>
+<p>The remedy is to split the overall amplification between the INA and the summing amplifier, which is the next stage anyway. The first-stage gain still dominates the input-referred noise of the chain, so the INA should provide most of the amplification, but the gain-setting resistor must remain in a range where its value is well-defined. A practical compromise is to choose $G_\text{INA}$ so that $R_g$ lands in the tens-to-hundreds of ohms range.</p>
 <p>Select $G_\text{INA} = 500$. The gain-setting resistor is then:</p>
 <p>$$R_g = \frac{60\,\text{k}\Omega}{500 - 4} \approx 121\,\Omega \quad (\text{standard E96 value}),$$</p>
-<p>and the INA output at full design load is $0.5\,\text{mV} \times 500 = 0.25\,\text{V}$, comfortably below the $\pm 4\,\text{V}$ swing limit. The remaining amplification needed to fill the ADC range — a factor of $5\,\text{V} / 0.25\,\text{V} = 20$ — is implemented in the summing amplifier, alongside the offset, at no additional component cost.</p>
+<p>and the INA output at full design load is $0.5\,\text{mV} \times 500 = 0.25\,\text{V}$, comfortably below the $\pm 4\,\text{V}$ swing limit. The remaining amplification needed to fill the ADC range (a factor of $5\,\text{V} / 0.25\,\text{V} = 20$) is implemented in the summing amplifier, alongside the offset, at no additional component cost.</p>
 <p><strong>Step 2: Design the summing amplifier.</strong> The INA output spans $[0\,\text{V},\,0.25\,\text{V}]$ but the ADC expects $[-2.5\,\text{V},\,+2.5\,\text{V}]$. The inverting summing amplifier output is:</p>
 <p>$$v_\text{ADC} = -\frac{R_f}{R_a}\,v_\text{INA} - \frac{R_f}{R_b}\,V_\text{offset}.$$</p>
 <p>Two conditions fix the two unknowns $R_f/R_a$ and $R_f/R_b$:</p>
@@ -321,7 +321,7 @@
 <p>The complete transfer function is:</p>
 <p>$$v_\text{ADC} = -20\,v_\text{INA} + 2.5\,\text{V}.$$</p>
 <p>Verification: at $v_\text{INA} = 0$, $v_\text{ADC} = +2.5\,\text{V}$; at $v_\text{INA} = 0.25\,\text{V}$, $v_\text{ADC} = -20 \times 0.25 + 2.5 = -2.5\,\text{V}$. ✓</p>
-<p>The INA contributes a factor of 500, the summing amplifier contributes a magnitude of 20, and the cascaded gain from bridge differential output to ADC input is $500 \times 20 = 10{,}000\,\text{V/V}$ — the same overall scaling that would have been obtained with $G_\text{INA} = 8000$ and a summing-amp gain of $-1.25$, just distributed across the two stages to keep every component value in a manufacturable range.</p>
+<p>The INA contributes a factor of 500, the summing amplifier contributes a magnitude of 20, and the cascaded gain from bridge differential output to ADC input is $500 \times 20 = 10{,}000\,\text{V/V}$. This is the same overall scaling that would have been obtained with $G_\text{INA} = 8000$ and a summing-amp gain of $-1.25$, just distributed across the two stages to keep every component value in a manufacturable range.</p>
 <p><strong>Step 3: Effective resolution.</strong> The signal now spans the full 5 V ADC input range across 4096 levels:</p>
 <p>$$\Delta = \frac{5\,\text{V}}{4096} \approx 1.2\,\text{mV per count},$$</p>
 <p>corresponding to a weight resolution of:</p>
@@ -329,7 +329,7 @@
 <p>This is the theoretical limit imposed by the ADC. Noise, component tolerances, and load cell non-linearity will raise the practical resolution floor above this value.</p>
 <h3>Design Priorities</h3>
 <p>Several practical considerations guide signal chain design.</p>
-<p><strong>Set the INA gain first, but leave headroom.</strong> The INA's first-stage gain dominates the input-referred noise of the whole signal chain, so make it large — but stop short of the output-swing limit. Pushing the INA gain that high forces the gain-setting resistor $R_g$ down into the single-ohm range, where PCB and contact resistance, standard-value granularity, and temperature drift all become meaningful error sources. Keep $R_g$ in the tens-to-hundreds of ohms range and put the remainder of the required gain in the summing amplifier, which is already in the signal path for level shifting.</p>
+<p><strong>Set the INA gain first, but leave headroom.</strong> The INA's first-stage gain dominates the input-referred noise of the whole signal chain, so make it large, but stop short of the output-swing limit. Pushing the INA gain that high forces the gain-setting resistor $R_g$ down into the single-ohm range, where PCB and contact resistance, standard-value granularity, and temperature drift all become meaningful error sources. Keep $R_g$ in the tens-to-hundreds of ohms range and put the remainder of the required gain in the summing amplifier, which is already in the signal path for level shifting.</p>
 <p><strong>Check the output swing against the supply.</strong> On a split $\pm 5\,\text{V}$ supply, the INA125 output swing is approximately $\pm 4\,\text{V}$. Select the gain so that the full-scale output remains within this limit.</p>
 <p><strong>Configure the reference pin correctly.</strong> On a split supply, the INA125 reference pin (IAref, pin 5) must be connected to ground. This sets the output at zero load to approximately 0 V, enabling symmetric operation around ground.</p>
 <p><strong>Use the summing amplifier for offset and scale.</strong> Fine-tuning the gain and offset in the analog domain before the ADC is more efficient than attempting to correct for a poorly scaled signal in software. Each bit of resolution lost due to a mismatched signal chain requires doubling the number of ADC samples to recover the same noise floor by averaging.</p>
