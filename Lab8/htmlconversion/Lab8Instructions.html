@@ -375,7 +375,7 @@ Provide a sketch of the proposed breadboard layout showing the placement of the 
 <ol>
 <li>
 <p><strong>Power verification.</strong><br/>
-   Connect $\pm 5$ V to the INA125 supply pins. Tie the load cell ground wire, the M2K analog ground (black wire), and the breadboard ground bus to the same rail. A single shared ground point prevents M2K switching-supply return currents from creating small voltage differences across the signal ground that the ADC would read as phantom weight changes. Before applying any input, power on and measure the supply voltages at the IC pins with the M2K voltmeter.</p>
+   Connect $\pm 5$ V to the INA125 supply pins. Tie the M2K analog ground (black wire) and the breadboard ground bus to the same rail, so the resistor bridge, the amplifier, and the M2K all share a single ground reference. A single shared ground point prevents M2K switching-supply return currents from creating small voltage differences across the signal ground that the ADC would read as a spurious offset. Before applying any input, power on and measure the supply voltages at the IC pins with the M2K voltmeter.</p>
 </li>
 <li>
 <p><strong>Build the resistor bridge and set the INA gain.</strong><br/>
@@ -396,35 +396,37 @@ Provide a sketch of the proposed breadboard layout showing the placement of the 
 <p>Take a photograph of the completed Stage 1 breadboard and submit it.</p>
 </blockquote>
 <h3>3.2 Stage 2: Summing Amplifier Bring-Up in Isolation</h3>
-<p>Test the summing amplifier separately before connecting it to the INA125 output. Use the M2K power supply to provide a DC voltage substituting for the INA output.</p>
+<p>Test the summing amplifier separately, before connecting it to the INA125 output. Use the M2K power supply to provide a DC voltage that substitutes for the INA output.</p>
+<p>The goal here is to confirm that the summing amplifier performs the linear operation it was designed for: it inverts and scales its input by the designed gain and adds the designed offset, so that its output follows $V_\text{out} = V_\text{offset} - G_s\,V_\text{in}$, where $G_s$ is the summing-stage gain (set by $R_f/R_a$) and $V_\text{offset}$ is the designed offset (the $+2.5$ V you obtain with 0 V in). You are verifying the stage's gain and offset, not a specific output endpoint. At this point you do not yet know the actual full-load INA output. That value depends on the real load cell and the gain you end up using, and it is measured directly in Stage 3. What you can confirm now is that whatever the INA eventually delivers will be transformed correctly.</p>
 <ol>
-<li><strong>Zero-input condition.</strong><br/>
-   Apply 0 V DC to the summing amplifier input. Measure the output. The designed output at zero input is $+2.5$ V.</li>
+<li><strong>Offset check (zero input).</strong><br/>
+   Apply 0 V DC to the summing amplifier input. Measure the output. With no input, the output equals the designed offset, $+2.5$ V.</li>
 </ol>
 <blockquote>
 <p><strong>Lab Deliverable #2a</strong></p>
-<p>Measured output voltage at 0 V input. Percent error from the designed value of $+2.5$ V.</p>
+<p>Measured output voltage at 0 V input. Percent error from the designed offset of $+2.5$ V.</p>
 </blockquote>
 <ol>
-<li><strong>Full-scale input condition.</strong><br/>
-   Apply the full-scale INA output voltage from your team's design to the summing amplifier input. Measure the output. The designed output at full-scale input is $-2.5$ V.</li>
+<li><strong>Gain check (slope).</strong><br/>
+   Apply at least two known DC input voltages spanning the range your INA output could plausibly cover (for example 0.5 V and 1.0 V, or use your predicted full-load INA value as one of the test points). Measure the output at each. Compute the slope, $\Delta V_\text{out} / \Delta V_\text{in}$, and confirm that its magnitude matches your designed summing-stage gain $G_s$ and that the sign is inverting. Confirm that every output stays within the usable ADC range and that the stage is not saturating against either rail.</li>
 </ol>
+<p>The aim is to verify that the summing amplifier applies the correct gain and offset to any input it receives. It does not need to land on a particular output value at this stage. Where the full-load signal actually maps is established in Stage 3, once the real INA output under load is known, and adjusted there if needed.</p>
 <blockquote>
 <p><strong>Lab Deliverable #2b</strong></p>
-<p>Measured output voltage at full-scale input. Calculated transfer function slope from the two measurements. Percent error from the designed value of $-2.5$ V. Photograph of the completed Stage 2 breadboard.</p>
+<p>The DC input voltages applied and the measured output at each. Calculated transfer-function slope (the measured summing-stage gain) and intercept (the measured offset). Percent error of the measured gain from your designed $G_s$. Photograph of the completed Stage 2 breadboard.</p>
 </blockquote>
 <h3>3.3 Stage 3: Load Cell Connection and End-to-End Measurement</h3>
-<p>Connect the load cell to the INA125 inputs only after Stage 1 has been verified and signed off. The load cell wires are color-coded; consult the load cell specifications in the project document Appendix A for the correct wiring assignment.</p>
+<p>The load cell is the real Wheatstone bridge that the four resistors in Stage 1 stood in for, so the INA gain you verified there carries straight over. Connect the load cell to the INA125 inputs only after Stage 1 has been verified and signed off. The load cell wires are color-coded; consult the load cell specifications in the project document Appendix A for the correct wiring assignment.</p>
 <blockquote>
 <p><strong>WARNING</strong></p>
 <p>Handle the load cell carefully. Do not apply forces beyond the 500 g maximum design load. Do not bend the cable sharply near the connector.</p>
 </blockquote>
 <ol>
 <li><strong>Polarity verification.</strong><br/>
-   Place a small weight on the load cell and measure the INA125 output voltage. The output must increase (become more positive) as weight is added. If it decreases, the signal wires are reversed at the INA125 inputs — swap the connections to IN$+$ and IN$-$ and re-verify before proceeding.</li>
+   Place a small weight on the load cell and measure the INA125 output voltage. The output must increase (become more positive) as weight is added. If it decreases, the signal wires are reversed at the INA125 inputs. Swap the connections to IN$+$ and IN$-$ and re-verify before proceeding.</li>
 </ol>
 <blockquote>
-<p><strong>Why this matters:</strong> the summing amplifier stage is designed for a positive INA output at full load. Reversed signal wires produce a negative INA output, which the inverting summing amplifier drives above $+2.5$ V — saturation, not a correctable slope reversal. Catching this here takes thirty seconds; catching it after Stage 2 is already wired costs much more.</p>
+<p><strong>Why this matters:</strong> the summing amplifier stage is designed for a positive INA output at full load. Reversed signal wires produce a negative INA output, which the inverting summing amplifier drives above $+2.5$ V: saturation, not a correctable slope reversal. Catching this here takes thirty seconds; catching it after Stage 2 is already wired costs much more.</p>
 </blockquote>
 <ol>
 <li><strong>Unloaded baseline.</strong><br/>
@@ -443,12 +445,18 @@ Provide a sketch of the proposed breadboard layout showing the placement of the 
 <p>Known weight used (state the value in grams). Measured INA output voltage under load. M2K ADC reading under load. Calculated implied sensitivity in mV/g from the two INA output measurements.</p>
 </blockquote>
 <ol>
-<li><strong>End-to-end signal chain.</strong><br/>
-   Connect the INA125 output to the summing amplifier input. Record the ADC input voltage (summing amplifier output) at zero load and under the known weight. Confirm that zero load maps to approximately $+2.5$ V and that load maps toward $-2.5$ V.</li>
+<li><strong>End-to-end signal chain, and adjustment.</strong><br/>
+   Connect the INA125 output to the summing amplifier input. Record the ADC input voltage (summing amplifier output) at zero load and under the known weight. The target is for zero load to sit near $+2.5$ V and full load to approach $-2.5$ V, so the signal uses the full ADC range.</li>
 </ol>
+<p>This is the first time you see the complete signal chain working with the real load cell, and the endpoints may not land exactly where your design predicted. That is expected and is the reason the earlier stages were verified in isolation: the actual load cell sensitivity and the gains you physically built differ slightly from the prelab numbers. Adjust as follows:</p>
+<ul>
+<li>If the zero-load output is not near $+2.5$ V, adjust the offset produced by the summing amplifier (the offset branch, set by $R_b$ and the reference) until it sits where it should.</li>
+<li>If the full-load output does not approach $-2.5$ V, adjust the total gain so that full load uses the available range without saturating. The total gain is the INA gain times the summing-stage gain, so you can reach full scale by adjusting either stage. Keep most of the gain out of the INA, consistent with your prelab design.</li>
+<li>These two adjustments interact. Changing the INA gain also shifts the zero-load operating point, so after any change to the INA gain, re-check the zero-load output and re-trim the offset. A good order is to settle the offset first, then set the gain, then confirm the offset once more.</li>
+</ul>
 <blockquote>
 <p><strong>Lab Deliverable #3c</strong></p>
-<p>ADC input voltage at zero load and under known weight. Confirmation that signal polarity is as designed (ADC reading decreases as load increases). Photographs of the complete breadboard with load cell connected.</p>
+<p>ADC input voltage at zero load and under known weight. Any adjustments made to gain or offset, and why. Confirmation that signal polarity is as designed (ADC reading decreases as load increases). Photographs of the complete breadboard with load cell connected.</p>
 </blockquote>
 <h3>3.4 Stage 4: Low-Pass Filter Bring-Up</h3>
 <p>This stage verifies the passive RC filter and op-amp buffer added after the summing amplifier. The INA125 at high gain already limits bandwidth to a few hundred Hz, but 60 Hz power-line interference still passes through. The RC filter brings the cutoff frequency down to the 2--10 Hz range selected in Prelab Deliverable #6, and the buffer prevents the ADC input impedance from loading the filter.</p>
