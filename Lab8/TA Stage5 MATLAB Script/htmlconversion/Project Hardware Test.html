@@ -81,28 +81,9 @@
       color: #1a1a1a;
     }
 
-    /* ── Code blocks ── */
-    pre {
-      background: #f4f4f4;
-      border: 1px solid #cccccc;
-      border-left: 4px solid #005a9c;
-      border-radius: 4px;
-      padding: 0.85rem 1rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-      line-height: 1.45;
-    }
-    pre code {
-      background: none;
-      padding: 0;
-      border-radius: 0;
-      font-size: 0.88em;
-      color: #1a1a1a;
-    }
-
     /* ── Images ── */
     img {
-      max-width: 70%;
+      max-width: 95%;   /* hard cap — inline style controls actual width */
       height: auto;
       display: block;
       margin: 1rem auto;
@@ -170,14 +151,38 @@
       outline: 3px solid #005a9c;
       outline-offset: 2px;
     }
+
+    /* ── CC license footer ── */
+    .cc-footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cccccc;
+      font-size: 0.85rem;
+      color: #555555;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .cc-footer img {
+      width: 88px;
+      height: auto;
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .cc-footer a {
+      color: #00008B;
+    }
   </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"
     onload="renderMathInElement(document.body, {
       delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$',  right: '$',  display: false}
+        {left: '$$',  right: '$$',  display: true},
+        {left: '$',   right: '$',   display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
       ],
       throwOnError: false
     });"></script>
@@ -197,6 +202,7 @@
 <li>Report the mean and standard deviation of the final output voltage at each weight.</li>
 </ol>
 <h2>Required Files</h2>
+<p><strong>Download both scripts:</strong> <a href="https://aknoesen.github.io/ECE-Emerge/Lab8/TA%20Stage5%20MATLAB%20Script/TA_HW_Test.zip" target="_blank">TA_HW_Test.zip</a> (contains <code>TA_HW_Test.m</code> and <code>M2K.m</code>). Unzip into a single folder.</p>
 <p>Both files must be in the same folder (or on the MATLAB path):</p>
 <div aria-label="Required Files" class="table-wrapper" role="region" tabindex="0"><table><caption>Required Files</caption>
 <thead>
@@ -301,12 +307,12 @@
 <p>You should see two clearly separated step changes in both traces as the weight is increased from 0 g → 250 g → 500 g. The two traces should track each other (offset and/or scaled, depending on the post-INA stage gain — in the example figure above, the post-INA stage inverts and amplifies the signal, so V<sub>out</sub> steps downward as V<sub>INA</sub> steps upward).</p>
 <h3>2. Mean and standard deviation in the Command Window</h3>
 <p>The script prints two 1×3 arrays for the <strong>final output (CH1)</strong> at each weight:</p>
-<pre><code>Mean (in V) for 0g, 250g and 500g:
-    &lt;mean_0g&gt;    &lt;mean_250g&gt;    &lt;mean_500g&gt;
-
-Standard deviation (in V) for 0g, 250g and 500g:
-    &lt;std_0g&gt;     &lt;std_250g&gt;     &lt;std_500g&gt;
-</code></pre>
+<p>```<br/>
+Mean (in V) for 0g, 250g and 500g:<br/>
+<mean_0g> <mean_250g> <mean_500g></mean_500g></mean_250g></mean_0g></p>
+<p>Standard deviation (in V) for 0g, 250g and 500g:<br/>
+<std_0g> <std_250g> <std_500g><br/>
+```</std_500g></std_250g></std_0g></p>
 <p>Use the means to check that the circuit's transfer characteristic at 0 / 250 / 500 g matches the design target. Use the standard deviations as a quick noise/stability check — a clean circuit should show small standard deviations (well under the step size between weight levels).</p>
 <h2>Key Configuration Constants</h2>
 <p>These are set at the top of the measurement section in <code>TA_HW_Test.m</code> and can be edited if needed:</p>
@@ -348,6 +354,15 @@ Standard deviation (in V) for 0g, 250g and 500g:
 <li><strong>CH2 (INA) steps but CH1 (V<sub>out</sub>) does not</strong> — issue is in the post-INA stage, not the INA itself.</li>
 <li><strong>Both channels noisy / high standard deviation</strong> — check ground connections, the load cell wiring, and that the scale platform is mechanically stable during the 1 s capture window.</li>
 </ul>
+<footer aria-label="License information" class="cc-footer" role="contentinfo">
+<img alt="Creative Commons Attribution-NonCommercial 4.0 International License badge" src="../media/by_nc.png">
+<span>
+    This work is licensed under a
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
+    Please attribute this work to André Knoesen.
+  </span>
+</img></footer>
+
   </main>
 </body>
 </html>
